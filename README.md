@@ -1,14 +1,14 @@
-#d2l-pages-search
+# D2l-Pages-Search
 
-##Problem Description
 
+## Problem Description
 At BYU-Idaho, teachers and employees need to find parts of courses that are either broken or need to be fixed in some way.  This program will allow the user to locate the problem the user is looking for and then simply provide a way to fix the problem.
 
-##Design Overview
+## Design Overview
 
 The program will search all of the courses in I-Learn using a library that Joshua McKinney wrote within the last month.  The program will be run from inside I-Learn, via an HTML page.  This will allow easy access for Joshua McKinney's library to quickly search the contents of any course.  The program will display the results to the user in a way that they understand and can easily navigate to and then fix the problem.  The user will be able to search by the actual text that the user can see on each course page, or by the CSS Selector, which would return all the occurrances of that selector in the course.
 
-##Interface Design
+## Interface Design
 
 The program will consist of a graphical user interface embedded in an HTML page in an I-Learn Course.  The interface will consist of two mechanisms for the user to input information, and two output mechanisms.
 
@@ -17,7 +17,7 @@ This is an example of how the UI will look like:
 ![alt text](./d2l-pages-search_ui_design.jpg "UI Design Mockup")
 
 ---
-###User Input
+### User Input
 Input | Description
 ----- | ------------------------
 Ou Numbers | The Org Unit ID numbers of the courses the user wants to search
@@ -34,10 +34,10 @@ Action | What will happen
 *Download Results CSV* button is clicked | A CSV is generated of the data displayed to the user and is then downloaded.
 *Course Homepage* link is clicked | The user is brought to the course's homepage.
 *Link to File* link is clicked | The user is brought to content page where the file is located.
-*CSS Selector Radio Buttons* are clicked | If the user has searched using a CSS Selector, then these buttons, when clicked, will change the format in which the results are displayed.  Further information is given in [Output](#outputHead).
+*CSS Selector Radio Buttons* are clicked | If the user has searched using a CSS Selector, then these buttons, when clicked, will change the format in which the results are displayed.  Further information is given in Output.
 
 ---
-### <a name="outputHead"></a>Output
+### Output
 
 
 If the user indicates to search using a CSS Selector, the three radio buttons seen above the results are displayed.  They indicate how the results are displayed, to better help the user analyze what they are looking for.  Examples of the output are given here:
