@@ -1,6 +1,5 @@
 # D2l-Pages-Search
 
-Currently, this document is a copy of designDocuments/designDocument.md
 
 ## Problem Description
 At BYU-Idaho, teachers and employees need to find parts of courses that are either broken or need to be fixed in some way.  This program will allow the user to locate the problem the user is looking for and then simply provide a way to fix the problem.
