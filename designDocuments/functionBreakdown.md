@@ -1,18 +1,15 @@
 # Structured Chart Explanation
-***Primary Question: What will each of these functions do?***
 
-## main()
-Main will handle all user input from the DOM.
-
-#### Variables
-##### Explanation
-`ouNumbers` - An array of ouNumbers from which to gather course data.
-`downloadedCourses` - An array of course data that includes all the HTML pages from each course.
-`results` - An array of the results found from searching all the courses.
+## Program Variables
+#### Explanation
+`ouNumbers` - An array of ouNumbers from which to gather course data.<br>
+`downloadedCourses` - An array of course data that includes all the HTML pages from each course.<br>
+`searchSettings` - An object of settings with which to run the search.<br>
+`results` - An array of the results found from searching all the courses.<br>
 
 -----
 
-##### Formats
+#### Formats
 
 `downloadedCourses` format:
 *downloadedCourses documentation cited from Joshua McKinney's Library get-d2l-course-html-pages*
@@ -46,9 +43,18 @@ Each page in the arrays look like this:
     }
 ```
 
+`searchSettings` format:
+```javascript
+{
+    query: The search query string,
+    isSelector: A boolean value stating whether the query is a CSS Selector or not
+}
+```
+
+
 `Results` format:
 
-```
+```javascript
 var results = [
 {
     course_name:
@@ -59,8 +65,16 @@ var results = [
 ```
 
 -----
+## Functions
 
-##### Functionality
+***Primary Question: What will each of these functions do?***
+
+## main()
+Main will handle all user input from the DOM.
+
+-----
+
+### Functionality
 - Gather the ouNumbers
 - Send the ouNumbers to downloadCourses
 - Gather the search settings from the user
@@ -68,5 +82,19 @@ var results = [
 
 -----
 
+## downloadCourses(ouNumbers)
+Download courses will use Joshua McKinney's library to download all the course HTML files.
 
-## downloadCourses()
+-----
+### Functionality
+- Download all HTML files for every ouNumber given
+- Display the status of the downloading of each course
+- Change the ouNumber to the course name once it has been downloaded
+-----
+
+## searchCourses(downloadedCourses, searchSettings)
+Search courses will search through all of the downloaded courses, according to the search settings and return the results.
+
+-----
+### Functionality
+- Parse through
