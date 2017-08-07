@@ -80,7 +80,6 @@ Main will handle all user input from the DOM.
 - Send the ouNumbers to downloadCourses
 - Gather the search settings from the user
 - Send the results to displayResults
-
 -----
 
 ## downloadCourses(ouNumbers)
