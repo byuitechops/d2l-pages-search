@@ -1,3 +1,5 @@
+var chalk = require('chalk');
+
 /**
  * Main will handle all user input from the DOM.
  */
@@ -9,7 +11,7 @@ function main() {
     var downloadedCourses = downloadCourses(ouNumbers);
 
     // Get the searchSettings from the user
-    console.log(process.argv[3]);
+    console.log('Search query: ' + process.argv[3]);
     var searchSettings = {
         query: process.argv[3],
         isSelector: process.argv[4],
@@ -20,7 +22,7 @@ function main() {
     var results = searchCourses(downloadedCourses, searchSettings);
 
     // Display the results
-    displayResults(results);
+    displayResults(results, searchSettings);
 
     return;
 }
@@ -40,7 +42,7 @@ function downloadCourses(ouNumbers) {
         successfulPages: [{
             document: "Example Document",
             url: "https://google.com/",
-            html: "DOCTYPE! html <html><head></head><body><h1>I love people, courses and roller coasters!</h1></body></html>",
+            html: "<!DOCTYPE html> <html><head></head><body><h1>I love people, courses and roller coasters!</h1></body></html>",
             error: null
         }],
         errorPages: []
@@ -63,37 +65,55 @@ function searchCourses(downloadedCourses, searchSettings) {
     var results = [];
     // Search according to the settings
     downloadedCourses.forEach(function (course) {
+        // Every course searched will have a result.  Some will have no matches.
+        var newResult = {
+            courseName: course.courseInfo.name,
+            ouNumber: course.courseInfo.ouNumber,
+            matches: []
+        }
+
         course.successfulPages.forEach(function (page) {
             if (page.html.includes(searchSettings.query)) {
-                // We found a match!
+                // We found a match!  
+                // Extract the match
                 var matchedRegex = new RegExp(searchSettings.query, 'g');
+
+                // Only get 50 chars before the match
                 var beginningIndex = page.html.indexOf(searchSettings.query);
-                var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex - 1);
-                var matchW = page.html.match(matchedRegex);
-                console.log('matchW: ' + matchW);
-                resultMatch += matchW;
-                var endIndex = beginningIndex + matchW.length - 1;
-                resultMatch += page.html.substring(endIndex + 1, endIndex + 50);
+                var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
+                var matchWord = page.html.match(matchedRegex);
 
-                console.log(resultMatch)
+                // Append the matchedWord onto the whole result
+                resultMatch += matchWord[0];
 
-                // Now make the result object
-                /*results.push({
-                    courseName: course.courseInfo.name,
-                    ouNumber: course.courseInfo.ouNumber,
-                    matches: []
-                })*/
+                // Only get 50 chars after the end of the matchedWord
+                var endIndex = beginningIndex + matchWord[0].length;
+                resultMatch += page.html.substring(endIndex, endIndex + 50);
+
+                // Now push the match
+                newResult.matches.push(resultMatch);
             }
-        })
-    })
+        });
+
+        results.push(newResult);
+    });
+
+    return results;
 }
 
 /**
  * Display results will display the results through the DOM.
- * @param {Array} results An array of the results from the search
+ * @param {Array}  results         An array of the results from the search
+ * @param {object} [[Description]]
  */
-function displayResults(results) {
-
+function displayResults(results, searchSettings) {
+    results.forEach(function (result) {
+        result.matches.forEach(function (match) {
+            var matchedIndex = match.indexOf(searchSettings.query);
+            var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
+            console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
+        })
+    })
 }
 
 /**
