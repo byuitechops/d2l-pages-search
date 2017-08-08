@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<head>
+  <meta>
+  <title>
+    Course Search
+  </title>
+  <link href="surface_styles.css" rel="stylesheet">
+  <link href="our_style.css" rel="stylesheet">
+</head>
+<body>
+  <!-- OU Input Box -->
+  <div class="flex">
+    <div>
+
+      <div class="card">
+        <div class="flex">
+          <textarea placeholder="Enter OUs">  </textarea>
+        </div>
+        <div class="flex">
+          <button class="btn--raised download-button">Download Courses</button>
+        </div>
+      </div>
+
+      <div class="card loading-console">
+        <div class="flex">
+          <span class="header">Course</span>
+          <span class="spacer"></span>
+          <span class="header">Status</span>
+        </div>
+        <!-- This will be repeated for each verified course -->
+        <div class="flex course">
+          <span class="course-title">Joshua McKinney Sandbox</span>
+          <span class="spacer"></span>
+          <span class="status-loading">Loading</span>
+        </div>
+        <div class="flex course">
+          <span class="course-title">Zach Williams Sandbox</span>
+          <span class="spacer"></span>
+          <span class="status-complete">Complete</span>
+        </div>
+        <div class="flex course">
+          <span class="course-title">FDENG 301 Section 02</span>
+          <span class="spacer"></span>
+          <span class="status-loading">Loading</span>
+        </div>
+        <div class="flex course">
+          <span class="course-title">Joshua McKinney Sandbox</span>
+          <span class="spacer"></span>
+          <span class="status-loading">Loading</span>
+        </div>
+        <div class="flex course">
+          <span class="course-title">Zach Williams Sandbox</span>
+          <span class="spacer"></span>
+          <span class="status-complete">Complete</span>
+        </div>
+        <div class="flex course">
+          <span class="course-title">FDENG 301 Section 02</span>
+          <span class="spacer"></span>
+          <span class="status-loading">Loading</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex">
+          <input class="search-input" type="text">
+          <div class="flexer regex-box">
+
+          </div>
+        </div>
+        <div class="radio-container flex">
+          <input class="type-radio" type="radio" name="search-type" value="Text" checked>
+          <label for="web-page-text">Page Text</label>
+          <input class="type-radio" type="radio" name="search-type" value="HTML">
+          <label for="HTML">HTML</label>
+          <input class="type-radio" type="radio" name="search-type" value="CSS">
+          <label for="CSS Selector">CSS Selector</label>
+          <input class="type-radio" type="checkbox" name="search-type">
+          <label for="regex">Regex</label>
+        </div>
+        <div class="flex">
+          <button class="btn--raised search-button">Search</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="header">Results</span>
+
+        <div class="course-results">
+          <div class="flex">
+            <a href="#" class="results-course-title">{{Course Name}}</a>
+            <span class="spacer"></span>
+            <span class="results-course-title">{{Course OU}}</span>
+          </div>
+
+          <div class="card result-card">
+            <div class="flex file-header">
+              <span class="results-file-name">{{File Name}}</span>
+              <span class="spacer"></span>
+              <a href="#">{{File Link}}</a>
+            </div>
+
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+          </div>
+          <div class="card result-card">
+            <div class="flex file-header">
+              <span class="results-file-name">{{File Name}}</span>
+              <span class="spacer"></span>
+              <a href="#">{{File Link}}</a>
+            </div>
+
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+          </div>
+          <div class="card result-card">
+            <div class="flex file-header">
+              <span class="results-file-name">{{File Name}}</span>
+              <span class="spacer"></span>
+              <a href="#">{{File Link}}</a>
+            </div>
+
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+            <div class="result">
+              <span>
+                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+               </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+</body>
