@@ -103,13 +103,13 @@ Search courses will search through all of the downloaded courses, according to t
 - Format the results of the search
 - Return the results of the search
 -----
-## displayResults(results)
+## displayResults(results, searchSettings)
 Display results will display the results through the DOM.
 
 -----
 ### Functionality
 - Read the results
-- Output the results to the DOM
+- Output the results to the DOM, highlighting the search query
 - For CSS Selectors, change the output layout according to which radio button is pressed
 -----
 
