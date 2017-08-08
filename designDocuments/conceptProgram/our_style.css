@@ -3,9 +3,11 @@ body {
 }
 
 textarea {
-  height: 30px;
+  height: 90px;
   padding: 10px;
-  width: 50%;
+  margin-top: 10px;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
 }
 
 .flex {
@@ -128,4 +130,9 @@ textarea {
 
 .file-header {
   margin-bottom: 20px;
+}
+
+.half-card {
+  max-width: calc(390px);
+  min-width: calc(390px);
 }

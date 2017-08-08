@@ -12,52 +12,29 @@
   <!-- OU Input Box -->
   <div class="flex">
     <div>
+      <div class="flex">
+        <div class="card half-card">
+          <span class="header">Course OUs</span>
+          <div class="flex">
+            <textarea placeholder="Enter OUs or Drag & Drop a CSV"></textarea>
+          </div>
+          <div class="flex">
+            <button class="btn--raised download-button">Download Courses</button>
+          </div>
+        </div>
 
-      <div class="card">
-        <div class="flex">
-          <textarea placeholder="Enter OUs">  </textarea>
-        </div>
-        <div class="flex">
-          <button class="btn--raised download-button">Download Courses</button>
-        </div>
-      </div>
-
-      <div class="card loading-console">
-        <div class="flex">
-          <span class="header">Course</span>
-          <span class="spacer"></span>
-          <span class="header">Status</span>
-        </div>
-        <!-- This will be repeated for each verified course -->
-        <div class="flex course">
-          <span class="course-title">Joshua McKinney Sandbox</span>
-          <span class="spacer"></span>
-          <span class="status-loading">Loading</span>
-        </div>
-        <div class="flex course">
-          <span class="course-title">Zach Williams Sandbox</span>
-          <span class="spacer"></span>
-          <span class="status-complete">Complete</span>
-        </div>
-        <div class="flex course">
-          <span class="course-title">FDENG 301 Section 02</span>
-          <span class="spacer"></span>
-          <span class="status-loading">Loading</span>
-        </div>
-        <div class="flex course">
-          <span class="course-title">Joshua McKinney Sandbox</span>
-          <span class="spacer"></span>
-          <span class="status-loading">Loading</span>
-        </div>
-        <div class="flex course">
-          <span class="course-title">Zach Williams Sandbox</span>
-          <span class="spacer"></span>
-          <span class="status-complete">Complete</span>
-        </div>
-        <div class="flex course">
-          <span class="course-title">FDENG 301 Section 02</span>
-          <span class="spacer"></span>
-          <span class="status-loading">Loading</span>
+        <div class="card  half-card loading-console">
+          <div class="flex">
+            <span class="header">Course</span>
+            <span class="spacer"></span>
+            <span class="header">Status</span>
+          </div>
+          <!-- This will be repeated for each verified course -->
+          <div class="flex course">
+            <span class="course-title">Joshua McKinney Sandbox</span>
+            <span class="spacer"></span>
+            <span class="status-loading">Loading</span>
+          </div>
         </div>
       </div>
 
@@ -83,92 +60,60 @@
         </div>
       </div>
 
-      <div class="card">
-        <span class="header">Results</span>
-
-        <div class="course-results">
-          <div class="flex">
-            <a href="#" class="results-course-title">{{Course Name}}</a>
-            <span class="spacer"></span>
-            <span class="results-course-title">{{Course OU}}</span>
-          </div>
-
-          <div class="card result-card">
-            <div class="flex file-header">
-              <span class="results-file-name">{{File Name}}</span>
-              <span class="spacer"></span>
-              <a href="#">{{File Link}}</a>
-            </div>
-
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-          </div>
-          <div class="card result-card">
-            <div class="flex file-header">
-              <span class="results-file-name">{{File Name}}</span>
-              <span class="spacer"></span>
-              <a href="#">{{File Link}}</a>
-            </div>
-
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-          </div>
-          <div class="card result-card">
-            <div class="flex file-header">
-              <span class="results-file-name">{{File Name}}</span>
-              <span class="spacer"></span>
-              <a href="#">{{File Link}}</a>
-            </div>
-
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-            <div class="result">
-              <span>
-                Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-               </span>
-            </div>
-          </div>
-
+      <div class="card" id="results-container">
+        <div class="flex">
+          <span class="header">Results</span>
+          <span class="spacer"></span>
+          <input class="type-radio" type="radio" name="result-type" value="Text" checked>
+          <label for="web-page-text">Text</label>
+          <input class="type-radio" type="radio" name="result-type" value="HTML">
+          <label for="HTML">Tags</label>
+          <input class="type-radio" type="radio" name="result-type" value="CSS">
+          <label for="CSS Selector">Full HTML</label>
         </div>
 
-      </div>
+        <!-- All Course Results added here -->
 
+        <script id="course-result" type="text/x-handlebars-template">
+          <div class="course-results">
+
+            <!-- Course Information added here -->
+            <div class="flex">
+              <a href="{{course.link}}" class="results-course-title" target="_blank">{{course.name}}</a>
+              <span class="spacer"></span>
+              <span class="results-course-title">{{course.ou}}</span>
+            </div>
+
+            <!-- Each File Result added here -->
+            <div class="card result-card">
+
+              <!-- File Information added here -->
+              <div class="flex file-header">
+                <span class="results-file-name">{{course.file.name}}</span>
+                <span class="spacer"></span>
+                <a href="{{course.file.link}}" target="_blank">View File</a>
+              </div>
+
+              <!-- Each result within the file added here -->
+              <div class="result">
+                <span>
+                  Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+                 </span>
+              </div>
+              <div class="result">
+                <span>
+                  Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+                 </span>
+              </div>
+
+            </div>
+          </div>
+        </script>
+
+      </div>
     </div>
   </div>
-
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="handlebars-v4.0.10.js" type="text/javascript"></script>
+  <script src="mockup.js" type="text/javascript"></script>
 </body>
