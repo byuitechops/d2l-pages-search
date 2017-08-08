@@ -14,8 +14,10 @@ function main() {
     console.log('Search query: ' + process.argv[3]);
     var searchSettings = {
         query: process.argv[3],
-        isSelector: process.argv[4],
-        isRegex: process.argv[5]
+        isSelector: process.argv[4] === 'false' ? false : true,
+        isRegex: process.argv[5] === 'false' ? false : true,
+        searchInnerText: process.argv[6] === 'false' ? false : true,
+        searchHtml: process.argv[7] === 'false' ? false : true
     }
 
     // Search the courses
@@ -73,25 +75,54 @@ function searchCourses(downloadedCourses, searchSettings) {
         }
 
         course.successfulPages.forEach(function (page) {
-            if (page.html.includes(searchSettings.query)) {
-                // We found a match!  
-                // Extract the match
-                var matchedRegex = new RegExp(searchSettings.query, 'g');
+            if (searchSettings.isSelector) {
+                // Place selector searching logic here
+            } else {
+                // We want to search using innerText or html
+                if (searchSettings.searchInnerText) {
+                    // Place innerText searching logic here
+                } else if (searchSettings.searchHtml) {
+                    // Check to see if the query is regex
+                    if (searchSettings.isRegex) {
+                        if (page.html.match(searchSettings.query)) {
+                            // Only get 50 chars before the match
+                            var beginningIndex = page.html.search(searchSettings.query);
+                            var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
+                            var matchWord = page.html.match(searchSettings.query);
 
-                // Only get 50 chars before the match
-                var beginningIndex = page.html.indexOf(searchSettings.query);
-                var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
-                var matchWord = page.html.match(matchedRegex);
+                            // Append the matchedWord onto the whole result
+                            resultMatch += matchWord[0];
 
-                // Append the matchedWord onto the whole result
-                resultMatch += matchWord[0];
+                            // Only get 50 chars after the end of the matchedWord
+                            var endIndex = beginningIndex + matchWord[0].length;
+                            resultMatch += page.html.substring(endIndex, endIndex + 50);
 
-                // Only get 50 chars after the end of the matchedWord
-                var endIndex = beginningIndex + matchWord[0].length;
-                resultMatch += page.html.substring(endIndex, endIndex + 50);
+                            // Now push the match
+                            newResult.matches.push(resultMatch);
+                        }
+                    } else {
+                        if (page.html.includes(searchSettings.query)) {
+                            // We found a match!  
+                            // Extract the match
+                            var matchedRegex = new RegExp(searchSettings.query, 'g');
 
-                // Now push the match
-                newResult.matches.push(resultMatch);
+                            // Only get 50 chars before the match
+                            var beginningIndex = page.html.indexOf(searchSettings.query);
+                            var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
+                            var matchWord = page.html.match(matchedRegex);
+
+                            // Append the matchedWord onto the whole result
+                            resultMatch += matchWord[0];
+
+                            // Only get 50 chars after the end of the matchedWord
+                            var endIndex = beginningIndex + matchWord[0].length;
+                            resultMatch += page.html.substring(endIndex, endIndex + 50);
+
+                            // Now push the match
+                            newResult.matches.push(resultMatch);
+                        }
+                    }
+                }
             }
         });
 
