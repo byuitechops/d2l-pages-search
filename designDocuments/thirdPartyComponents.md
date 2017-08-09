@@ -10,3 +10,9 @@ https://mildrenben.github.io/surface/index.html
 Primary Color: Blue (#2196f3)
 
 Accent Color: Blood Orange (#ff5722)
+
+## Handlebars JS
+
+Since we'll be handling and manipulating quite a bit of data and then using it in the view, Handlebars' templating provides an easy answer. It's primary use will be in displaying the results for each search.
+
+Documentation: http://handlebarsjs.com/
