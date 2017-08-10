@@ -64,4 +64,4 @@ For CSS Selector searches:
 
 courseName | ouNumber | pageUrl (with content/enforced/) | Open/Close Tags | Full HTML | Full Inner Text
 --------- | -------- | -------------------------------- | --------------- | --------- | ------------
-| | | `<div class="nameInputContainer"></div>` | `<div class="nameInputContainer">These are the contents of the div</div>` | These are the contents of the div
+| | | | `<div class="nameInputContainer"></div>` | `<div class="nameInputContainer">These are the contents of the div</div>` | These are the contents of the div
