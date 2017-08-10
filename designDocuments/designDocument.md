@@ -56,7 +56,7 @@ For plain text or HTML searches:
 
 courseName | ouNumber | pageUrl (with content/enforced/) | matchResult
 ---------- | -------- | -------------------------------- | -----------
-| | | (50 characters left and right of the found word)
+ | | | | (50 characters left and right of the found word)
 
 For CSS Selector searches:
 
