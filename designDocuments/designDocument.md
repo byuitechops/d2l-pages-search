@@ -27,14 +27,14 @@ The following table describes what the program will do when the user makes certa
 
 Action | What will happen
 ------ | -----------------------
-*Download Courses Button* is clicked | The program will download each of the course html pages of the specified courses to an array.<br><br>  As each course's files are being downloaded, its accompanying ou number is displayed in the *Courses Ready to Search* window.  A status icon appears to the right of each ou number.  While the course is being downloaded, a circular progress bar will appear to the right of its corresponding ou number.<br><br>  When a course has finished downloading, the circular progress bar will be replaced by a checkmark and the ou number will be replaced by the name of the course, signifying to the user completion and readiness to search that course.<br><br>  The *search button*, *search query input box* and *search options buttons* are only able to be interacted with after all the courses have finished downloading.
+*Load Courses Button* is clicked | The program will download each of the course html pages of the specified courses to an array.<br><br>  As each course's files are being downloaded, its accompanying ou number is displayed in the *Courses Ready to Search* window.  A status icon appears to the right of each ou number.  While the course is being downloaded, a circular progress bar will appear to the right of its corresponding ou number, signifying that the course is being loaded into the program.<br><br>  When a course has finished downloading, the circular progress bar will be replaced by a checkmark and the ou number will be replaced by the name of the course, signifying to the user completion and readiness to search that course.<br><br>  The *search button*, *search query input box* and *search options buttons* will then be able to be interacted with.
 *Web Page Text* or *HTML Text* option button is clicked | A checkbox appears to the right of the *search query input box*, allowing the search to be done using a regular expression.
 *CSS Selector* option button is clicked | The checkbox to the right of the *search query input box* disappears.
-*Search* button is clicked | The program searches the downloaded courses for the given search query according to the selected search options.  When finished, the program displays the results below the search button.
-*Download Results CSV* button is clicked | A CSV is generated of the data displayed to the user and is then downloaded.
+*Search* button is clicked | The program searches the downloaded courses for the given search query according to the selected options.  When finished, the program displays the results below the search button.
+*Download Results CSV* button is clicked | A CSV is generated of the data and is then downloaded.
 *Course Homepage* link is clicked | The user is brought to the course's homepage.
 *Link to File* link is clicked | The user is brought to content page where the file is located.
-*CSS Selector Radio Buttons* are clicked | If the user has searched using a CSS Selector, then these buttons, when clicked, will change the format in which the results are displayed.  Further information is given in Output.
+*CSS Selector Radio Buttons* are clicked | If the user has searched using a CSS Selector, then these buttons, when clicked, will change the format in which the results are displayed.  Further information is given in [Output](#output).
 
 ---
 ### Output
