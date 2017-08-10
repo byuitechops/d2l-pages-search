@@ -13,14 +13,14 @@
     <!-- OU Input Box -->
     <div class="flex">
         <div>
-            <div class="flex">
+            <div class="flex" id="download-course-container">
                 <div class="card half-card">
                     <span class="header">Course OUs</span>
                     <div class="flex">
                         <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
                     </div>
                     <div class="flex">
-                        <button class="btn--raised search-button">Load Courses</button>
+                        <button class="btn--raised search-button" id="loadCoursesButton">Load Courses</button>
                     </div>
                     <p class="step-1-2">1. Insert Course OUs or Drag and Drop a CSV into the box above</p>
                 </div>
@@ -44,10 +44,10 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" id="search-container">
                 <p class="step-3">3. Enter what you'd like to search for below and press "Search"</p>
                 <div class="flex">
-                    <input class="search-input" type="text">
+                    <input class="search-input" id="searchInput" type="text">
                     <div class="flexer regex-box">
 
                     </div>

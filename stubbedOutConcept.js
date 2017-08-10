@@ -7,15 +7,24 @@ function main() {
     var searchSettings;
 
     // HTML document elements
-    var loadCoursesButton = document.querySelector('.search-button');
-    var searchCoursesButton = document.querySelector('.search-button');
-    var searchInputElement = document.querySelector('.search-input');
-    var searchSettingText = document.getElementById('searchSettingText');
-    var searchSettingHTML = document.getElementById('searchSettingHTML');
-    var searchSettingCSS = document.getElementById('searchSettingCSS');
-    var searchSettingRegex = document.getElementById('searchSettingRegex');
+    /*var loadCoursesButton = document.querySelector('.search-button'),
+        searchCoursesButton = document.querySelector('.search-button'),
+        searchInputElement = document.querySelector('.search-input'),
+        searchSettingText = document.getElementById('searchSettingText'),
+        searchSettingHTML = document.getElementById('searchSettingHTML'),
+        searchSettingCSS = document.getElementById('searchSettingCSS'),
+        searchSettingRegex = document.getElementById('searchSettingRegex');*/
 
-    loadCoursesButton.addEventListener('click', function () {
+    // jQuery elements
+    var loadCoursesButton = $('#download-course-container .search-button'),
+        searchCoursesButton = $('#search-container .search-button'),
+        searchInputElement = $('#searchInput'),
+        searchSettingText = $('#searchSettingText'),
+        searchSettingHTML = $('#searchSettingHTML'),
+        searchSettingCSS = $('#searchSettingCSS'),
+        searchSettingRegex = $('#searchSettingRegex');
+
+    loadCoursesButton.on('click', function () {
         // Get the ouNumbers
         ouNumbers = getOuNumbers();
 
@@ -23,16 +32,23 @@ function main() {
         downloadedCourses = downloadCourses(ouNumbers);
     });
 
-    searchCoursesButton.addEventListener('click', function () {
+    searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user
         searchSettings = {
-            query: isSelector: isRegex: searchInnerText: searchHtml:
+            query: searchInputElement.val(),
+            searchInnerText: searchSettingText.is(':checked'),
+            searchHTML: searchSettingHTML.is(':checked'),
+            isSelector: searchSettingCSS.is(':checked'),
+            isRegex: searchSettingRegex.is(':checked')
         }
-        /*// Search the courses
+
+        console.log(searchSettings)
+        // Search the courses
         var results = searchCourses(downloadedCourses, searchSettings);
 
         // Display the results
-        displayResults(results, searchSettings);*/
+        console.log(results);
+        //displayResults(results, searchSettings);
     });
 
 
@@ -73,11 +89,6 @@ function downloadCourses(ouNumbers) {
         console.log(results);
     });
 
-    // Uncomment for actual library
-    /*d2lScrape.getCourseHtmlPages(ouNumbers, function (error, data) {
-        return data;
-    });*/
-
     return downloadedData;
 }
 
@@ -93,68 +104,68 @@ function renderStatus(dataToRender) {
 function searchCourses(downloadedCourses, searchSettings) {
     var results = [];
     // Search according to the settings
-    // downloadedCourses.forEach(function(course) {
-    //     // Every course searched will have a result.  Some will have no matches.
-    //     var newResult = {
-    //         courseName: course.courseInfo.name,
-    //         ouNumber: course.courseInfo.ouNumber,
-    //         matches: []
-    //     }
-    //
-    //     course.successfulPages.forEach(function(page) {
-    //         if (searchSettings.isSelector) {
-    //             // Place selector searching logic here
-    //         } else {
-    //             // We want to search using innerText or html
-    //             if (searchSettings.searchInnerText) {
-    //                 // Place innerText searching logic here
-    //             } else if (searchSettings.searchHtml) {
-    //                 // Check to see if the query is regex
-    //                 if (searchSettings.isRegex) {
-    //                     if (page.html.match(searchSettings.query)) {
-    //                         // Only get 50 chars before the match
-    //                         var beginningIndex = page.html.search(searchSettings.query);
-    //                         var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
-    //                         var matchWord = page.html.match(searchSettings.query);
-    //
-    //                         // Append the matchedWord onto the whole result
-    //                         resultMatch += matchWord[0];
-    //
-    //                         // Only get 50 chars after the end of the matchedWord
-    //                         var endIndex = beginningIndex + matchWord[0].length;
-    //                         resultMatch += page.html.substring(endIndex, endIndex + 50);
-    //
-    //                         // Now push the match
-    //                         newResult.matches.push(resultMatch);
-    //                     }
-    //                 } else {
-    //                     if (page.html.includes(searchSettings.query)) {
-    //                         // We found a match!
-    //                         // Extract the match
-    //                         var matchedRegex = new RegExp(searchSettings.query, 'g');
-    //
-    //                         // Only get 50 chars before the match
-    //                         var beginningIndex = page.html.indexOf(searchSettings.query);
-    //                         var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
-    //                         var matchWord = page.html.match(matchedRegex);
-    //
-    //                         // Append the matchedWord onto the whole result
-    //                         resultMatch += matchWord[0];
-    //
-    //                         // Only get 50 chars after the end of the matchedWord
-    //                         var endIndex = beginningIndex + matchWord[0].length;
-    //                         resultMatch += page.html.substring(endIndex, endIndex + 50);
-    //
-    //                         // Now push the match
-    //                         newResult.matches.push(resultMatch);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     });
-    //
-    //     results.push(newResult);
-    // });
+    downloadedCourses.forEach(function (course) {
+        // Every course searched will have a result.  Some will have no matches.
+        var newResult = {
+            courseName: course.courseInfo.name,
+            ouNumber: course.courseInfo.ouNumber,
+            matches: []
+        }
+
+        course.successfulPages.forEach(function (page) {
+            if (searchSettings.isSelector) {
+                // Place selector searching logic here
+            } else {
+                // We want to search using innerText or html
+                if (searchSettings.searchInnerText) {
+                    // Place innerText searching logic here
+                } else if (searchSettings.searchHtml) {
+                    // Check to see if the query is regex
+                    if (searchSettings.isRegex) {
+                        if (page.html.match(searchSettings.query)) {
+                            // Only get 50 chars before the match
+                            var beginningIndex = page.html.search(searchSettings.query);
+                            var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
+                            var matchWord = page.html.match(searchSettings.query);
+
+                            // Append the matchedWord onto the whole result
+                            resultMatch += matchWord[0];
+
+                            // Only get 50 chars after the end of the matchedWord
+                            var endIndex = beginningIndex + matchWord[0].length;
+                            resultMatch += page.html.substring(endIndex, endIndex + 50);
+
+                            // Now push the match
+                            newResult.matches.push(resultMatch);
+                        }
+                    } else {
+                        if (page.html.includes(searchSettings.query)) {
+                            // We found a match!
+                            // Extract the match
+                            var matchedRegex = new RegExp(searchSettings.query, 'g');
+
+                            // Only get 50 chars before the match
+                            var beginningIndex = page.html.indexOf(searchSettings.query);
+                            var resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
+                            var matchWord = page.html.match(matchedRegex);
+
+                            // Append the matchedWord onto the whole result
+                            resultMatch += matchWord[0];
+
+                            // Only get 50 chars after the end of the matchedWord
+                            var endIndex = beginningIndex + matchWord[0].length;
+                            resultMatch += page.html.substring(endIndex, endIndex + 50);
+
+                            // Now push the match
+                            newResult.matches.push(resultMatch);
+                        }
+                    }
+                }
+            }
+        });
+
+        results.push(newResult);
+    });
 
     return results;
 }
