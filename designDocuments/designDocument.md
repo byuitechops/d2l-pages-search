@@ -42,11 +42,11 @@ Action | What will happen
 
 If the user indicates to search using a CSS Selector, the three radio buttons seen above the results are displayed.  They indicate how the results are displayed, to better help the user analyze what they are looking for.  Examples of the output are given here:
 
-Open/Close Tags: `<p></p>`<br>
+Open/Close Tags: `<p class="recipe"></p>`<br>
 Full HTML: `<p class="recipe">Beef Stroganoff: 1 Can Cream of Mushroom Soup</p>`<br>
 Inner Text: `Beef Stroganoff: 1 Can Cream of Mushroom Soup`<br>
 
 For a normal text search, the found match is given with 50 characters to the left of the beginning and 50 characters to the right of the match.  Example:
 
 Search query: `'Hello Dolly!'`<br>
-match: There once was a woman I knew who was very fair <span style="background-color:yellow">Hello Dolly!</span>  She was great.  She wore big hats and sang to me
+match: There once was a woman I knew who was very fair <span style="background-color:yellow">*Hello Dolly!*</span>  She was great.  She wore big hats and sang to me
