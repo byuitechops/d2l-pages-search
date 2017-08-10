@@ -2,11 +2,11 @@
 
 
 ## Problem Description
-At BYU-Idaho, teachers and employees need to find parts of courses that are either broken or need to be fixed in some way.  This program will allow the user to locate the problem the user is looking for and then simply provide a way to fix the problem.
+At BYU-Idaho, teachers and employees need to locate parts of online courses that they know need to be either changed or modified.  This program searches for a given query in all the HTML pages of the courses the user specifies and generates a report of what was found.
 
 ## Design Overview
 
-The program will search all of the courses in I-Learn using a library that Joshua McKinney wrote within the last month.  The program will be run from inside I-Learn, via an HTML page.  This will allow easy access for Joshua McKinney's library to quickly search the contents of any course.  The program will display the results to the user in a way that they understand and can easily navigate to and then fix the problem.  The user will be able to search by the actual text that the user can see on each course page, or by the CSS Selector, which would return all the occurrances of that selector in the course.
+This program will search all of the courses the user gave to it using [get-d2l-course-html-pages](https://github.com/byuitechops/get-d2l-course-html-pages).  The program will be run from inside I-Learn, via an HTML page.  This program will display the results to the user on the web page or optionally in a CSV file.  The user will be able to search by the actual text that the user can see on each course page, or by the CSS Selector, which would return the whole HTML elements that the CSS Selector selects.
 
 ## Interface Design
 
@@ -40,16 +40,18 @@ Action | What will happen
 ### Output
 #### Match Output
 
+For a normal text search, the found match is given with 50 characters to the left of the beginning and 50 characters to the right of the match.  The match will be highlighted.  Example:
+
+Search query: `'Hello Dolly!'`<br>
+match: There once was a woman I knew who was very fair ```Hello Dolly!```  She was great.  She wore big hats and sang to me
+
 If the user indicates to search using a CSS Selector, the three radio buttons seen above the results are displayed.  They indicate how the results are displayed, to better help the user analyze what they are looking for.  Examples of the output are given here:
 
 Open/Close Tags: `<p class="recipe"></p>`<br>
 Full HTML: `<p class="recipe">Beef Stroganoff: 1 Can Cream of Mushroom Soup</p>`<br>
 Inner Text: `Beef Stroganoff: 1 Can Cream of Mushroom Soup`<br>
 
-For a normal text search, the found match is given with 50 characters to the left of the beginning and 50 characters to the right of the match.  The match will be highlighted.  Example:
-
-Search query: `'Hello Dolly!'`<br>
-match: There once was a woman I knew who was very fair ```Hello Dolly!```  She was great.  She wore big hats and sang to me
+By default, the full html will be displayed for CSS Selector searches.
 
 #### CSV Output
 For plain text or HTML searches:
