@@ -6,7 +6,7 @@ At BYU-Idaho, teachers and employees need to locate parts of online courses that
 
 ## Design Overview
 
-This program will search all of the courses the user gave to it using [get-d2l-course-html-pages](https://github.com/byuitechops/get-d2l-course-html-pages).  The program will be run from inside I-Learn, via an HTML page.  This program will display the results to the user on the web page or optionally in a CSV file.  The user will be able to search by the actual text that the user can see on each course page, or by the CSS Selector, which would return the whole HTML elements that the CSS Selector selects.
+This program will search all of the courses the user gave to it using [get-d2l-course-html-pages](https://github.com/byuitechops/get-d2l-course-html-pages).  The program will be run from inside I-Learn, via an HTML page.  This program will display the results to the user on the web page or optionally in a CSV file.  The user will be able to search by the actual text that the user can see on each course page, within the HTML code or by the CSS Selector, which would return the whole HTML elements that the CSS Selector selects.
 
 ## Interface Design
 
