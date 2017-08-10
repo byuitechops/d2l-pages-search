@@ -38,7 +38,7 @@ Action | What will happen
 
 ---
 ### Output
-
+#### Match Output
 
 If the user indicates to search using a CSS Selector, the three radio buttons seen above the results are displayed.  They indicate how the results are displayed, to better help the user analyze what they are looking for.  Examples of the output are given here:
 
@@ -46,7 +46,20 @@ Open/Close Tags: `<p class="recipe"></p>`<br>
 Full HTML: `<p class="recipe">Beef Stroganoff: 1 Can Cream of Mushroom Soup</p>`<br>
 Inner Text: `Beef Stroganoff: 1 Can Cream of Mushroom Soup`<br>
 
-For a normal text search, the found match is given with 50 characters to the left of the beginning and 50 characters to the right of the match.  Example:
+For a normal text search, the found match is given with 50 characters to the left of the beginning and 50 characters to the right of the match.  The match will be highlighted.  Example:
 
 Search query: `'Hello Dolly!'`<br>
 match: There once was a woman I knew who was very fair ```Hello Dolly!```  She was great.  She wore big hats and sang to me
+
+#### CSV Output
+For plain text or HTML searches:
+
+  | courseName | ouNumber | pageUrl (with content/enforced/) | matchResult
+--| ---------- | -------- | -------------------------------- | -----------
+match | | | | (50 characters left and right of the found word)
+
+For CSS Selector searches:
+
+  | courseName | ouNumber | pageUrl (with content/enforced/) | Open/Close Tags | Full HTML | Full Inner Text
+-- | --------- | -------- | -------------------------------- | --------------- | --------- | ------------
+match | | | | `<div class="nameInputContainer"></div>` | `<div class="nameInputContainer">These are the contents of the div</div>` | These are the contents of the div
