@@ -31,3 +31,6 @@ console.log(context.length);
 context.forEach((courseObject) => {
   $('#results-container').append(template(courseObject));
 });
+
+
+var ouNumbers = $('#textarea').value().split(',');

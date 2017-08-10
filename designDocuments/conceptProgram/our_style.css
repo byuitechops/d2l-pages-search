@@ -17,11 +17,6 @@ textarea {
   flex-wrap: wrap;
 }
 
-.download-button {
-  margin: 20px 0 10px;
-  width: 200px;
-}
-
 .flex-column {
   display: flex;
   flex-direction: column;
@@ -55,11 +50,15 @@ textarea {
 }
 
 .status-complete {
-  color: #2196f3;
+  color: #82C242;
 }
 
 .status-loading {
-  color: #ff5722;
+  color: #F58300;
+}
+
+.status-error {
+  color: #E42226;
 }
 
 .search-input {
@@ -93,8 +92,8 @@ textarea {
 }
 
 .search-button {
-  margin: 20px 0 10px;
-  width: 200px;
+  margin: 20px 5px 10px;
+  width: 140px;
 }
 
 .course-results {
@@ -102,14 +101,14 @@ textarea {
 }
 
 .results-course-title {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 22px;
+    padding-bottom: 5px;
 }
 
 .result-card {
   margin: 0 0 10px !important;
-  max-width: 760px;
-  min-width: 760px;
+  max-width: 100%;
+  min-width: 100%;
 }
 
 .results-file-name {
@@ -135,4 +134,49 @@ textarea {
 .half-card {
   max-width: calc(390px);
   min-width: calc(390px);
+}
+
+.check-collapse {
+    padding: 0;
+}
+
+.OU {
+    color: gray;
+    position: absolute;
+    top: 14px;
+    right: 40px;
+    font-size: 12px;
+}
+
+.step-1-2 {
+    padding: 0;
+    margin: 10px 0 0;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+}
+
+.step-3 {
+    padding: 0;
+    margin: 0 0 10px;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+}
+
+.course-holder {
+    max-height: 170px;
+    overflow: auto;
+}
+
+.disabled {
+    background-color: #888;
+    color: #bbb;
+    cursor: default;
+}
+
+.disabled:hover {
+    background-color: #888;
+    color: #bbb;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 }

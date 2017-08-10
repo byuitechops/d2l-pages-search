@@ -16,29 +16,35 @@
         <div class="card half-card">
           <span class="header">Course OUs</span>
           <div class="flex">
-            <textarea placeholder="Enter OUs or Drag & Drop a CSV"></textarea>
+            <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
           </div>
           <div class="flex">
-            <button class="btn--raised download-button">Download Courses</button>
+            <button class="btn--raised search-button">Load Courses</button>
           </div>
+            <p class="step-1-2">1. Insert Course OUs or Drag and Drop a CSV into the box above</p>
         </div>
 
-        <div class="card  half-card loading-console">
+        <div class="card flex-column half-card loading-console">
           <div class="flex">
             <span class="header">Course</span>
             <span class="spacer"></span>
             <span class="header">Status</span>
           </div>
           <!-- This will be repeated for each verified course -->
-          <div class="flex course">
-            <span class="course-title">Joshua McKinney Sandbox</span>
+            <div class="course-holder">
+              <div class="flex course">
+                <span class="course-title">Joshua McKinney Sandbox</span>
+                <span class="spacer"></span>
+                <span class="status-loading">Loading</span>
+              </div>
+            </div>
             <span class="spacer"></span>
-            <span class="status-loading">Loading</span>
-          </div>
+            <p class="step-1-2">2. Wait until all courses listed above have finished loading</p>
         </div>
       </div>
 
       <div class="card">
+          <p class="step-3">3. Enter what you'd like to search for below and press "Search"</p>
         <div class="flex">
           <input class="search-input" type="text">
           <div class="flexer regex-box">
@@ -56,7 +62,8 @@
           <label for="regex">Regex</label>
         </div>
         <div class="flex">
-          <button class="btn--raised search-button">Search</button>
+            <button class="btn--raised search-button">Search</button>
+            <button class="btn--raised search-button disabled" disabled>Download</button>
         </div>
       </div>
 
@@ -75,39 +82,43 @@
         <!-- All Course Results added here -->
 
         <script id="course-result" type="text/x-handlebars-template">
-          <div class="course-results">
-
             <!-- Course Information added here -->
-            <div class="flex">
-              <a href="{{course.link}}" class="results-course-title" target="_blank">{{course.name}}</a>
-              <span class="spacer"></span>
-              <span class="results-course-title">{{course.ou}}</span>
+            <div class="collapsible-wrap course-results no-pad">
+                <input type="checkbox" id="collapsible-{{course.name}}" checked>
+                <label for="collapsible-{{course.name}}" class="check-collapse">
+                    <a href="{{course.link}}" class="results-course-title" target="_blank">
+                        {{course.name}} 
+                    </a>
+                    <span class="OU">{{course.OU}}</span>
+                </label>
+        
+                <div class="collapsible-{{course.name}}-area">
+                    <!-- Each File Result added here -->
+                    <div class="card result-card">
+
+                      <!-- File Information added here -->
+                      <div class="flex file-header">
+                        <span class="results-file-name">{{course.file.name}}</span>
+                        <span class="spacer"></span>
+                        <a href="{{course.file.link}}" target="_blank">View File</a>
+                      </div>
+
+                      <!-- Each result within the file added here -->
+                      <div class="result">
+                        <span>
+                          Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+                         </span>
+                      </div>
+                      <div class="result">
+                        <span>
+                          Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
+                         </span>
+                      </div>
+
+                    </div>
+                    
+                </div>
             </div>
-
-            <!-- Each File Result added here -->
-            <div class="card result-card">
-
-              <!-- File Information added here -->
-              <div class="flex file-header">
-                <span class="results-file-name">{{course.file.name}}</span>
-                <span class="spacer"></span>
-                <a href="{{course.file.link}}" target="_blank">View File</a>
-              </div>
-
-              <!-- Each result within the file added here -->
-              <div class="result">
-                <span>
-                  Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-                 </span>
-              </div>
-              <div class="result">
-                <span>
-                  Lorem ipsum dolor sit amet, nec ei sumo hendrerit, mutat noster eu sed. Te eum nibh nemore eirmod, pri id <span class="highlight">oportere</span> inciderint. Eum ne etiam congue. Erat cetero eu sea. Omnis velit ut vim, vidisse gubergren sed in, per semper lobortis accusamus id.
-                 </span>
-              </div>
-
-            </div>
-          </div>
         </script>
 
       </div>
