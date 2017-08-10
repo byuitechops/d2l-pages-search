@@ -9,6 +9,11 @@ function main() {
     // HTML document elements
     var loadCoursesButton = document.querySelector('.search-button');
     var searchCoursesButton = document.querySelector('.search-button');
+    var searchInputElement = document.querySelector('.search-input');
+    var searchSettingText = document.getElementById('searchSettingText');
+    var searchSettingHTML = document.getElementById('searchSettingHTML');
+    var searchSettingCSS = document.getElementById('searchSettingCSS');
+    var searchSettingRegex = document.getElementById('searchSettingRegex');
 
     loadCoursesButton.addEventListener('click', function () {
         // Get the ouNumbers
