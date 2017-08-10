@@ -54,8 +54,8 @@ match: There once was a woman I knew who was very fair ```Hello Dolly!```  She w
 #### CSV Output
 For plain text or HTML searches:
 
-courseName | ouNumber | pageUrl (with content/enforced/) | matchResult 
----------- | -------- | --------------------------------
+courseName | ouNumber | pageUrl (with content/enforced/) | matchResult
+---------- | -------- | -------------------------------- | -----------
 | | | (50 characters left and right of the found word)
 
 For CSS Selector searches:
