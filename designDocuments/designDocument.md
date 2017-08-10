@@ -54,12 +54,12 @@ match: There once was a woman I knew who was very fair ```Hello Dolly!```  She w
 #### CSV Output
 For plain text or HTML searches:
 
-  | courseName | ouNumber | pageUrl (with content/enforced/) | matchResult
---| ---------- | -------- | -------------------------------- | -----------
-match | | | | (50 characters left and right of the found word)
+courseName | ouNumber | pageUrl (with content/enforced/) | matchResult
+---------- | -------- | --------------------------------
+match | | | (50 characters left and right of the found word)
 
 For CSS Selector searches:
 
-  | courseName | ouNumber | pageUrl (with content/enforced/) | Open/Close Tags | Full HTML | Full Inner Text
--- | --------- | -------- | -------------------------------- | --------------- | --------- | ------------
-match | | | | `<div class="nameInputContainer"></div>` | `<div class="nameInputContainer">These are the contents of the div</div>` | These are the contents of the div
+courseName | ouNumber | pageUrl (with content/enforced/) | Open/Close Tags | Full HTML | Full Inner Text
+--------- | -------- | -------------------------------- | --------------- | --------- | ------------
+| | | `<div class="nameInputContainer"></div>` | `<div class="nameInputContainer">These are the contents of the div</div>` | These are the contents of the div
