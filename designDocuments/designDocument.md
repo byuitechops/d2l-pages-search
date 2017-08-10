@@ -49,4 +49,4 @@ Inner Text: `Beef Stroganoff: 1 Can Cream of Mushroom Soup`<br>
 For a normal text search, the found match is given with 50 characters to the left of the beginning and 50 characters to the right of the match.  Example:
 
 Search query: `'Hello Dolly!'`<br>
-match: There once was a woman I knew who was very fair <span style="background-color:yellow">*Hello Dolly!*</span>  She was great.  She wore big hats and sang to me
+match: There once was a woman I knew who was very fair <mark>Hello Dolly!</mark>  She was great.  She wore big hats and sang to me
