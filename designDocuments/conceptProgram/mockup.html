@@ -31,12 +31,8 @@
             <span class="header">Status</span>
           </div>
           <!-- This will be repeated for each verified course -->
-            <div class="course-holder">
-              <div class="flex course">
-                <span class="course-title">Joshua McKinney Sandbox</span>
-                <span class="spacer"></span>
-                <span class="status-loading">Loading</span>
-              </div>
+            <div id="course-status-container" class="course-holder">
+              
             </div>
             <span class="spacer"></span>
             <p class="step-1-2">2. Wait until all courses listed above have finished loading</p>
@@ -82,6 +78,16 @@
     </div>
   </div>
 
+<!-- COURSE STATUS ------------------------------------------------------------------>
+  <script id="course-status-template" type="text/x-handlebars-template">
+    <div class="flex course" id="{{ou}}-OU">
+      <span class="course-title">{{name}}</span>
+      <span class="spacer"></span>
+      <span class="status-loading">{{status}}</span>
+    </div>
+  </script>
+<!-- COURSE STATUS ------------------------------------------------------------------>
+
 <!-- COURSE ------------------------------------------------------------------------->
   <script id="course-template" type="text/x-handlebars-template">
       <!-- Course Information added here -->
@@ -98,7 +104,7 @@
           </div>
       </div>
   </script>
-<!-- COURSE ------------------------------------------------------------------------->
+<!-- COURSE ----------------------------------------------------------------------->
 
 <!-- FILE ------------------------------------------------------------------------->
   <script id="file-template" type="text/x-handlebars-template">
@@ -116,7 +122,7 @@
   </script>
 <!-- FILE ------------------------------------------------------------------------->
 
-<!-- MATCH ------------------------------------------------------------------------->
+<!-- MATCH ------------------------------------------------------------------------>
   <script id="match-template" type="text/x-handlebars-template">
     <div class="result">
       <span>
@@ -126,7 +132,7 @@
       </span>
     </div>
   </script>
-<!-- MATCH ------------------------------------------------------------------------->
+<!-- MATCH ----------------------------------------------------------------------->
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="handlebars-v4.0.10.js" type="text/javascript"></script>

@@ -4,6 +4,29 @@ var file = $('#file-template').html();
 var fileTemplate = Handlebars.compile(file);
 var match = $('#match-template').html();
 var matchTemplate = Handlebars.compile(match);
+var status = $('#course-status-template').html();
+var statusTemplate = Handlebars.compile(status);
+
+var courseStatuses = [];
+
+ouNumbers.forEach((ouNumber) => {
+  courseStatuses[ouNumber + '-OU'] = {
+    name: ouNumber,
+    ou: ouNumber,
+    status: 'LOADING'
+  };
+});
+
+function addStatuses(loadingCourses) {
+  loadingCourses.forEach((courseStatusObject) => {
+    $('#course-status-container').append(statusTemplate(courseStatusObject));
+  });
+}
+
+function resetStatus(course) {
+  $('#' + course.ou + '-OU').remove();
+  $('#course-status-container').append(statusTemplate(course));
+}
 
 var context = [
     {
