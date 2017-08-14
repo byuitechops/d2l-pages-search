@@ -91,7 +91,7 @@ function downloadCourses(ouNumbers, callback) {
         courseStatuses[ouNumber + '-OU'] = {
             name: ouNumber,
             ou: ouNumber,
-            status: 'loading'
+            status: 'LOADING'
         };
     });
     console.log(courseStatuses);
@@ -101,7 +101,7 @@ function downloadCourses(ouNumbers, callback) {
         // Download a single course
         d2lScrape.getCourseHtmlPages(ouNumber, function (error, data) {
             if (error) {
-                renderStatus(data.courseInfo.Identifier, data.courseInfo.Name, 'error');
+                renderStatus(data.courseInfo.Identifier, data.courseInfo.Name, 'ERROR');
                 callback(error);
                 return;
             }
@@ -110,7 +110,7 @@ function downloadCourses(ouNumbers, callback) {
             courseStatuses[ouNumber + '-OU'] = {
                 name: data.courseInfo.Name,
                 ou: ouNumber,
-                status: 'complete'
+                status: 'COMPLETE'
             }
             renderStatus(courseStatuses[ouNumber + '-OU'], false);
 
