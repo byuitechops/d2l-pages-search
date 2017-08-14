@@ -1,3 +1,13 @@
+// Declare Handlebars templates
+var course = $('#course-template').html();
+var courseTemplate = Handlebars.compile(course);
+var file = $('#file-template').html();
+var fileTemplate = Handlebars.compile(file);
+var match = $('#match-template').html();
+var matchTemplate = Handlebars.compile(match);
+var status = $('#course-status-template').html();
+var statusTemplate = Handlebars.compile(status);
+
 /**
  * Main will handle all user input from the DOM.
  */
@@ -88,13 +98,49 @@ function getOuNumbers() {
  * @returns {Array} Array of the downloaded course data objects
  */
 function downloadCourses(ouNumbers, callback) {
+    var courseStatuses = [];
+    ouNumbers.forEach((ouNumber) => {
+        courseStatuses[ouNumber + '-OU'] = {
+            name: ouNumber,
+            ou: ouNumber,
+            status: 'LOADING'
+        };
+    });
+
+    function downloadCourse(ouNumber, callback) {
+
+        // Download a single course
+        d2lScrape.getCourseHtmlPages(ouNumber, function (error, data) {
+            if (error) {
+                renderStatus(data.courseInfo.Identifier, data.courseInfo.Name, 'ERROR');
+                callback(error);
+                return;
+            }
+
+            // Render the status that we've downloaded
+            courseStatuses[ouNumber + '-OU'] = {
+                name: data.courseInfo.Name,
+                ou: ouNumber,
+                status: 'COMPLETE'
+            }
+            renderStatus(courseStatuses[ouNumber + '-OU'], false);
+
+            // Compile the data with async
+            callback(null, data);
+        })
+    }
+
+
     var downloadedData = [];
 
     // Render the status that we're downloading
-    renderStatus(ouNumbers);
+    courseStatuses.forEach(function (statusObject, true) {
+        renderStatus(statusObject);
+    });
+
 
     // Download all the course html pages for each of the ouNumbers
-    async.map(ouNumbers, d2lScrape.getCourseHtmlPages, function (error, results) {
+    async.map(ouNumbers, downloadCourse, function (error, results) {
         if (error) {
             callback(error);
         }
@@ -106,8 +152,13 @@ function downloadCourses(ouNumbers, callback) {
 
 }
 
-function renderStatus(dataToRender) {
-    console.log(dataToRender);
+function renderStatus(statusObject, addCourses) {
+    if (addCourses) {
+        $('#course-status-container').append(statusTemplate(statusObject));
+    } else {
+        $('#' + statusObject.ou + '-OU').remove();
+        $('#course-status-container').append(statusTemplate(statusObject));
+    }
 }
 
 /**
