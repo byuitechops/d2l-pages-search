@@ -1,36 +1,73 @@
-var source = $('#course-result').html();
-var template = Handlebars.compile(source);
+var course = $('#course-template').html();
+var courseTemplate = Handlebars.compile(course);
+var file = $('#file-template').html();
+var fileTemplate = Handlebars.compile(file);
+var match = $('#match-template').html();
+var matchTemplate = Handlebars.compile(match);
 
-var context = [{
-    course: {
-      name: 'FDENG 301',
-      OU: '104763',
-      link: 'https://www.google.com',
-      file: {
-        name: 'Lonely Mountain.html',
-        link: 'https://www.google.com'
-      }
+var context = [
+    {
+      courseInfo: {
+        Name: 'FDENG 301',
+        Code: '102934'
+      },
+      successfulPages: [
+        {
+            document: 'FileName',
+            url: 'www.filelocation.com',
+            html: 'striiiingHTML', //(when request is successful)
+            matches: [
+              {name: 'Match1'},
+              {name: 'Match2'},
+              {name: 'Match3'}
+            ]
+            /*error: null //when request is successful
+            error : { //when request has an error
+                status: request.status,
+                statusText: request.statusText,
+                responseText: request.responseText,
+                responseURL: request.responseURL
+            }*/
+          }
+      ],
+      errorPages: []
+    },
+    {
+      courseInfo: {
+        Name: 'FDWLD 101',
+        Code: '102454'
+      },
+      successfulPages: [
+        {
+            document: 'FileName2',
+            url: 'www.filelocation.com',
+            html: 'striiiingHTML', //(when request is successful)
+            matches: [
+              {name: 'Match1'},
+              {name: 'Match2'},
+              {name: 'Match3'}
+            ]
+            /*error: null //when request is successful
+            error : { //when request has an error
+                status: request.status,
+                statusText: request.statusText,
+                responseText: request.responseText,
+                responseURL: request.responseURL
+            }*/
+          }
+      ],
+      errorPages: []
     }
-  },
-  {
-    course: {
-      name: 'CS 126',
-      OU: '123456',
-      link: 'https://www.google.com',
-      file: {
-        name: 'Lonely Bantha.html',
-        link: 'https://www.google.com'
-      }
-    }
-  }
 ];
 
-//var html = template(context);
-//$('#results-container').append(html);
-console.log(context.length);
+// Grabs all the course objects from Context and loops through them all to display them all
 context.forEach((courseObject) => {
-  $('#results-container').append(template(courseObject));
+  $('#results-container').append(courseTemplate(courseObject));
+  courseObject.successfulPages.forEach((file) => {
+    $('#course-results-' + courseObject.courseInfo.Code)
+    .append(fileTemplate(file));
+    file.matches.forEach((match) => {
+      $('#file-matches-' + file.document).append(matchTemplate(match));
+    });
+  });
 });
-
-
-var ouNumbers = $('#textarea').value().split(',');
