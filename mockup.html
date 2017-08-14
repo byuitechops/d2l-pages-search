@@ -33,7 +33,7 @@
                 <div class="flex"><input class="search-input" type="text" />
                     <div class="flexer regex-box"></div>
                 </div>
-                <div class="radio-container flex"><input class="type-radio" type="radio" name="search-type" value="Text" checked="checked" /> <label for="web-page-text">Page Text</label> <input class="type-radio" type="radio" name="search-type" value="HTML" /> <label for="HTML">HTML</label> <input class="type-radio" type="radio" name="search-type" value="CSS" /> <label for="CSS Selector">CSS Selector</label> <input class="type-radio" type="checkbox" name="search-type" /> <label for="regex">Regex</label></div>
+                <div class="radio-container flex"><input class="type-radio" id="searchSettingText" type="radio" name="search-type" value="Text" checked="checked" /> <label for="web-page-text">Page Text</label> <input class="type-radio" id="searchSettingHTML" type="radio" name="search-type" value="HTML" /> <label for="HTML">HTML</label> <input class="type-radio" id="searchSettingCSS" type="radio" name="search-type" value="CSS" /> <label for="CSS Selector">CSS Selector</label> <input class="type-radio" id="searchSettingRegex" type="checkbox" name="search-type" /> <label for="regex">Regex</label></div>
                 <div class="flex"><button id="search-button" class="btn--raised search-button">Search</button> <button id="download-button" class="btn--raised search-button disabled" disabled="disabled">Download</button></div>
             </div>
             <div class="card" id="results-container">

@@ -19,7 +19,7 @@ function main() {
     // jQuery elements
     var loadCoursesButton = $('#load-button'),
         searchCoursesButton = $('#search-button'),
-        searchInputElement = $('#searchInput'),
+        searchInputElement = $('.search-input'),
         searchSettingText = $('#searchSettingText'),
         searchSettingHTML = $('#searchSettingHTML'),
         searchSettingCSS = $('#searchSettingCSS'),
@@ -167,6 +167,8 @@ function searchCourses(downloadedCourses, searchSettings) {
 
         var resultMatch;
 
+        console.log('searchQuery: ' + searchSettings.query)
+
         course.successfulPages.forEach(function (page) {
             if (searchSettings.isSelector) {
                 // Place selector searching logic here
@@ -187,24 +189,44 @@ function searchCourses(downloadedCourses, searchSettings) {
             } else {
                 // We want to search using innerText or html
                 if (searchSettings.searchInnerText) {
-                    // Place innerText searching logic here
-                    if (page.document.body.innerText.includes(searchSettings.query)) {
-                        var matchedRegex = new RegExp(searchSettings.query, 'g');
+                    // Check to see if the query is regex
+                    if (searchSettings.isRegex) {
+                        // Place innerText searching logic here
+                        if (page.document.body.innerText.match(searchSettings.query)) {
+                            // Only get 50 chars before the match
+                            var beginningIndex = page.html.search(searchSettings.query);
+                            resultMatch = page.html.substring(beginningIndex - 50, beginningIndex);
+                            var matchWord = page.html.match(searchSettings.query);
 
-                        // Only get 50 chars before the match
-                        var beginningIndex = page.document.body.innerText.indexOf(searchSettings.query);
-                        resultMatch = page.document.body.innerText.substring(beginningIndex - 50, beginningIndex);
-                        var matchWord = page.document.body.innerText.match(matchedRegex);
+                            // Append the matchedWord onto the whole result
+                            resultMatch += matchWord[0];
 
-                        // Append the matchedWord onto the whole result
-                        resultMatch += matchWord[0];
+                            // Only get 50 chars after the end of the matchedWord
+                            var endIndex = beginningIndex + matchWord[0].length;
+                            resultMatch += page.html.substring(endIndex, endIndex + 50);
 
-                        // Only get 50 chars after the end of the matchedWord
-                        var endIndex = beginningIndex + matchWord[0].length;
-                        resultMatch += page.document.body.innerText.substring(endIndex, endIndex + 50);
+                            // Now push the match
+                            newResult.matches.push(resultMatch);
+                        }
+                    } else {
+                        if (page.document.body.innerText.includes(searchSettings.query)) {
+                            var matchedRegex = new RegExp(searchSettings.query, 'g');
 
-                        // Now push the match
-                        newResult.matches.push(resultMatch);
+                            // Only get 50 chars before the match
+                            var beginningIndex = page.document.body.innerText.indexOf(searchSettings.query);
+                            resultMatch = page.document.body.innerText.substring(beginningIndex - 50, beginningIndex);
+                            var matchWord = page.document.body.innerText.match(matchedRegex);
+
+                            // Append the matchedWord onto the whole result
+                            resultMatch += matchWord[0];
+
+                            // Only get 50 chars after the end of the matchedWord
+                            var endIndex = beginningIndex + matchWord[0].length;
+                            resultMatch += page.document.body.innerText.substring(endIndex, endIndex + 50);
+
+                            // Now push the match
+                            newResult.matches.push(resultMatch);
+                        }
                     }
                 } else if (searchSettings.searchHtml) {
                     // Check to see if the query is regex
