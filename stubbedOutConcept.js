@@ -1,12 +1,12 @@
 // Declare Handlebars templates
-var course = $('#course-template').html();
+/*var course = $('#course-template').html();
 var courseTemplate = Handlebars.compile(course);
 var file = $('#file-template').html();
 var fileTemplate = Handlebars.compile(file);
 var match = $('#match-template').html();
 var matchTemplate = Handlebars.compile(match);
 var status = $('#course-status-template').html();
-var statusTemplate = Handlebars.compile(status);
+var statusTemplate = Handlebars.compile(status);*/
 
 /**
  * Main will handle all user input from the DOM.
@@ -16,23 +16,15 @@ function main() {
     var downloadedCourses;
     var searchSettings;
 
-    // HTML document elements
-    /*var loadCoursesButton = document.querySelector('.search-button'),
-        searchCoursesButton = document.querySelector('.search-button'),
-        searchInputElement = document.querySelector('.search-input'),
-        searchSettingText = document.getElementById('searchSettingText'),
-        searchSettingHTML = document.getElementById('searchSettingHTML'),
-        searchSettingCSS = document.getElementById('searchSettingCSS'),
-        searchSettingRegex = document.getElementById('searchSettingRegex');*/
-
     // jQuery elements
-    var loadCoursesButton = $('#download-course-container .search-button'),
-        searchCoursesButton = $('#search-container .search-button'),
+    var loadCoursesButton = $('#load-button'),
+        searchCoursesButton = $('#search-button'),
         searchInputElement = $('#searchInput'),
         searchSettingText = $('#searchSettingText'),
         searchSettingHTML = $('#searchSettingHTML'),
         searchSettingCSS = $('#searchSettingCSS'),
-        searchSettingRegex = $('#searchSettingRegex');
+        searchSettingRegex = $('#searchSettingRegex'),
+        downloadButton = $('#download-button')
 
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
@@ -44,11 +36,7 @@ function main() {
                 console.error('There was an error in downloading the courses: ' + error);
             }
 
-            downloadedCourses = data.reduce(function (flat, dataItem) {
-                return dataItem.reduce(function (subFlat, subItem) {
-                    return subFlat.concat(subItem);
-                }, []);
-            }, []);
+            downloadedCourses = data;
 
             console.log(downloadedCourses);
 
@@ -75,7 +63,6 @@ function main() {
 
 
 
-
     /* Add all the eventListeners we need */
     /*loadCoursesButton.addEventListener('click', function () {
         //get the ou numbers
@@ -98,6 +85,7 @@ function getOuNumbers() {
  * @returns {Array} Array of the downloaded course data objects
  */
 function downloadCourses(ouNumbers, callback) {
+    // Generate the courseStatus Objects
     var courseStatuses = [];
     ouNumbers.forEach((ouNumber) => {
         courseStatuses[ouNumber + '-OU'] = {
@@ -106,9 +94,10 @@ function downloadCourses(ouNumbers, callback) {
             status: 'LOADING'
         };
     });
+    console.log(courseStatuses);
 
     function downloadCourse(ouNumber, callback) {
-
+        renderStatus(courseStatuses[ouNumber + '-OU'], true);
         // Download a single course
         d2lScrape.getCourseHtmlPages(ouNumber, function (error, data) {
             if (error) {
@@ -130,14 +119,10 @@ function downloadCourses(ouNumbers, callback) {
         })
     }
 
-
-    var downloadedData = [];
-
-    // Render the status that we're downloading
-    courseStatuses.forEach(function (statusObject, true) {
-        renderStatus(statusObject);
+    // Render all the status objects that we're about to load
+    courseStatuses.forEach(function (statusObject) {
+        renderStatus(statusObject, true);
     });
-
 
     // Download all the course html pages for each of the ouNumbers
     async.map(ouNumbers, downloadCourse, function (error, results) {
@@ -145,19 +130,19 @@ function downloadCourses(ouNumbers, callback) {
             callback(error);
         }
 
-        downloadedData.push(results);
-
-        callback(null, downloadedData);
+        callback(null, results);
     });
 
 }
 
 function renderStatus(statusObject, addCourses) {
+
+
     if (addCourses) {
-        $('#course-status-container').append(statusTemplate(statusObject));
+        $('#course-status-container').append(Handlebars.templates.status(statusObject));
     } else {
         $('#' + statusObject.ou + '-OU').remove();
-        $('#course-status-container').append(statusTemplate(statusObject));
+        $('#course-status-container').append(Handlebars.templates.status(statusObject));
     }
 }
 
