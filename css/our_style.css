@@ -1,0 +1,182 @@
+body {
+
+}
+
+textarea {
+  height: 90px;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-console {
+  background-color: #fff;
+  min-height: 150px;
+  padding: 20px;
+  width: calc(100% - 20px);
+}
+
+.card {
+  margin: 10px;
+  max-width: 800px;
+  min-width: 800px;
+}
+
+.header {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.course {
+  margin: 5px 0;
+}
+
+.status-COMPLETE {
+  color: #82C242;
+}
+
+.status-LOADING {
+  color: #F58300;
+}
+
+.status-ERROR {
+  color: #E42226;
+}
+
+.search-input {
+  font-size: 18px;
+  margin: 10px 10px 20px !important;
+  padding: 15px 10px !important;
+  width: 50% !important;
+  border: solid 1px #2196f3 !important;
+  border-radius: 2px;
+  background: none !important;
+  background-color: #fafafa !important;
+}
+
+.flexer {
+  display: flex;
+  justify-content: center;
+}
+
+.flexer>label {
+  margin-left: 10px;
+  padding-top: 4px;
+}
+
+
+.type-radio {
+  margin: 0 10px 0 14px !important;
+}
+
+.radio-container>label {
+  padding: 1px 4px;
+}
+
+.search-button {
+  margin: 20px 5px 10px;
+  width: 140px;
+}
+
+.course-results {
+  margin: 20px 0 0;
+}
+
+.results-course-title {
+  font-size: 22px;
+    padding-bottom: 5px;
+}
+
+.result-card {
+  margin: 0 0 10px !important;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.results-file-name {
+  font-weight: bold;
+}
+
+.result {
+  margin: 10px 0;
+  background-color: #efefef;
+  padding: 3px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.file-header {
+  margin-bottom: 20px;
+}
+
+.half-card {
+  max-width: calc(390px);
+  min-width: calc(390px);
+}
+
+.check-collapse {
+    padding: 0;
+}
+
+.OU {
+    color: gray;
+    position: absolute;
+    top: 14px;
+    right: 40px;
+    font-size: 12px;
+}
+
+.step-1-2 {
+    padding: 0;
+    margin: 10px 0 0;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+}
+
+.step-3 {
+    padding: 0;
+    margin: 0 0 10px;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+}
+
+.course-holder {
+    max-height: 170px;
+    overflow: auto;
+}
+
+.disabled {
+    background-color: #888;
+    color: #bbb;
+    cursor: default;
+}
+
+.disabled:hover {
+    background-color: #888;
+    color: #bbb;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
