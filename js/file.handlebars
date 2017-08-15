@@ -1,11 +1,13 @@
 <div class="card result-card">
   <!-- File Information added here -->
   <div class="flex file-header">
-    <span class="results-file-name tooltip" data-text="{{url}}">{{document}}</span>
+    <span class="results-file-name" title="{{pageUrl}}">
+      {{name}}
+    </span>
     <span class="spacer"></span>
-    <a href="{{document}}" target="_blank">View File</a>
+    <a href="{{pageUrl}}" target="_blank">View File</a>
   </div>
-  <div id="file-matches-{{document}}">
+  <div id="file-matches-{{id}}">
     <!-- Matches within the file go here -->
   </div>
 </div>

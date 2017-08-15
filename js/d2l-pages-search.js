@@ -60,7 +60,7 @@ function main() {
 
         // Display the results
         console.log(results);
-        //displayResults(results, searchSettings);
+        displayResults(results, searchSettings);
     });
 
     // End program
@@ -74,7 +74,7 @@ function getOuNumbers() {
 /**
  * This function downloads all the courses the user specifies.  It keeps track of the status of the
  * download of each course
- * 
+ *
  * @param {Array}    ouNumbers The ouNumbers to be downloaded
  * @param {function} callback  A function to send the downloaded courses back to the caller
  */
@@ -91,7 +91,7 @@ function downloadCourses(ouNumbers, callback) {
 
     /**
      * Downloads a single course and updates its model status.
-     * 
+     *
      * @param {number}   ouNumber The ouNumber for a course
      * @param {function} callback The callback that compiles the data into the result async array
      */
@@ -147,7 +147,7 @@ function downloadCourses(ouNumbers, callback) {
 /**
  * This function changes the view according to the model data it is given.
  * Specifically, this function reports the change in status of downloading courses.
- * 
+ *
  * @param {object}  statusObject An object with the data to be displayed
  * @param {boolean} updateCourse   Whether to update a course or not
  */
@@ -161,9 +161,9 @@ function renderStatus(statusObject, updateCourse) {
 }
 
 /**
- * This function will search through all of the downloaded courses and return the results of 
+ * This function will search through all of the downloaded courses and return the results of
  * the search.
- * 
+ *
  * @param {Array}  downloadedCourses Courses to search
  * @param {object} searchSettings    Settings with which to conduct the search
  */
@@ -297,15 +297,39 @@ function makeMatch(page, matchType) {
  * @param {Array}  results         An array of the results from the search
  * @param {object} [[Description]]
  */
-function displayResults(results, searchSettings) {
-    results.forEach(function (result) {
-        result.matches.forEach(function (match) {
-            var matchedIndex = match.indexOf(searchSettings.query);
-            var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
-            console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
-        })
-    })
-}
+
+ function displayResults(results, searchSettings) {
+
+   function renderResults(courseObject) {
+     console.log('RESULT', courseObject);
+     if (courseObject.pages.length > 0) {
+       $('#results-container').append(Handlebars.templates.course(courseObject));
+       courseObject.pages.forEach((file) => {
+          file.name = file.pageUrl
+            .split('/')[file.pageUrl.split('/').length - 1]
+            .split('%20').join(' ');
+          file.id = file.name.split(' ').join('').split('.').join('');
+         $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
+         file.matches.forEach((match) => {
+           if (!searchSettings.isSelector) {
+             $('#file-matches-' + file.id).append(Handlebars.templates.textMatch(match));
+           } else {
+             $('#file-matches-' + file.id).append(Handlebars.templates.cssMatch(match));
+           }
+         });
+       });
+     }
+   }
+
+   results.forEach(function(result) {
+     renderResults(result);
+     /*result.matches.forEach(function(match) {
+       var matchedIndex = match.indexOf(searchSettings.query);
+       var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
+       console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
+     })*/
+   })
+ }
 
 /**
  * Download a CSV of the results in the format specified by the user.
@@ -320,9 +344,9 @@ main();
 
 /*****************************************/
 /**
- * This function will search through all of the downloaded courses and return the results of 
+ * This function will search through all of the downloaded courses and return the results of
  * the search.
- * 
+ *
  * @param {Array}  downloadedCourses Courses to search
  * @param {object} searchSettings    Settings with which to conduct the search
  */
@@ -369,7 +393,6 @@ function searchCourses(downloadedCourses, searchSettings) {
         // Fix the query to correctly parse the regex
         makeRegexFromQuery(searchSettings);
     }
-
 
     return downloadedCourses.map(function (course) {
         return {
