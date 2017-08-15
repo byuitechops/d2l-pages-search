@@ -363,12 +363,20 @@ function searchCourses(downloadedCourses, searchSettings) {
 
             // Construct the 50 left and right string
             var endOfWordIndex = myArray.index + myArray[0].length;
-            var match = myArray.input.substring(myArray.index - 50, myArray.index);
+            match = {
+                firstFifty: myArray.input.substring(myArray.index - 50, myArray.index).replace(/\n+/g, ''),
+                queryMatch: matchedWord,
+                secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '')
+            }
+
+            /*var match = myArray.input.substring(myArray.index - 50, myArray.index);
+            match += '<span class="highlight">';
             match += matchedWord;
-            match += myArray.input.substring(endOfWordIndex, endOfWordIndex + 50);
+            match += '</span>'
+            match += myArray.input.substring(endOfWordIndex, endOfWordIndex + 50);*/
 
             // Now get rid of whitespace
-            match = match.replace(/\n+/g, '');
+            //match = match.replace(/\n+/g, '');
 
             outputArray.push(match);
         }
@@ -397,7 +405,25 @@ function searchCourses(downloadedCourses, searchSettings) {
 
     function makeRegexFromQuery(searchSettings) {
         if (searchSettings.isRegex) {
+            // Taken from `course-search` gitHub repo
+            // Check to make sure searchString is in regular expression form
+            var pattern;
+            var flags;
 
+            if (/^\/.+(\/[gimy]*)$/.test(searchSettings.query)) {
+                pattern = searchSettings.query.slice(1, searchSettings.query.lastIndexOf('/'));
+                flags = searchSettings.query.slice(searchSettings.query.lastIndexOf('/') + 1);
+            } else {
+                window.alert("Regular expression pattern must be wrapped with '/' and must only be followed by valid flags.");
+                return;
+            }
+            try {
+                // Create Regular Expression Object
+                regEx = new RegExp(pattern, flags);
+            } catch (ex) {
+                window.alert(ex.message);
+                return;
+            }
         } else {
             searchSettings.query = new RegExp(searchSettings.query, 'g');
         }
