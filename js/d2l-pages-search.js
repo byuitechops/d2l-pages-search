@@ -361,16 +361,16 @@ function searchCourses(downloadedCourses, searchSettings) {
             var matchedWord = myArray[0];
 
             // Construct the 50 left and right string
-            function getString(string) {
+            function getFirstFifty(string) {
                 return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index);
                 //return string.substring(string.indexOf('potato') - 53, string.indexOf('potato'));
             }
             var endOfWordIndex = myArray.index + myArray[0].length;
             match = {
-                firstFifty: '...' + getString(myArray.input),
+                firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
                 //firstFifty: '...' + myArray.input.substring(myArray.index - 50, myArray.index).replace(/\n+/g, ''),
                 queryMatch: matchedWord,
-                secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + '...'
+                secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
             }
 
             /*var match = myArray.input.substring(myArray.index - 50, myArray.index);
