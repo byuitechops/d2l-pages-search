@@ -305,10 +305,8 @@ function displayResults(results, searchSettings) {
         if (courseObject.pages.length > 0) {
             $('#results-container').append(Handlebars.templates.course(courseObject));
             courseObject.pages.forEach((file) => {
-                file.name = file.pageUrl
-                    .split('/')[file.pageUrl.split('/').length - 1]
-                    .split('%20').join('')
-                    .split('%27').join('');
+                file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
+
                 file.id = file.name.split(' ').join('').split('.').join('');
                 $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
                 file.matches.forEach((match) => {
