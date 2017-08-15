@@ -167,7 +167,7 @@ function renderStatus(statusObject, updateCourse) {
  * @param {Array}  downloadedCourses Courses to search
  * @param {object} searchSettings    Settings with which to conduct the search
  */
-function searchCourses(downloadedCourses, searchSettings) {
+/*function searchCourses(downloadedCourses, searchSettings) {
     var results = [];
 
     // Search according to the settings
@@ -175,78 +175,22 @@ function searchCourses(downloadedCourses, searchSettings) {
         // Every course searched will have a result.  Some will have no matches.
         var newResult = {
             courseName: course.courseInfo.Name,
+            courseUrl: course.courseInfo.Path,
             ouNumber: course.courseInfo.Identifier,
-            matches: []
+            matches: course.successfulPages.map(findMatches)
         }
         var resultMatch = {};
 
         console.log('searchQuery: ' + searchSettings.query)
 
-        function makeMatch(page, matchType) {
-            // Every match will have a page url
-            resultMatch.pageUrl = page.url;
-
-            switch (matchType) {
-                case 'regex':
-                    // Only get 50 chars before the match
-                    var beginningIndex = page.html.search(searchSettings.query);
-                    resultMatch.match = page.html.substring(beginningIndex - 50, beginningIndex);
-                    var matchedWord = page.html.match(searchSettings.query);
-
-                    // Append the matched word onto the whole result
-                    resultMatch.match += matchedWord[0];
-
-                    // Only get 50 chars after the end of the matched word
-                    var endIndex = beginningIndex + matchedWord[0].length;
-                    resultMatch.match += page.html.substring(endIndex, endIndex + 50);
-
-                    // Now push the whole match
-                    newResult.matches.push(resultMatch);
-                    break;
-
-                case 'text':
-                    // Make a regex out of the query so we can get the index
-                    var matchedRegex = new RegExp(searchSettings.query, 'g');
-
-                    // Only get 50 chars before the match
-                    var beginningIndex = page.document.body.innerText.indexOf(searchSettings.query);
-                    resultMatch.match = page.document.body.innerText.substring(beginningIndex - 50, beginningIndex);
-                    var matchedWord = page.document.body.innerText.match(matchedRegex);
-
-                    // Append the matched word onto the whole result
-                    resultMatch.match += matchedWord[0];
-
-                    // Only get 50 chars after the end of the matched word
-                    var endIndex = beginningIndex + matchedWord[0].length;
-                    resultMatch.match += page.document.body.innerText.substring(endIndex, endIndex + 50);
-
-                    // Now push the whole match
-                    newResult.matches.push(resultMatch);
-                    break;
-
-                case 'selector':
-                    resultMatch.pageUrl = page.url;
-                    resultMatch.fullHtml = page.html;
-                    resultMatch.innerText = page.document.body.innerText;
-
-                    // Put the open/close tags in
-                    page.document.querySelectorAll(searchSettings.query).forEach(function (foundElement) {
-                        resultMatch.openCloseTags = '<p></p>' // example for right now
-                    });
-
-                    // Push all the matches with their proper results into the matches array
-                    newResult.matches.push(resultMatch);
-                    break;
-            }
-        }
-
         // Search each successful page with the settings
-        course.successfulPages.forEach(function (page) {
+        function findMatches(page) {
+            var matchesOut;
             if (searchSettings.isSelector) {
                 // Place selector searching logic here
                 if (page.document.querySelector(searchSettings.query)) {
                     // We have a match!
-                    makeMatch(page, 'selector');
+                    matchesOut = makeMatch(page, 'selector');
                 }
             } else {
                 // We want to search using innerText or html
@@ -256,12 +200,12 @@ function searchCourses(downloadedCourses, searchSettings) {
                         // Place innerText searching logic here
                         if (page.document.body.innerText.match(searchSettings.query)) {
                             // We have a match!
-                            makeMatch(page, 'regex');
+                            matchesOut = makeMatch(page, 'regex');
                         }
                     } else {
                         if (page.document.body.innerText.includes(searchSettings.query)) {
                             // We have a match!
-                            makeMatch(page, 'text');
+                            matchesOut = makeMatch(page, 'text');
                         }
                     }
                 } else if (searchSettings.searchHtml) {
@@ -269,23 +213,84 @@ function searchCourses(downloadedCourses, searchSettings) {
                     if (searchSettings.isRegex) {
                         if (page.html.match(searchSettings.query)) {
                             // We have a match!
-                            makeMatch(page, 'regex');
+                            matchesOut = makeMatch(page, 'regex');
                         }
                     } else {
                         if (page.html.includes(searchSettings.query)) {
                             // We found a match!
-                            makeMatch(page, 'text');
+                            matchesOut = makeMatch(page, 'text');
                         }
                     }
                 }
             }
-        });
+
+            return matchesOut;
+        }
 
         results.push(newResult);
     });
 
     return results;
 }
+
+function makeMatch(page, matchType) {
+    // Every match will have a page url
+    resultMatch.pageUrl = page.url;
+
+    switch (matchType) {
+        case 'regex':
+            // Only get 50 chars before the match
+            var beginningIndex = page.html.search(searchSettings.query);
+            resultMatch.match = page.html.substring(beginningIndex - 50, beginningIndex);
+            var matchedWord = page.html.match(searchSettings.query);
+
+            // Append the matched word onto the whole result
+            resultMatch.match += matchedWord[0];
+
+            // Only get 50 chars after the end of the matched word
+            var endIndex = beginningIndex + matchedWord[0].length;
+            resultMatch.match += page.html.substring(endIndex, endIndex + 50);
+
+            // Now push the whole match
+            newResult.matches.push(resultMatch);
+            break;
+
+        case 'text':
+            // Make a regex out of the query so we can get the index
+            var matchedRegex = new RegExp(searchSettings.query, 'g');
+
+            // Only get 50 chars before the match
+            var beginningIndex = page.document.body.innerText.indexOf(searchSettings.query);
+            resultMatch.match = page.document.body.innerText.substring(beginningIndex - 50, beginningIndex);
+            var matchedWord = page.document.body.innerText.match(matchedRegex);
+
+            // Append the matched word onto the whole result
+            resultMatch.match += matchedWord[0];
+
+            // Only get 50 chars after the end of the matched word
+            var endIndex = beginningIndex + matchedWord[0].length;
+            resultMatch.match += page.document.body.innerText.substring(endIndex, endIndex + 50);
+
+            // Now push the whole match
+            newResult.matches.push(resultMatch);
+            break;
+
+        case 'selector':
+            resultMatch.pageUrl = page.url;
+            resultMatch.fullHtml = page.html;
+            resultMatch.innerText = page.document.body.innerText;
+            resultMatch.openCloseTags = [];
+
+            // Put the open/close tags in
+            page.document.querySelectorAll(searchSettings.query).forEach(function (foundElement) {
+                resultMatch.openCloseTags.push(foundElement);
+            });
+
+            // Push all the matches with their proper results into the matches array
+            newResult.matches.push(resultMatch);
+            break;
+    }
+}*/
 
 /**
  * Display results will display the results through the DOM.
@@ -311,3 +316,76 @@ function downloadCSV(results) {
 }
 
 main();
+
+
+/*****************************************/
+/**
+ * This function will search through all of the downloaded courses and return the results of 
+ * the search.
+ * 
+ * @param {Array}  downloadedCourses Courses to search
+ * @param {object} searchSettings    Settings with which to conduct the search
+ */
+function searchCourses(downloadedCourses, searchSettings) {
+    var makeMatches;
+
+    function searchText(searchString, regEx) {
+
+    }
+
+    function makeMatchesSelector(page, searchSettings) {
+        // Put the open/close tags in
+        return Array.from(page.document.querySelectorAll(searchSettings.query)).map(function (foundElement) {
+            return {
+                fullHtml: foundElement.outerHTML,
+                innerText: foundElement.innerText,
+                openCloseTags: foundElement.outerHTML.replace(foundElement.innerHTML, '')
+            }
+        });
+    }
+
+    function makeMatchesText(page, searchSettings) {
+        return searchText(page.document.body.innerText, searchSettings.query);
+    }
+
+    function makeMatchesHtml(page, searchSettings) {
+        return searchText(page.html, searchSettings.query);
+    }
+
+    function makeRegexFromQuery(searchSettings) {
+
+    }
+
+    // Decide what our make function will be
+    if (searchSettings.isSelector) {
+        makeMatches = makeMatchesSelector;
+    } else if (searchSettings.searchInnerText) {
+        makeMatches = makeMatchesText;
+    } else {
+        makeMatches = makeMatchesHtml;
+    }
+
+    if (searchSettings.isRegex) {
+        // Fix the query to correctly parse the regex
+        makeRegexFromQuery(searchSettings);
+    }
+
+
+    return downloadedCourses.map(function (course) {
+        return {
+            courseName: course.courseInfo.Name,
+            courseUrl: course.courseInfo.Path,
+            ouNumber: course.courseInfo.Identifier,
+            pages: course.successfulPages.map(function (page) {
+                    return {
+                        pageUrl: page.url,
+                        matches: makeMatches(page, searchSettings)
+                    }
+                })
+                // We're only going to keep the pages that have returned data
+                .filter(function (page) {
+                    return page.matches.length > 0;
+                })
+        }
+    })
+}
