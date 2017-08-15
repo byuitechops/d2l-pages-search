@@ -424,7 +424,7 @@ function searchCourses(downloadedCourses, searchSettings) {
             }
             try {
                 // Create Regular Expression Object
-                regEx = new RegExp(pattern, flags);
+                searchSettings.query = new RegExp(pattern, flags);
             } catch (ex) {
                 window.alert(ex.message);
                 return;
