@@ -13,7 +13,7 @@ textarea {
 .flex {
   display: flex;
   justify-content: center;
-  padding: -10px 0;
+  margin: 0 0 -10px;
   width: 100%;
   flex-wrap: wrap;
 }
