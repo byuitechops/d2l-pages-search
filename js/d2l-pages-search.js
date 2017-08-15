@@ -51,6 +51,8 @@ function main() {
             if (error) {
                 console.error('There was an error in downloading the courses: ' + error);
             }
+
+            console.log('courses downloaded:', courses)
         });
     });
 
