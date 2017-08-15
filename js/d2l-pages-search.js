@@ -12,8 +12,7 @@ var statusTemplate = Handlebars.compile(status);*/
  * Main will handle all user input from the DOM.
  */
 function main() {
-    var ouNumbers;
-    var downloadedCourses;
+    var courses = [];
     var searchSettings;
 
     // jQuery elements
@@ -29,18 +28,29 @@ function main() {
     // Main event listeners
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
-        ouNumbers = getOuNumbers();
+        var tempOuNumbers = getOuNumbers();
+
+        // For each of the ouNumbers, see if they're on the list of downloaded courses already.
+        tempOuNumbers.forEach(function (ouNumber) {
+            var isCourseOnList = courses.some(function (course) {
+                return ouNumber === course.ou;
+            });
+
+            // If not on the list, make a new object with which to put our downloaded course.
+            if (!isCourseOnList) {
+                courses.push({
+                    courseName: String(ouNumber),
+                    ouNumber: ouNumber,
+                    isDownloaded: false
+                });
+            }
+        });
 
         // Download the ouNumbers
-        downloadCourses(ouNumbers, function (error, data) {
+        downloadCourses(courses, function (error) {
             if (error) {
                 console.error('There was an error in downloading the courses: ' + error);
             }
-
-            downloadedCourses = data;
-
-            console.log('Downloaded course data: ', downloadedCourses);
-
         });
     });
 
@@ -56,7 +66,7 @@ function main() {
 
         console.log('searchSettings: ' + JSON.stringify(searchSettings));
         // Search the courses
-        var results = searchCourses(downloadedCourses, searchSettings);
+        var results = searchCourses(courses, searchSettings);
 
         // Display the results
         console.log(results);
@@ -78,67 +88,53 @@ function getOuNumbers() {
  * @param {Array}    ouNumbers The ouNumbers to be downloaded
  * @param {function} callback  A function to send the downloaded courses back to the caller
  */
-function downloadCourses(ouNumbers, callback) {
-    // Generate the courseStatus Objects
-    var courseStatuses = [];
-    ouNumbers.forEach((ouNumber) => {
-        courseStatuses[ouNumber + '-OU'] = {
-            name: ouNumber,
-            ou: ouNumber,
-            status: 'LOADING'
-        };
-    });
-
+function downloadCourses(courses, callback) {
     /**
      * Downloads a single course and updates its model status.
      *
-     * @param {number}   ouNumber The ouNumber for a course
+     * @param {number}   course A course to download
      * @param {function} callback The callback that compiles the data into the result async array
      */
-    function downloadCourse(ouNumber, downloadCourseCallback) {
-        renderStatus(courseStatuses[ouNumber + '-OU'], true);
-        // Download a single course
-        d2lScrape.getCourseHtmlPages(ouNumber, function (error, data) {
-            if (error) {
-                renderStatus({
-                    name: ouNumber,
-                    ou: ouNumber,
-                    status: 'ERROR'
-                }, true);
-                downloadCourseCallback(error);
-                return;
-            }
+    function downloadCourse(course, downloadCourseCallback) {
+        // Update the view
+        renderStatus(courses);
 
-            // Update the model data to reflect the course has downloaded
-            courseStatuses[ouNumber + '-OU'] = {
-                name: data.courseInfo.Name,
-                ou: ouNumber,
-                status: 'COMPLETE'
-            }
+        if (!course.isDownloaded) {
+            // Download a single course
+            d2lScrape.getCourseHtmlPages(course.ouNumber, function (error, data) {
+                if (error) {
+                    course.status = 'ERROR';
+                    downloadCourseCallback();
+                    return;
+                }
 
-            // Render the status that we've downloaded the course
-            renderStatus(courseStatuses[ouNumber + '-OU'], true);
+                // Update the model data to reflect the course has downloaded
+                course.isDownloaded = true;
+                course.status = 'COMPLETE'
+                course.courseName = data.courseInfo.Name;
+                course.courseUrl = data.courseInfo.Path;
+                course.pages = data.successfulPages;
+            });
+        }
 
-            // Compile the data with async
-            downloadCourseCallback(null, data);
-            return;
-        })
+        // Go on to the next course
+        downloadCourseCallback();
+        return;
     }
 
-    // Render all the status objects that we're about to load
-    courseStatuses.forEach(function (statusObject) {
-        renderStatus(statusObject, false);
-    });
-
-    // Download all the course html pages for each of the ouNumbers
-    async.map(ouNumbers, downloadCourse, function (error, results) {
+    // Download all the course html pages for each of the courses
+    async.eachSeries(courses, downloadCourse, function (error) {
+        // We will never call this error statement, because we'll handle it another way
         if (error) {
             callback(error);
             return;
         }
 
-        // Send the results back to the caller
-        callback(null, results);
+        // Render the status that we've downloaded all the courses
+        renderStatus(courses);
+
+        // Tell the program to keep on going
+        callback();
         return;
     });
 
@@ -148,207 +144,21 @@ function downloadCourses(ouNumbers, callback) {
  * This function changes the view according to the model data it is given.
  * Specifically, this function reports the change in status of downloading courses.
  *
- * @param {object}  statusObject An object with the data to be displayed
- * @param {boolean} updateCourse   Whether to update a course or not
+ * @param {object}  courses An object with the data to be displayed
  */
-function renderStatus(statusObject, updateCourse) {
-    if (updateCourse) {
-        $('#' + statusObject.ou + '-OU').remove();
-        $('#course-status-container').append(Handlebars.templates.status(statusObject));
-    } else {
-        $('#course-status-container').append(Handlebars.templates.status(statusObject));
-    }
+function renderStatus(courses) {
+    $('#course-status-container').html(Handlebars.templates.status(courses));
 }
-
-/**
- * This function will search through all of the downloaded courses and return the results of
- * the search.
- *
- * @param {Array}  downloadedCourses Courses to search
- * @param {object} searchSettings    Settings with which to conduct the search
- */
-/*function searchCourses(downloadedCourses, searchSettings) {
-    var results = [];
-
-    // Search according to the settings
-    downloadedCourses.forEach(function (course) {
-        // Every course searched will have a result.  Some will have no matches.
-        var newResult = {
-            courseName: course.courseInfo.Name,
-            courseUrl: course.courseInfo.Path,
-            ouNumber: course.courseInfo.Identifier,
-            matches: course.successfulPages.map(findMatches)
-        }
-        var resultMatch = {};
-
-        console.log('searchQuery: ' + searchSettings.query)
-
-        // Search each successful page with the settings
-        function findMatches(page) {
-            var matchesOut;
-            if (searchSettings.isSelector) {
-                // Place selector searching logic here
-                if (page.document.querySelector(searchSettings.query)) {
-                    // We have a match!
-                    matchesOut = makeMatch(page, 'selector');
-                }
-            } else {
-                // We want to search using innerText or html
-                if (searchSettings.searchInnerText) {
-                    // Check to see if the query is regex
-                    if (searchSettings.isRegex) {
-                        // Place innerText searching logic here
-                        if (page.document.body.innerText.match(searchSettings.query)) {
-                            // We have a match!
-                            matchesOut = makeMatch(page, 'regex');
-                        }
-                    } else {
-                        if (page.document.body.innerText.includes(searchSettings.query)) {
-                            // We have a match!
-                            matchesOut = makeMatch(page, 'text');
-                        }
-                    }
-                } else if (searchSettings.searchHtml) {
-                    // Check to see if the query is regex
-                    if (searchSettings.isRegex) {
-                        if (page.html.match(searchSettings.query)) {
-                            // We have a match!
-                            matchesOut = makeMatch(page, 'regex');
-                        }
-                    } else {
-                        if (page.html.includes(searchSettings.query)) {
-                            // We found a match!
-                            matchesOut = makeMatch(page, 'text');
-                        }
-                    }
-                }
-            }
-
-            return matchesOut;
-        }
-
-        results.push(newResult);
-    });
-
-    return results;
-}
-
-function makeMatch(page, matchType) {
-    // Every match will have a page url
-    resultMatch.pageUrl = page.url;
-
-    switch (matchType) {
-        case 'regex':
-            // Only get 50 chars before the match
-            var beginningIndex = page.html.search(searchSettings.query);
-            resultMatch.match = page.html.substring(beginningIndex - 50, beginningIndex);
-            var matchedWord = page.html.match(searchSettings.query);
-
-            // Append the matched word onto the whole result
-            resultMatch.match += matchedWord[0];
-
-            // Only get 50 chars after the end of the matched word
-            var endIndex = beginningIndex + matchedWord[0].length;
-            resultMatch.match += page.html.substring(endIndex, endIndex + 50);
-
-            // Now push the whole match
-            newResult.matches.push(resultMatch);
-            break;
-
-        case 'text':
-            // Make a regex out of the query so we can get the index
-            var matchedRegex = new RegExp(searchSettings.query, 'g');
-
-            // Only get 50 chars before the match
-            var beginningIndex = page.document.body.innerText.indexOf(searchSettings.query);
-            resultMatch.match = page.document.body.innerText.substring(beginningIndex - 50, beginningIndex);
-            var matchedWord = page.document.body.innerText.match(matchedRegex);
-
-            // Append the matched word onto the whole result
-            resultMatch.match += matchedWord[0];
-
-            // Only get 50 chars after the end of the matched word
-            var endIndex = beginningIndex + matchedWord[0].length;
-            resultMatch.match += page.document.body.innerText.substring(endIndex, endIndex + 50);
-
-            // Now push the whole match
-            newResult.matches.push(resultMatch);
-            break;
-
-        case 'selector':
-            resultMatch.pageUrl = page.url;
-            resultMatch.fullHtml = page.html;
-            resultMatch.innerText = page.document.body.innerText;
-            resultMatch.openCloseTags = [];
-
-            // Put the open/close tags in
-            page.document.querySelectorAll(searchSettings.query).forEach(function (foundElement) {
-                resultMatch.openCloseTags.push(foundElement);
-            });
-
-            // Push all the matches with their proper results into the matches array
-            newResult.matches.push(resultMatch);
-            break;
-    }
-}*/
-
-/**
- * Display results will display the results through the DOM.
- * @param {Array}  results         An array of the results from the search
- * @param {object} [[Description]]
- */
-
-function displayResults(results, searchSettings) {
-
-    function renderResults(courseObject) {
-        console.log('RESULT', courseObject);
-        if (courseObject.pages.length > 0) {
-            $('#results-container').append(Handlebars.templates.course(courseObject));
-            courseObject.pages.forEach((file, index) => {
-                file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
-                file.id = 'file-' + courseObject.ouNumber + '-' + index;
-                $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
-                file.matches.forEach((match) => {
-                    if (!searchSettings.isSelector) {
-                        $('#' + file.id).append(Handlebars.templates.textMatch(match));
-                    } else {
-                        $('#' + file.id).append(Handlebars.templates.cssMatch(match));
-                    }
-                });
-            });
-        }
-    }
-
-    results.forEach(function (result) {
-        renderResults(result);
-        /*result.matches.forEach(function(match) {
-          var matchedIndex = match.indexOf(searchSettings.query);
-          var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
-          console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
-        })*/
-    })
-}
-
-/**
- * Download a CSV of the results in the format specified by the user.
- * @param {Array} results An array of results from the search, in a format that the user wants
- */
-function downloadCSV(results) {
-
-}
-
-main();
-
 
 /*****************************************/
 /**
  * This function will search through all of the downloaded courses and return the results of
  * the search.
  *
- * @param {Array}  downloadedCourses Courses to search
+ * @param {Array}  courses Courses to search
  * @param {object} searchSettings    Settings with which to conduct the search
  */
-function searchCourses(downloadedCourses, searchSettings) {
+function searchCourses(courses, searchSettings) {
     // This variable holds the function that we will use to search
     var makeMatches;
     $('.course-results').remove();
@@ -463,7 +273,7 @@ function searchCourses(downloadedCourses, searchSettings) {
         makeRegexFromQuery(searchSettings);
     }
 
-    return downloadedCourses.map(function (course) {
+    return courses.map(function (course) {
         return {
             courseName: course.courseInfo.Name,
             courseUrl: course.courseInfo.Path,
@@ -481,3 +291,51 @@ function searchCourses(downloadedCourses, searchSettings) {
         }
     })
 }
+
+
+/**
+ * Display results will display the results through the DOM.
+ * @param {Array}  results         An array of the results from the search
+ * @param {object} 
+ */
+
+function displayResults(results, searchSettings) {
+
+    function renderResults(courseObject) {
+        console.log('RESULT', courseObject);
+        if (courseObject.pages.length > 0) {
+            $('#results-container').append(Handlebars.templates.course(courseObject));
+            courseObject.pages.forEach((file, index) => {
+                file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
+                file.id = 'file-' + courseObject.ouNumber + '-' + index;
+                $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
+                file.matches.forEach((match) => {
+                    if (!searchSettings.isSelector) {
+                        $('#' + file.id).append(Handlebars.templates.textMatch(match));
+                    } else {
+                        $('#' + file.id).append(Handlebars.templates.cssMatch(match));
+                    }
+                });
+            });
+        }
+    }
+
+    results.forEach(function (result) {
+        renderResults(result);
+        /*result.matches.forEach(function(match) {
+          var matchedIndex = match.indexOf(searchSettings.query);
+          var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
+          console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
+        })*/
+    })
+}
+
+/**
+ * Download a CSV of the results in the format specified by the user.
+ * @param {Array} results An array of results from the search, in a format that the user wants
+ */
+function downloadCSV(results) {
+
+}
+
+main();
