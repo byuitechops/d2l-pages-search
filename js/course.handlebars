@@ -1,0 +1,12 @@
+<div class="collapsible-wrap course-results no-pad">
+    <input type="checkbox" id="collapsible-{{courseInfo.Code}}" checked>
+    <label for="collapsible-{{courseInfo.Code}}" class="check-collapse">
+        <a href="{{courseInfo.link}}" class="results-course-title" target="_blank">
+            {{courseInfo.Name}}
+        </a>
+        <span class="OU">{{courseInfo.Code}}</span>
+    </label>
+    <div id="course-results-{{courseInfo.Code}}" class="collapsible-{{courseInfo.Code}}-area">
+      <!-- Results for the course go here -->
+    </div>
+</div>
