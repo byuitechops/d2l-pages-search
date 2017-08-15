@@ -125,8 +125,6 @@ function downloadCourses(courses, callback) {
             // Go on to the next course
             downloadCourseCallback();
         }
-
-
     }
 
     // To begin, render the current statuses
@@ -147,7 +145,6 @@ function downloadCourses(courses, callback) {
         callback();
         return;
     });
-
 }
 
 /**
@@ -171,6 +168,8 @@ function renderStatus(courses) {
 function searchCourses(courses, searchSettings) {
     // This variable holds the function that we will use to search
     var makeMatches;
+
+    // This removes the current results, if any
     $('.course-results').remove();
 
     function searchText(searchString, regEx) {
