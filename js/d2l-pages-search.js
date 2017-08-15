@@ -327,10 +327,26 @@ main();
  * @param {object} searchSettings    Settings with which to conduct the search
  */
 function searchCourses(downloadedCourses, searchSettings) {
+    // This variable holds the function that we will use to search
     var makeMatches;
 
     function searchText(searchString, regEx) {
+        // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
+        var myArray;
+        var outputArray = [];
+        while ((myArray = regEx.exec(searchString)) !== null) {
+            var matchedWord = myArray[0];
 
+            // Construct the 50 left and right string
+            var endOfWordIndex = myArray.index + myArray[0].length;
+            var match = myArray.input.substring(myArray.index - 50, myArray.index);
+            match += matchedWord;
+            match += myArray.input.substring(endOfWordIndex, endOfWordIndex + 50);
+
+            outputArray.push(match);
+        }
+
+        return outputArray;
     }
 
     function makeMatchesSelector(page, searchSettings) {
@@ -353,7 +369,11 @@ function searchCourses(downloadedCourses, searchSettings) {
     }
 
     function makeRegexFromQuery(searchSettings) {
+        if (searchSettings.isRegex) {
 
+        } else {
+            searchSettings.query = new RegExp(searchSettings.query, 'g');
+        }
     }
 
     // Decide what our make function will be
@@ -365,8 +385,13 @@ function searchCourses(downloadedCourses, searchSettings) {
         makeMatches = makeMatchesHtml;
     }
 
-    if (searchSettings.isRegex) {
+    /*if (searchSettings.isRegex) {
         // Fix the query to correctly parse the regex
+        makeRegexFromQuery(searchSettings);
+    }*/
+
+    // We need to change it to regEx no matter what
+    if (!searchSettings.isSelector) {
         makeRegexFromQuery(searchSettings);
     }
 
