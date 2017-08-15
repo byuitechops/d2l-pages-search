@@ -306,7 +306,7 @@ function displayResults(results, searchSettings) {
             $('#results-container').append(Handlebars.templates.course(courseObject));
             courseObject.pages.forEach((file, index) => {
                 file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
-                file.id = 'file-' + courseObject.ouNumber +'-' + index;
+                file.id = 'file-' + courseObject.ouNumber + '-' + index;
                 $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
                 file.matches.forEach((match) => {
                     if (!searchSettings.isSelector) {
@@ -356,33 +356,44 @@ function searchCourses(downloadedCourses, searchSettings) {
     function searchText(searchString, regEx) {
         // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
         var myArray;
+        var matchedWord;
+        var endOfWordIndex;
         var outputArray = [];
-        while ((myArray = regEx.exec(searchString)) !== null) {
-            var matchedWord = myArray[0];
 
-            // Construct the 50 left and right string
-            function getFirstFifty(string) {
-                return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index);
-                //return string.substring(string.indexOf('potato') - 53, string.indexOf('potato'));
+        function getFirstFifty(string) {
+            return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index);
+        }
+
+        // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
+        if (regEx.global) {
+            while ((myArray = regEx.exec(searchString)) !== null) {
+                matchedWord = myArray[0];
+                endOfWordIndex = myArray.index + myArray[0].length;
+
+                // Construct the 50 left and right string
+                match = {
+                    firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
+                    queryMatch: matchedWord,
+                    secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                }
+
+                outputArray.push(match);
             }
-            var endOfWordIndex = myArray.index + myArray[0].length;
-            match = {
-                firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
-                //firstFifty: '...' + myArray.input.substring(myArray.index - 50, myArray.index).replace(/\n+/g, ''),
-                queryMatch: matchedWord,
-                secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+        } else {
+            myArray = regEx.exec(searchString);
+            if (myArray) {
+                matchedWord = myArray[0];
+                endOfWordIndex = myArray.index + myArray[0].length;
+
+                // Construct the 50 left and right string
+                match = {
+                    firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
+                    queryMatch: matchedWord,
+                    secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                }
+
+                outputArray.push(match);
             }
-
-            /*var match = myArray.input.substring(myArray.index - 50, myArray.index);
-            match += '<span class="highlight">';
-            match += matchedWord;
-            match += '</span>'
-            match += myArray.input.substring(endOfWordIndex, endOfWordIndex + 50);*/
-
-            // Now get rid of whitespace
-            //match = match.replace(/\n+/g, '');
-
-            outputArray.push(match);
         }
 
         return outputArray;
@@ -441,11 +452,6 @@ function searchCourses(downloadedCourses, searchSettings) {
     } else {
         makeMatches = makeMatchesHtml;
     }
-
-    /*if (searchSettings.isRegex) {
-        // Fix the query to correctly parse the regex
-        makeRegexFromQuery(searchSettings);
-    }*/
 
     // We need to change it to regEx no matter what
     if (!searchSettings.isSelector) {
