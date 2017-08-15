@@ -364,6 +364,10 @@ function searchCourses(downloadedCourses, searchSettings) {
             return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index);
         }
 
+        function getLastFifty(string) {
+            return string.substring(string.substring(myArray.length, endOfWordIndex + 50).lastIndexOf(' ') + 1, endOfWordIndex + 50);
+        }
+
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
         if (regEx.global) {
             while ((myArray = regEx.exec(searchString)) !== null) {
@@ -374,7 +378,8 @@ function searchCourses(downloadedCourses, searchSettings) {
                 match = {
                     firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
                     queryMatch: matchedWord,
-                    secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    //secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    secondFifty: getLastFifty(myArray.input) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
                 }
 
                 outputArray.push(match);
