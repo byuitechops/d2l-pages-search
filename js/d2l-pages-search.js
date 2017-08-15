@@ -354,6 +354,7 @@ main();
 function searchCourses(downloadedCourses, searchSettings) {
     // This variable holds the function that we will use to search
     var makeMatches;
+    $('.course-results').remove();
 
     function searchText(searchString, regEx) {
         // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
