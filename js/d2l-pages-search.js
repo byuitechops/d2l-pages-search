@@ -298,38 +298,38 @@ function makeMatch(page, matchType) {
  * @param {object} [[Description]]
  */
 
- function displayResults(results, searchSettings) {
+function displayResults(results, searchSettings) {
 
-   function renderResults(courseObject) {
-     console.log('RESULT', courseObject);
-     if (courseObject.pages.length > 0) {
-       $('#results-container').append(Handlebars.templates.course(courseObject));
-       courseObject.pages.forEach((file) => {
-          file.name = file.pageUrl
-            .split('/')[file.pageUrl.split('/').length - 1]
-            .split('%20').join(' ');
-          file.id = file.name.split(' ').join('').split('.').join('');
-         $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
-         file.matches.forEach((match) => {
-           if (!searchSettings.isSelector) {
-             $('#file-matches-' + file.id).append(Handlebars.templates.textMatch(match));
-           } else {
-             $('#file-matches-' + file.id).append(Handlebars.templates.cssMatch(match));
-           }
-         });
-       });
-     }
-   }
+    function renderResults(courseObject) {
+        console.log('RESULT', courseObject);
+        if (courseObject.pages.length > 0) {
+            $('#results-container').append(Handlebars.templates.course(courseObject));
+            courseObject.pages.forEach((file) => {
+                file.name = file.pageUrl
+                    .split('/')[file.pageUrl.split('/').length - 1]
+                    .split('%20').join(' ');
+                file.id = file.name.split(' ').join('').split('.').join('');
+                $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
+                file.matches.forEach((match) => {
+                    if (!searchSettings.isSelector) {
+                        $('#file-matches-' + file.id).append(Handlebars.templates.textMatch(match));
+                    } else {
+                        $('#file-matches-' + file.id).append(Handlebars.templates.cssMatch(match));
+                    }
+                });
+            });
+        }
+    }
 
-   results.forEach(function(result) {
-     renderResults(result);
-     /*result.matches.forEach(function(match) {
-       var matchedIndex = match.indexOf(searchSettings.query);
-       var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
-       console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
-     })*/
-   })
- }
+    results.forEach(function (result) {
+        renderResults(result);
+        /*result.matches.forEach(function(match) {
+          var matchedIndex = match.indexOf(searchSettings.query);
+          var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
+          console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
+        })*/
+    })
+}
 
 /**
  * Download a CSV of the results in the format specified by the user.
@@ -364,9 +364,9 @@ function searchCourses(downloadedCourses, searchSettings) {
             // Construct the 50 left and right string
             var endOfWordIndex = myArray.index + myArray[0].length;
             match = {
-                firstFifty: myArray.input.substring(myArray.index - 50, myArray.index).replace(/\n+/g, ''),
+                firstFifty: '...' + myArray.input.substring(myArray.index - 50, myArray.index).replace(/\n+/g, ''),
                 queryMatch: matchedWord,
-                secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '')
+                secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + '...'
             }
 
             /*var match = myArray.input.substring(myArray.index - 50, myArray.index);
