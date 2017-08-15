@@ -6,7 +6,7 @@ templates['textMatch'] = template({"compiler":[7,">= 4.0.0"],"main":function(con
   return "<div class=\"result\">\r\n  <span>"
     + alias4(((helper = (helper = helpers.firstFifty || (depth0 != null ? depth0.firstFifty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"firstFifty","hash":{},"data":data}) : helper)))
     + "</span>\r\n  <span class=\"highlight\">\r\n    "
-    + ((stack1 = ((helper = (helper = helpers.query || (depth0 != null ? depth0.query : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"query","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = helpers.queryMatch || (depth0 != null ? depth0.queryMatch : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"queryMatch","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\r\n  </span>\r\n  <span>"
     + alias4(((helper = (helper = helpers.secondFifty || (depth0 != null ? depth0.secondFifty : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"secondFifty","hash":{},"data":data}) : helper)))
     + "</span>\r\n</div>\r\n";
