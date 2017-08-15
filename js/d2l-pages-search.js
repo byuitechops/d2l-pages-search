@@ -343,6 +343,9 @@ function searchCourses(downloadedCourses, searchSettings) {
             match += matchedWord;
             match += myArray.input.substring(endOfWordIndex, endOfWordIndex + 50);
 
+            // Now get rid of whitespace
+            match = match.replace(/\n+/g, '');
+
             outputArray.push(match);
         }
 
