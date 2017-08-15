@@ -304,16 +304,15 @@ function displayResults(results, searchSettings) {
         console.log('RESULT', courseObject);
         if (courseObject.pages.length > 0) {
             $('#results-container').append(Handlebars.templates.course(courseObject));
-            courseObject.pages.forEach((file) => {
+            courseObject.pages.forEach((file, index) => {
                 file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
-
-                file.id = file.name.split(' ').join('').split('.').join('');
+                file.id = 'file-' + courseObject.ouNumber +'-' + index;
                 $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
                 file.matches.forEach((match) => {
                     if (!searchSettings.isSelector) {
-                        $('#file-matches-' + file.id).append(Handlebars.templates.textMatch(match));
+                        $('#' + file.id).append(Handlebars.templates.textMatch(match));
                     } else {
-                        $('#file-matches-' + file.id).append(Handlebars.templates.cssMatch(match));
+                        $('#' + file.id).append(Handlebars.templates.cssMatch(match));
                     }
                 });
             });
