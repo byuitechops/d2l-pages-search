@@ -41,7 +41,8 @@ function main() {
                 courses.push({
                     courseName: String(ouNumber),
                     ouNumber: ouNumber,
-                    isDownloaded: false
+                    isDownloaded: false,
+                    status: ''
                 });
             }
         });
@@ -98,10 +99,11 @@ function downloadCourses(courses, callback) {
      * @param {function} callback The callback that compiles the data into the result async array
      */
     function downloadCourse(course, downloadCourseCallback) {
-        // Update the view
-        renderStatus(courses);
-
         if (!course.isDownloaded) {
+            // Update the view
+            course.status = 'LOADING'
+            renderStatus(courses);
+
             // Download a single course
             d2lScrape.getCourseHtmlPages(course.ouNumber, function (error, data) {
                 if (error) {
@@ -116,13 +118,19 @@ function downloadCourses(courses, callback) {
                 course.courseName = data.courseInfo.Name;
                 course.courseUrl = data.courseInfo.Path;
                 course.pages = data.successfulPages;
+
+                downloadCourseCallback();
             });
+        } else {
+            // Go on to the next course
+            downloadCourseCallback();
         }
 
-        // Go on to the next course
-        downloadCourseCallback();
-        return;
+
     }
+
+    // To begin, render the current statuses
+    renderStatus(courses);
 
     // Download all the course html pages for each of the courses
     async.eachSeries(courses, downloadCourse, function (error) {
