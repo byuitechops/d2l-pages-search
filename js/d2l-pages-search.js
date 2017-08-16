@@ -1,12 +1,12 @@
-// Declare Handlebars templates
-/*var course = $('#course-template').html();
-var courseTemplate = Handlebars.compile(course);
-var file = $('#file-template').html();
-var fileTemplate = Handlebars.compile(file);
-var match = $('#match-template').html();
-var matchTemplate = Handlebars.compile(match);
-var status = $('#course-status-template').html();
-var statusTemplate = Handlebars.compile(status);*/
+// jQuery elements
+var loadCoursesButton = $('#load-button'),
+    searchCoursesButton = $('#search-button'),
+    searchInputElement = $('.search-input'),
+    searchSettingText = $('#searchSettingText'),
+    searchSettingHTML = $('#searchSettingHTML'),
+    searchSettingCSS = $('#searchSettingCSS'),
+    searchSettingRegex = $('#searchSettingRegex'),
+    downloadButton = $('#download-button');
 
 /**
  * Main will handle all user input from the DOM.
@@ -15,25 +15,15 @@ function main() {
     var courses = [];
     var searchSettings;
 
-    // jQuery elements
-    var loadCoursesButton = $('#load-button'),
-        searchCoursesButton = $('#search-button'),
-        searchInputElement = $('.search-input'),
-        searchSettingText = $('#searchSettingText'),
-        searchSettingHTML = $('#searchSettingHTML'),
-        searchSettingCSS = $('#searchSettingCSS'),
-        searchSettingRegex = $('#searchSettingRegex'),
-        downloadButton = $('#download-button')
-
     // Main event listeners
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
-        var tempOuNumbers = getOuNumbers();
+        var ouNumbers = getOuNumbers();
 
         // For each of the ouNumbers, see if they're on the list of downloaded courses already.
-        tempOuNumbers.forEach(function (ouNumber) {
+        ouNumbers.forEach(function (ouNumber) {
             var isCourseOnList = courses.some(function (course) {
-                return ouNumber === course.ou;
+                return ouNumber === course.ouNumber;
             });
 
             // If not on the list, make a new object with which to put our downloaded course.
@@ -52,27 +42,24 @@ function main() {
             if (error) {
                 console.error('There was an error in downloading the courses: ' + error);
             }
-
-            console.log('courses downloaded:', courses)
         });
     });
 
     searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user
-        searchSettings = {
-            query: searchInputElement.val(),
-            searchInnerText: searchSettingText.is(':checked'),
-            searchHTML: searchSettingHTML.is(':checked'),
-            isSelector: searchSettingCSS.is(':checked'),
-            isRegex: searchSettingRegex.is(':checked')
+        try {
+            searchSettings = getSearchSettings();
+        } catch (e) {
+            // We have an error.  Report it and end the function.
+            console.log(e);
+            window.alert(e.message);
+            return;
         }
 
-        console.log('searchSettings: ' + JSON.stringify(searchSettings));
         // Search the courses
         var results = searchCourses(courses, searchSettings);
 
         // Display the results
-        console.log(results);
         displayResults(results, searchSettings);
     });
 
@@ -84,9 +71,54 @@ function getOuNumbers() {
     return $('#textarea').val().split(', ');
 }
 
+function getSearchSettings() {
+    function makeRegexFromQuery() {
+        if (searchSettings.isRegex) {
+            // Taken from `course-search` gitHub repo
+            // Check to make sure searchString is in regular expression form
+            var pattern;
+            var flags;
+
+            if (/^\/.+(\/[gimy]*)$/.test(searchSettings.query)) {
+                pattern = searchSettings.query.slice(1, searchSettings.query.lastIndexOf('/'));
+                flags = searchSettings.query.slice(searchSettings.query.lastIndexOf('/') + 1);
+            } else {
+                throw new Error("Regular expression pattern must be wrapped with '/' and must only be followed by valid flags.");
+            }
+            try {
+                // Create Regular Expression Object
+                searchSettings.query = new RegExp(pattern, flags);
+            } catch (ex) {
+                throw new Error("There was an Error in making the RegEx Object");
+            }
+        } else {
+            searchSettings.query = new RegExp(searchSettings.query, 'g');
+        }
+    }
+
+    // Get the search settings from the input box
+    var searchSettings = {
+        query: searchInputElement.val(),
+        searchInnerText: searchSettingText.is(':checked'),
+        searchHTML: searchSettingHTML.is(':checked'),
+        isSelector: searchSettingCSS.is(':checked'),
+        isRegex: searchSettingRegex.is(':checked')
+    }
+
+    // If query is not a selector...
+    if (!searchSettings.isSelector) {
+        // We need to change it to regEx no matter what
+        makeRegexFromQuery();
+    } else {
+        // Anything that goes in the box can be CSS searched without errors
+        searchSettings.isValidQuery = true;
+    }
+
+    return searchSettings;
+}
+
 /**
- * This function downloads all the courses the user specifies.  It keeps track of the status of the
- * download of each course
+ * This function downloads all the courses that have not been downloaded yet.
  *
  * @param {Array}    ouNumbers The ouNumbers to be downloaded
  * @param {function} callback  A function to send the downloaded courses back to the caller
@@ -149,7 +181,6 @@ function downloadCourses(courses, callback) {
 
 /**
  * This function changes the view according to the model data it is given.
- * Specifically, this function reports the change in status of downloading courses.
  *
  * @param {object}  courses An object with the data to be displayed
  */
@@ -157,13 +188,13 @@ function renderStatus(courses) {
     $('#course-status-container').html(Handlebars.templates.status(courses));
 }
 
-/*****************************************/
 /**
  * This function will search through all of the downloaded courses and return the results of
  * the search.
- *
- * @param {Array}  courses Courses to search
- * @param {object} searchSettings    Settings with which to conduct the search
+ * 
+ * @param   {Array}  courses        The courses to be searched
+ * @param   {object} searchSettings The settings to search with
+ * @returns {Array}  An array of the transformed courses with the results
  */
 function searchCourses(courses, searchSettings) {
     // This variable holds the function that we will use to search
@@ -180,11 +211,11 @@ function searchCourses(courses, searchSettings) {
         var outputArray = [];
 
         function getFirstFifty(string) {
-            return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index);
+            return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index).replace(/\n+/g, '');
         }
 
         function getLastFifty(string) {
-            return string.substring(string.substring(myArray.length, endOfWordIndex + 50).lastIndexOf(' ') + 1, endOfWordIndex + 50);
+            return string.substring(string.substring(endOfWordIndex, endOfWordIndex + 50).lastIndexOf(' ') + 1, endOfWordIndex + 50);
         }
 
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
@@ -197,8 +228,8 @@ function searchCourses(courses, searchSettings) {
                 match = {
                     firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
                     queryMatch: matchedWord,
-                    //secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
-                    secondFifty: getLastFifty(myArray.input) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    //secondFifty: getLastFifty(myArray.input) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
                 }
 
                 outputArray.push(match);
@@ -242,32 +273,6 @@ function searchCourses(courses, searchSettings) {
         return searchText(page.html, searchSettings.query);
     }
 
-    function makeRegexFromQuery(searchSettings) {
-        if (searchSettings.isRegex) {
-            // Taken from `course-search` gitHub repo
-            // Check to make sure searchString is in regular expression form
-            var pattern;
-            var flags;
-
-            if (/^\/.+(\/[gimy]*)$/.test(searchSettings.query)) {
-                pattern = searchSettings.query.slice(1, searchSettings.query.lastIndexOf('/'));
-                flags = searchSettings.query.slice(searchSettings.query.lastIndexOf('/') + 1);
-            } else {
-                window.alert("Regular expression pattern must be wrapped with '/' and must only be followed by valid flags.");
-                return;
-            }
-            try {
-                // Create Regular Expression Object
-                searchSettings.query = new RegExp(pattern, flags);
-            } catch (ex) {
-                window.alert(ex.message);
-                return;
-            }
-        } else {
-            searchSettings.query = new RegExp(searchSettings.query, 'g');
-        }
-    }
-
     // Decide what our make function will be
     if (searchSettings.isSelector) {
         makeMatches = makeMatchesSelector;
@@ -277,26 +282,23 @@ function searchCourses(courses, searchSettings) {
         makeMatches = makeMatchesHtml;
     }
 
-    // We need to change it to regEx no matter what
-    if (!searchSettings.isSelector) {
-        makeRegexFromQuery(searchSettings);
-    }
-
     return courses.map(function (course) {
-        return {
-            courseName: course.courseInfo.Name,
-            courseUrl: course.courseInfo.Path,
-            ouNumber: course.courseInfo.Identifier,
-            pages: course.successfulPages.map(function (page) {
-                    return {
-                        pageUrl: page.url,
-                        matches: makeMatches(page, searchSettings)
-                    }
-                })
-                // We're only going to keep the pages that have returned data
-                .filter(function (page) {
-                    return page.matches.length > 0;
-                })
+        if (course.status === 'COMPLETE') {
+            return {
+                courseName: course.courseName,
+                courseUrl: course.courseUrl,
+                ouNumber: course.ouNumber,
+                pages: course.pages.map(function (page) {
+                        return {
+                            pageUrl: page.url,
+                            matches: makeMatches(page, searchSettings)
+                        }
+                    })
+                    // We're only going to keep the pages that have returned data
+                    .filter(function (page) {
+                        return page.matches.length > 0;
+                    })
+            }
         }
     })
 }
@@ -331,11 +333,6 @@ function displayResults(results, searchSettings) {
 
     results.forEach(function (result) {
         renderResults(result);
-        /*result.matches.forEach(function(match) {
-          var matchedIndex = match.indexOf(searchSettings.query);
-          var chalkedWord = chalk.blue(match.substr(matchedIndex, searchSettings.query.length));
-          console.log(match.substring(0, matchedIndex) + chalkedWord + match.substring(matchedIndex + searchSettings.query.length));
-        })*/
     })
 }
 
