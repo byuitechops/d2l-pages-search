@@ -14,6 +14,7 @@ var loadCoursesButton = $('#load-button'),
 function main() {
     var courses = [];
     var searchSettings;
+    var results;
 
     // Main event listeners
     loadCoursesButton.on('click', function () {
@@ -32,7 +33,7 @@ function main() {
                     courseName: String(ouNumber),
                     ouNumber: ouNumber,
                     isDownloaded: false,
-                    status: ''
+                    status: 'WAITING'
                 });
             }
         });
@@ -43,6 +44,8 @@ function main() {
                 console.error('There was an error in downloading the courses: ' + error);
             }
         });
+
+        return;
     });
 
     searchCoursesButton.on('click', function () {
@@ -57,10 +60,19 @@ function main() {
         }
 
         // Search the courses
-        var results = searchCourses(courses, searchSettings);
+        results = searchCourses(courses, searchSettings);
 
         // Display the results
         displayResults(results, searchSettings);
+
+        // Enable the download CSV button
+        downloadButton.removeAttr('disabled');
+        return;
+    });
+
+    downloadButton.on('click', function () {
+        downloadCSV(results, searchSettings);
+        return;
     });
 
     // End program
@@ -119,16 +131,16 @@ function getSearchSettings() {
 
 /**
  * This function downloads all the courses that have not been downloaded yet.
- *
- * @param {Array}    ouNumbers The ouNumbers to be downloaded
- * @param {function} callback  A function to send the downloaded courses back to the caller
+ * 
+ * @param {Array}    courses  An array of course objects to attempt to download
+ * @param {function} callback A function to call once all the work of this function is done
  */
 function downloadCourses(courses, callback) {
     /**
      * Downloads a single course and updates its model status.
-     *
-     * @param {number}   course A course to download
-     * @param {function} callback The callback that compiles the data into the result async array
+     * 
+     * @param {object}   course                 A course to attempt to download
+     * @param {function} downloadCourseCallback A function that advances the async operation
      */
     function downloadCourse(course, downloadCourseCallback) {
         if (!course.isDownloaded) {
@@ -182,7 +194,7 @@ function downloadCourses(courses, callback) {
 /**
  * This function changes the view according to the model data it is given.
  *
- * @param {object}  courses An object with the data to be displayed
+ * @param {object}  courses The course data to be displayed
  */
 function renderStatus(courses) {
     $('#course-status-container').html(Handlebars.templates.status(courses));
@@ -200,9 +212,13 @@ function searchCourses(courses, searchSettings) {
     // This variable holds the function that we will use to search
     var makeMatches;
 
-    // This removes the current results, if any
-    $('.course-results').remove();
-
+    /**
+     * This function searches a string using a regular expression.
+     * 
+     * @param   {string} searchString The string we want to search
+     * @param   {RegExp} regEx        The regular expression we want to search with
+     * @returns {Array}  The array of results that were found
+     */
     function searchText(searchString, regEx) {
         // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
         var myArray;
@@ -254,6 +270,13 @@ function searchCourses(courses, searchSettings) {
         return outputArray;
     }
 
+    /**
+     * This function will return a new match for every querySelector that was found on a page.
+     * 
+     * @param   {object} page           A page of a course we want searching
+     * @param   {object} searchSettings Settings that we want to search with
+     * @returns {object} A match that was found for this page
+     */
     function makeMatchesSelector(page, searchSettings) {
         // Put the open/close tags in
         return Array.from(page.document.querySelectorAll(searchSettings.query)).map(function (foundElement) {
@@ -265,13 +288,32 @@ function searchCourses(courses, searchSettings) {
         });
     }
 
+    /**
+     * This function returns the searchText function, sending it the innerText of the page to be
+     * searched. 
+     * 
+     * @param   {object}   page           A page of a course we want to search
+     * @param   {object}   searchSettings Settings that we want to search with
+     * @returns {function} The searchText function
+     */
     function makeMatchesText(page, searchSettings) {
         return searchText(page.document.body.innerText, searchSettings.query);
     }
 
+    /**
+     * This function returns the searchText function, sending it the html of the page to be
+     * searched.
+     * 
+     * @param   {object}   page           A page of a course we want to search
+     * @param   {object}   searchSettings Settings that we want to search with
+     * @returns {function} The searchText function
+     */
     function makeMatchesHtml(page, searchSettings) {
         return searchText(page.html, searchSettings.query);
     }
+
+    // Remove the current results, if any
+    $('.course-results').remove();
 
     // Decide what our make function will be
     if (searchSettings.isSelector) {
@@ -282,7 +324,9 @@ function searchCourses(courses, searchSettings) {
         makeMatches = makeMatchesHtml;
     }
 
+    // Map the courses with the found matches in each of the courses' pages
     return courses.map(function (course) {
+        // Only map the courses that have the complete status
         if (course.status === 'COMPLETE') {
             return {
                 courseName: course.courseName,
@@ -291,6 +335,7 @@ function searchCourses(courses, searchSettings) {
                 pages: course.pages.map(function (page) {
                         return {
                             pageUrl: page.url,
+                            url: page.url,
                             matches: makeMatches(page, searchSettings)
                         }
                     })
@@ -303,15 +348,18 @@ function searchCourses(courses, searchSettings) {
     })
 }
 
-
 /**
- * Display results will display the results through the DOM.
- * @param {Array}  results         An array of the results from the search
- * @param {object} 
+ * This function will display the results that were found through the DOM.
+ * 
+ * @param {Array}  courses        The transformed course objects with the results from the search
+ * @param {object} searchSettings The settings that were used to search for the query
  */
-
-function displayResults(results, searchSettings) {
-
+function displayResults(courses, searchSettings) {
+    /**
+     * Render the results of the search using the DOM.
+     * 
+     * @param {object} courseObject An object that contains the course data to display
+     */
     function renderResults(courseObject) {
         console.log('RESULT', courseObject);
         if (courseObject.pages.length > 0) {
@@ -331,17 +379,55 @@ function displayResults(results, searchSettings) {
         }
     }
 
-    results.forEach(function (result) {
-        renderResults(result);
-    })
+    // Render the results for each of the courses
+    courses.forEach(function (course) {
+        renderResults(course);
+    });
 }
 
 /**
  * Download a CSV of the results in the format specified by the user.
- * @param {Array} results An array of results from the search, in a format that the user wants
+ * 
+ * @param {Array}  results        The results to download
+ * @param {object} searchSettings Settings to determine in what format to download the results
  */
-function downloadCSV(results) {
+function downloadCSV(results, searchSettings) {
+    // Array of the data to download
+    var toDownload = [];
 
+    if (searchSettings.isSelector) {
+        results.forEach(function (result) {
+            result.pages.forEach(function (page) {
+                page.matches.forEach(function (match) {
+                    toDownload.push({
+                        courseName: result.courseName,
+                        ouNumber: result.ouNumber,
+                        pageUrl: page.pageUrl,
+                        fullHtml: match.fullHtml,
+                        innerText: match.innerText,
+                        openCloseTags: match.openCloseTags
+                    });
+                });
+            });
+        });
+    } else {
+        results.forEach(function (result) {
+            result.pages.forEach(function (page) {
+                page.matches.forEach(function (match) {
+                    toDownload.push({
+                        courseName: result.courseName,
+                        ouNumber: result.ouNumber,
+                        pageUrl: page.pageUrl,
+                        match: match.firstFifty + match.queryMatch + match.secondFifty
+                    });
+                });
+            });
+        });
+    }
+
+    toDownload = d3.csvFormat(toDownload);
+    download(toDownload, 'results.csv', 'text/csv');
+    return;
 }
 
 main();

@@ -125,7 +125,8 @@ var d2lScrape = (function () {
                         }
 
                         //the url is relative make it absolute now
-                        url.absoluteTo(origin);
+                        url = url.absoluteTo(origin);
+
                     }
 
                     //we need a string to send on
@@ -521,6 +522,7 @@ var d2lScrape = (function () {
                 topCallback(err, null);
                 return;
             }
+
 
             urls = topicsInfo.topics
                 //map to just urls
