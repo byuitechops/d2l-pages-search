@@ -43,10 +43,38 @@ function main() {
             if (error) {
                 console.error('There was an error in downloading the courses: ' + error);
             }
+
+            addDeleteCourseEvents();
         });
 
         return;
     });
+
+    function addDeleteCourseEvents() {
+        courses.forEach(function (course, index) {
+            console.log($(`#delete${course.ouNumber}`));
+            // Set an event listener for each of the delete buttons
+            $(`#delete${course.ouNumber}`).on('click', {
+                value: index
+            }, function (event) {
+                console.log('button clicked for index:', event.data.value);
+                // Delete the model data
+                courses.splice(event.data.value, 1);
+
+                // Remove the event handler
+                $(`#delete${course.ouNumber}`).off();
+
+                // Update the view
+                renderStatus(courses);
+
+                // Reset the event handlers
+                addDeleteCourseEvents();
+            });
+
+            console.log('Event handlers set for course:', course);
+        });
+    }
+
 
     searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user

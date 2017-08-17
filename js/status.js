@@ -5,7 +5,9 @@ templates['status'] = template({"1":function(container,depth0,helpers,partials,d
 
   return "<div class=\"flex course\" id=\""
     + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
-    + "-OU\">\r\n    <span class=\"course-title\">"
+    + "-OU\">\r\n    <input class=\"deleteCourseButton\" id=\"delete"
+    + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
+    + "\" type=\"button\" />\r\n    <span class=\"course-title\">"
     + alias4(((helper = (helper = helpers.courseName || (depth0 != null ? depth0.courseName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"courseName","hash":{},"data":data}) : helper)))
     + "</span>\r\n    <span class=\"spacer\"></span>\r\n    <span class=\"status-"
     + alias4(((helper = (helper = helpers.status || (depth0 != null ? depth0.status : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"status","hash":{},"data":data}) : helper)))
