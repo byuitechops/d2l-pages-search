@@ -458,4 +458,4 @@ function downloadCSV(results, searchSettings) {
     return;
 }
 
-main();
+window.onload = main;
