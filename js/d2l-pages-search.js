@@ -391,7 +391,7 @@ function displayResults(courses, searchSettings) {
     function renderResults(courseObject) {
         console.log('RESULT', courseObject);
         if (courseObject.pages.length > 0) {
-            $('#results-container').append(Handlebars.templates.course(courseObject));
+            $('#result-flex').append(Handlebars.templates.course(courseObject));
             courseObject.pages.forEach((file, index) => {
                 file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
                 file.id = 'file-' + courseObject.ouNumber + '-' + index;
