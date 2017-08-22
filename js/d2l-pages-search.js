@@ -453,25 +453,25 @@ function displayResults(courses, searchSettings) {
                     } else {
                         // Do the logic to handle the radio buttons
                         if ($('#resultSettingText').is(':checked')) {
-                            //$('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
-                            $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.innerText));
-                            $('#editor').attr('id', 'editor' + index);
+                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
+                            //$('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.innerText));
+                            /*$('#editor').attr('id', 'editor' + index);
                             var newEditorSelector = '#editor' + index;
-                            $(newEditorSelector).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)
+                            $(newEditorSelector).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)*/
                         } else if ($('#resultSettingTags').is(':checked')) {
-                            //$('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
-                            $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.openCloseTags));
-                            $('#editor').attr('id', 'editor' + index);
+                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
+                            //$('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.openCloseTags));
+                            /*$('#editor').attr('id', 'editor' + index);
                             $('#editor' + index).after(`<script>
 var editor = ace.edit('editor${index}');
 editor.setTheme("ace/theme/chrome");
 editor.getSession().setMode("ace/mode/html");
-</script>`);
+</script>`);*/
                         } else {
-                            //$('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
-                            $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.fullHtml));
-                            $('#editor').attr('id', 'editor' + index);
-                            $('#editor' + index).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)
+                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
+                            //$('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.fullHtml));
+                            /*$('#editor').attr('id', 'editor' + index);
+                            $('#editor' + index).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)*/
                         }
                     }
                 });
