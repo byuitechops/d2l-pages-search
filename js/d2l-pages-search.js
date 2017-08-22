@@ -447,20 +447,58 @@ function displayResults(courses, searchSettings) {
                 file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
                 file.id = 'file-' + courseObject.ouNumber + '-' + index;
                 $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
-                file.matches.forEach((match) => {
+                file.matches.forEach((match, index) => {
                     if (!searchSettings.isSelector) {
                         $('#' + file.id).append(Handlebars.templates.textMatch(match));
                     } else {
                         // Do the logic to handle the radio buttons
                         if ($('#resultSettingText').is(':checked')) {
-                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
+                            //$('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
+                            $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.innerText));
+                            $('#editor').attr('id', 'editor' + index);
+                            var newEditorSelector = '#editor' + index;
+                            $(newEditorSelector).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)
                         } else if ($('#resultSettingTags').is(':checked')) {
-                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
+                            //$('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
+                            $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.openCloseTags));
+                            $('#editor').attr('id', 'editor' + index);
+                            $('#editor' + index).after(`<script>
+var editor = ace.edit('editor${index}');
+editor.setTheme("ace/theme/chrome");
+editor.getSession().setMode("ace/mode/html");
+</script>`);
                         } else {
-                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
+                            //$('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
+                            $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.fullHtml));
+                            $('#editor').attr('id', 'editor' + index);
+                            $('#editor' + index).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)
                         }
                     }
                 });
+                /*if (!searchSettings.isSelector) {
+                    $('#' + file.id).append(Handlebars.templates.textMatch(file.matches));
+                } else {
+                    // Do the logic to handle the radio buttons
+                    if ($('#resultSettingText').is(':checked')) {
+                        file.displayInnerText = true;
+                        file.displayOpenCloseTags = false;
+                        file.displayFullHtml = false;
+                        //$('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
+                        $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(file));
+                    } else if ($('#resultSettingTags').is(':checked')) {
+                        file.displayInnerText = false;
+                        file.displayOpenCloseTags = true;
+                        file.displayFullHtml = false;
+                        //$('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
+                        $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(file));
+                    } else {
+                        file.displayInnerText = false;
+                        file.displayOpenCloseTags = false;
+                        file.displayFullHtml = true;
+                        //$('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
+                        $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(file));
+                    }
+                }*/
             });
         }
     }
