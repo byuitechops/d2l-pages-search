@@ -6,6 +6,7 @@ var loadCoursesButton = $('#load-button'),
     searchSettingHTML = $('#searchSettingHTML'),
     searchSettingCSS = $('#searchSettingCSS'),
     searchSettingRegex = $('#searchSettingRegex'),
+    cssResultsButtons = $('.type-radio.result'),
     downloadButton = $('#download-button');
 
 /**
@@ -98,6 +99,13 @@ function main() {
         return;
     });
 
+    for (var i = 0; i < cssResultsButtons.length; i++) {
+        console.log('about to attach event listener to: ', cssResultsButtons[i])
+        cssResultsButtons[i].addEventListener('click', function () {
+            $('.course-results').remove();
+            displayResults(results, searchSettings);
+        });
+    }
     downloadButton.on('click', function () {
         downloadCSV(results, searchSettings);
         return;
@@ -400,7 +408,14 @@ function displayResults(courses, searchSettings) {
                     if (!searchSettings.isSelector) {
                         $('#' + file.id).append(Handlebars.templates.textMatch(match));
                     } else {
-                        $('#' + file.id).append(Handlebars.templates.cssMatch(match));
+                        // Do the logic to handle the radio buttons
+                        if ($('#resultSettingText').is(':checked')) {
+                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
+                        } else if ($('#resultSettingTags').is(':checked')) {
+                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
+                        } else {
+                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
+                        }
                     }
                 });
             });
