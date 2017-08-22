@@ -1,3 +1,14 @@
+/**************************************************************************************************
+ * d2l-pages-search.js
+ * This program searches all of d2l for what a user is looking for.  After searching, this program
+ * displays the search results in different ways that help the user analyze what was returned.
+ * 
+ * This program drives the d2l-pages-search.html web page.
+ * 
+ * Authors: Scott Nicholes and Zachary Williams
+ * License: MIT
+ **************************************************************************************************/
+
 // jQuery elements
 var loadCoursesButton = $('#load-button'),
     searchCoursesButton = $('#search-button'),
@@ -51,14 +62,15 @@ function main() {
         return;
     });
 
+    /**
+     * This function manages the event handlers for each of the course's deletion functions.
+     */
     function addDeleteCourseEvents() {
         courses.forEach(function (course, index) {
-            console.log($(`#delete${course.ouNumber}`));
             // Set an event listener for each of the delete buttons
             $(`#delete${course.ouNumber}`).on('click', {
                 value: index
             }, function (event) {
-                console.log('button clicked for index:', event.data.value);
                 // Delete the model data
                 courses.splice(event.data.value, 1);
 
@@ -71,11 +83,8 @@ function main() {
                 // Reset the event handlers
                 addDeleteCourseEvents();
             });
-
-            console.log('Event handlers set for course:', course);
         });
     }
-
 
     searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user
@@ -94,18 +103,24 @@ function main() {
         // Display the results
         displayResults(results, searchSettings);
 
+        // IF the search was done with a selector
+        if (searchSettings.isSelector) {
+            // When each of of the results radio buttons are clicked, re-display the results
+            //  in the proper format.
+            for (var i = 0; i < cssResultsButtons.length; i++) {
+                cssResultsButtons[i].addEventListener('click', function () {
+                    $('.course-results').remove();
+                    displayResults(results, searchSettings);
+                });
+            }
+        }
+
         // Enable the download CSV button
         downloadButton.removeAttr('disabled');
         return;
     });
 
-    for (var i = 0; i < cssResultsButtons.length; i++) {
-        console.log('about to attach event listener to: ', cssResultsButtons[i])
-        cssResultsButtons[i].addEventListener('click', function () {
-            $('.course-results').remove();
-            displayResults(results, searchSettings);
-        });
-    }
+
     downloadButton.on('click', function () {
         downloadCSV(results, searchSettings);
         return;
@@ -115,10 +130,22 @@ function main() {
     return;
 }
 
+/**
+ * This function simply gets the ou numbers from the DOM.
+ * 
+ * @returns {Array} An array of ou numbers
+ */
 function getOuNumbers() {
+    // Return the ou numbers, splitting out the commas
     return $('#textarea').val().split(', ');
 }
 
+/**
+ * This function gets and formats the search settings from the DOM.
+ * 
+ * @throws {Error} A string that tells the user what format the regular Expression should be in
+ * @returns {[[Type]]} [[Description]]
+ */
 function getSearchSettings() {
     function makeRegexFromQuery() {
         if (searchSettings.isRegex) {
@@ -363,6 +390,7 @@ function searchCourses(courses, searchSettings) {
         return searchText(page.html, searchSettings.query);
     }
 
+
     // Remove the current results, if any
     $('.course-results').remove();
 
@@ -396,7 +424,7 @@ function searchCourses(courses, searchSettings) {
                     })
             }
         }
-    })
+    });
 }
 
 /**
@@ -407,7 +435,7 @@ function searchCourses(courses, searchSettings) {
  */
 function displayResults(courses, searchSettings) {
     /**
-     * Render the results of the search using the DOM.
+     * This function will render the results of the search using the DOM.
      * 
      * @param {object} courseObject An object that contains the course data to display
      */
