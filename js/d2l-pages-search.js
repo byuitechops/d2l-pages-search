@@ -259,29 +259,45 @@ function searchCourses(courses, searchSettings) {
         // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
         var myArray;
         var matchedWord;
-        var endOfWordIndex;
         var outputArray = [];
 
+        /**
+         * This function returns the 50 characters before a found word match, including
+         * the whole word before those 50 characters, if there is any.
+         * 
+         * @param   {string} string The string from which to parse
+         * @returns {string} The fully formed first 50 or more characters after the match
+         */
         function getFirstFifty(string) {
             return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index).replace(/\n+/g, '');
         }
 
-        function getLastFifty(string) {
-            return string.substring(string.substring(endOfWordIndex, endOfWordIndex + 50).lastIndexOf(' ') + 1, endOfWordIndex + 50);
+        /**
+         * This function returns the 50 characters after a found word match, including
+         * the whole word after those 50 characters, if there is any.
+         * 
+         * @param   {string} string The string from which to parse
+         * @returns {string} The fully formed last 50 or more characters after the match
+         */
+        function getLastFifty(string, endOfWordIndex) {
+            var lastFiftyRegex = /[\s\S]{50}\w+/;
+            // Step 1: Get 50 chars to the right of the word
+            var allAfterWord = string.substring(endOfWordIndex);
+
+            // Step 2: Return the result of the regex
+            return allAfterWord.match(lastFiftyRegex)[0];
         }
 
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
         if (regEx.global) {
             while ((myArray = regEx.exec(searchString)) !== null) {
                 matchedWord = myArray[0];
-                endOfWordIndex = myArray.index + myArray[0].length;
 
                 // Construct the 50 left and right string
                 match = {
                     firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
                     queryMatch: matchedWord,
-                    secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
-                    //secondFifty: getLastFifty(myArray.input) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    secondFifty: getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
                 }
 
                 outputArray.push(match);
@@ -290,13 +306,12 @@ function searchCourses(courses, searchSettings) {
             myArray = regEx.exec(searchString);
             if (myArray) {
                 matchedWord = myArray[0];
-                endOfWordIndex = myArray.index + myArray[0].length;
 
                 // Construct the 50 left and right string
                 match = {
                     firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
                     queryMatch: matchedWord,
-                    secondFifty: myArray.input.substring(endOfWordIndex, endOfWordIndex + 50).replace(/\n+/g, '') + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    secondFifty: getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
                 }
 
                 outputArray.push(match);
