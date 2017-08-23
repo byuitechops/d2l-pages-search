@@ -317,12 +317,16 @@ function searchCourses(courses, searchSettings) {
          * @returns {string} The fully formed last 50 or more characters after the match
          */
         function getLastFifty(string, endOfWordIndex) {
-            var lastFiftyRegex = /[\s\S]{50}\w+/;
+            var lastFiftyRegex = /[\s\S]{50}/;
             // Step 1: Get 50 chars to the right of the word
             var allAfterWord = string.substring(endOfWordIndex);
 
-            // Step 2: Return the result of the regex
-            return allAfterWord.match(lastFiftyRegex)[0];
+            // Step 2: Return the result
+            if (allAfterWord.length > 50) {
+                return allAfterWord.match(lastFiftyRegex)[0];
+            } else {
+                return allAfterWord;
+            }
         }
 
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
