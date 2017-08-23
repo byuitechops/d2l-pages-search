@@ -103,16 +103,23 @@ function main() {
         // Display the results
         displayResults(results, searchSettings);
 
+        function displayRadio() {
+            $('.course-results').remove();
+            displayResults(results, searchSettings);
+        }
         // IF the search was done with a selector
         if (searchSettings.isSelector) {
             // When each of of the results radio buttons are clicked, re-display the results
             //  in the proper format.
-            for (var i = 0; i < cssResultsButtons.length; i++) {
-                cssResultsButtons[i].addEventListener('click', function () {
-                    $('.course-results').remove();
-                    displayResults(results, searchSettings);
-                });
-            }
+            cssResultsButtons.on('click', displayRadio)
+
+            /*for (var i = 0; i < cssResultsButtons.length; i++) {
+                cssResultsButtons[i].addEventListener('click', displayRadio);
+            }*/
+        } else {
+            // Remove the event listeners from the results radio buttons
+            cssResultsButtons.off('click');
+            console.log('Removed event listener');
         }
 
         // Enable the download CSV button
@@ -504,6 +511,8 @@ editor.getSession().setMode("ace/mode/html");
     }
 
     // Render the results for each of the courses
+    console.log('DISPLAY: courses.length', courses.length);
+    console.log('DISPLAY: searchSettings', searchSettings);
     courses.forEach(function (course) {
         renderResults(course);
     });
