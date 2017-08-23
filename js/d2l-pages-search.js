@@ -67,6 +67,7 @@ function main() {
         }
     }
 
+
     // Main event listeners
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
@@ -81,7 +82,7 @@ function main() {
             // If not on the list, make a new object with which to put our downloaded course.
             if (!isCourseOnList) {
                 courses.push({
-                    courseName: String(ouNumber),
+                    statusName: String(ouNumber),
                     ouNumber: ouNumber,
                     isDownloaded: false,
                     status: 'WAITING'
@@ -150,6 +151,87 @@ function getOuNumbers() {
     return $('#textarea').val().split(', ');
 }
 
+
+/**
+ * This function downloads all the courses that have not been downloaded yet.
+ * 
+ * @param {Array}    courses  An array of course objects to attempt to download
+ * @param {function} callback A function to call once all the work of this function is done
+ */
+function downloadCourses(courses, callback) {
+    /**
+     * Downloads a single course and updates its model status.
+     * 
+     * @param {object}   course                 A course to attempt to download
+     * @param {function} downloadCourseCallback A function that advances the async operation
+     */
+    function downloadCourse(course, downloadCourseCallback) {
+        if (!course.isDownloaded) {
+            // Update the view
+            course.status = 'LOADING'
+            renderStatus(courses);
+
+            // Download a single course
+            d2lScrape.getCourseHtmlPages(course.ouNumber, function (error, data) {
+                if (error) {
+                    course.status = 'ERROR';
+                    downloadCourseCallback();
+                    return;
+                }
+
+                // Trim the course name down to 25
+                var statusName;
+                if (data.courseInfo.Name.length > 25) {
+                    statusName = data.courseInfo.Name.substring(0, 25) + '...';
+                } else {
+                    statusName = data.courseInfo.Name;
+                }
+
+                // Update the model data to reflect the course has downloaded
+                course.isDownloaded = true;
+                course.status = 'COMPLETE'
+                course.courseName = data.courseInfo.Name;
+                course.statusName = statusName;
+                course.courseUrl = data.courseInfo.Path;
+                course.pages = data.successfulPages;
+
+                downloadCourseCallback();
+            });
+        } else {
+            // Go on to the next course
+            downloadCourseCallback();
+        }
+    }
+
+    // To begin, render the current statuses
+    renderStatus(courses);
+
+    // Download all the course html pages for each of the courses
+    async.eachSeries(courses, downloadCourse, function (error) {
+        // We will never call this error statement, because we'll handle it another way
+        if (error) {
+            callback(error);
+            return;
+        }
+
+        // Render the status that we've downloaded all the courses
+        renderStatus(courses);
+
+        // Tell the program to keep on going
+        callback();
+        return;
+    });
+}
+
+/**
+ * This function changes the view according to the model data it is given.
+ *
+ * @param {object}  courses The course data to be displayed
+ */
+function renderStatus(courses) {
+    $('#course-status-container').html(Handlebars.templates.status(courses));
+}
+
 /**
  * This function gets and formats the search settings from the DOM.
  * 
@@ -200,77 +282,6 @@ function getSearchSettings() {
     }
 
     return searchSettings;
-}
-
-/**
- * This function downloads all the courses that have not been downloaded yet.
- * 
- * @param {Array}    courses  An array of course objects to attempt to download
- * @param {function} callback A function to call once all the work of this function is done
- */
-function downloadCourses(courses, callback) {
-    /**
-     * Downloads a single course and updates its model status.
-     * 
-     * @param {object}   course                 A course to attempt to download
-     * @param {function} downloadCourseCallback A function that advances the async operation
-     */
-    function downloadCourse(course, downloadCourseCallback) {
-        if (!course.isDownloaded) {
-            // Update the view
-            course.status = 'LOADING'
-            renderStatus(courses);
-
-            // Download a single course
-            d2lScrape.getCourseHtmlPages(course.ouNumber, function (error, data) {
-                if (error) {
-                    course.status = 'ERROR';
-                    downloadCourseCallback();
-                    return;
-                }
-
-                // Update the model data to reflect the course has downloaded
-                course.isDownloaded = true;
-                course.status = 'COMPLETE'
-                course.courseName = data.courseInfo.Name;
-                course.courseUrl = data.courseInfo.Path;
-                course.pages = data.successfulPages;
-
-                downloadCourseCallback();
-            });
-        } else {
-            // Go on to the next course
-            downloadCourseCallback();
-        }
-    }
-
-    // To begin, render the current statuses
-    renderStatus(courses);
-
-    // Download all the course html pages for each of the courses
-    async.eachSeries(courses, downloadCourse, function (error) {
-        // We will never call this error statement, because we'll handle it another way
-        if (error) {
-            callback(error);
-            return;
-        }
-
-        // Render the status that we've downloaded all the courses
-        renderStatus(courses);
-
-        // Tell the program to keep on going
-        callback();
-        return;
-    });
-}
-
-/**
- * This function changes the view according to the model data it is given.
- *
- * @param {object}  courses The course data to be displayed
- */
-function renderStatus(courses) {
-    $('#course-status-container').html(Handlebars.templates.status(courses));
 }
 
 /**
