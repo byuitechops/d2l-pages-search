@@ -28,6 +28,45 @@ function main() {
     var searchSettings;
     var results;
 
+    /**
+     * This function manages the event handlers for each of the course's deletion functions.
+     */
+    function addDeleteCourseEvents() {
+        courses.forEach(function (course, index) {
+            // Set an event listener for each of the delete buttons
+            $(`#delete${course.ouNumber}`).on('click', {
+                value: index
+            }, function (event) {
+                // Delete the model data
+                courses.splice(event.data.value, 1);
+
+                // Remove the event handler
+                $(`#delete${course.ouNumber}`).off();
+
+                // Update the view
+                renderStatus(courses);
+
+                // Reset the event handlers
+                addDeleteCourseEvents();
+            });
+        });
+    }
+
+    function handleRadioButtons() {
+        // IF the search was done with a selector
+        if (searchSettings.isSelector) {
+            // When each of of the results radio buttons are clicked, re-display the results
+            //  in the proper format.
+            cssResultsButtons.on('click', function () {
+                $('.course-results').remove();
+                displayResults(results, searchSettings);
+            });
+        } else {
+            // Remove the event listeners from the results radio buttons
+            cssResultsButtons.off('click');
+        }
+    }
+
     // Main event listeners
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
@@ -62,29 +101,6 @@ function main() {
         return;
     });
 
-    /**
-     * This function manages the event handlers for each of the course's deletion functions.
-     */
-    function addDeleteCourseEvents() {
-        courses.forEach(function (course, index) {
-            // Set an event listener for each of the delete buttons
-            $(`#delete${course.ouNumber}`).on('click', {
-                value: index
-            }, function (event) {
-                // Delete the model data
-                courses.splice(event.data.value, 1);
-
-                // Remove the event handler
-                $(`#delete${course.ouNumber}`).off();
-
-                // Update the view
-                renderStatus(courses);
-
-                // Reset the event handlers
-                addDeleteCourseEvents();
-            });
-        });
-    }
 
     searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user
@@ -103,27 +119,14 @@ function main() {
         // Display the results
         displayResults(results, searchSettings);
 
-        function displayRadio() {
-            $('.course-results').remove();
-            displayResults(results, searchSettings);
-        }
-        // IF the search was done with a selector
-        if (searchSettings.isSelector) {
-            // When each of of the results radio buttons are clicked, re-display the results
-            //  in the proper format.
-            cssResultsButtons.on('click', displayRadio)
-
-            /*for (var i = 0; i < cssResultsButtons.length; i++) {
-                cssResultsButtons[i].addEventListener('click', displayRadio);
-            }*/
-        } else {
-            // Remove the event listeners from the results radio buttons
-            cssResultsButtons.off('click');
-            console.log('Removed event listener');
-        }
+        // Either enable or disable the radio buttons
+        handleRadioButtons();
 
         // Enable the download CSV button
-        downloadButton.removeAttr('disabled');
+        if (downloadButton.prop('disabled')) {
+            downloadButton.removeAttr('disabled');
+        }
+
         return;
     });
 
