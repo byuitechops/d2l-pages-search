@@ -57,13 +57,14 @@ function main() {
         if (searchSettings.isSelector) {
             // When each of of the results radio buttons are clicked, re-display the results
             //  in the proper format.
-            cssResultsButtons.on('click', function () {
-                $('.course-results').remove();
-                displayResults(results, searchSettings);
-            });
+            $('#cssSelectorOptions').css({
+                display: 'inherit'
+            })
         } else {
             // Remove the event listeners from the results radio buttons
-            cssResultsButtons.off('click');
+            $('#cssSelectorOptions').css({
+                display: 'none'
+            }) //            cssResultsButtons.off('click');
         }
     }
 
@@ -120,7 +121,7 @@ function main() {
         // Display the results
         displayResults(results, searchSettings);
 
-        // Either enable or disable the radio buttons
+        // Either hide or show the radio buttons
         handleRadioButtons();
 
         // Enable the download CSV button
@@ -129,6 +130,11 @@ function main() {
         }
 
         return;
+    });
+
+    cssResultsButtons.on('click', function () {
+        $('.course-results').remove();
+        displayResults(results, searchSettings);
     });
 
 

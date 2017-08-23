@@ -200,6 +200,10 @@ textarea {
 
 
 
+
+
+
+
 /********************
  * Download button
  ********************/
@@ -221,6 +225,17 @@ textarea {
     cursor: pointer;
 }
 
+
+
+
+
+
+
+/*css selector Search Options*/
+
+#cssSelectorOptions {
+    display: none;
+}
 
 
 

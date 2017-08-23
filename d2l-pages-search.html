@@ -64,12 +64,14 @@
                 <div class="flex" id="result-flex">
                     <span class="header">Results</span>
                     <span class="spacer"></span>
-                    <input id="resultSettingText" class="type-radio result" type="radio" name="result-type" value="Text" checked>
-                    <label for="web-page-text">Text</label>
-                    <input id="resultSettingTags" class="type-radio result" type="radio" name="result-type" value="HTML">
-                    <label for="HTML">Tags</label>
-                    <input id="resultSettingHTML" class="type-radio result" type="radio" name="result-type" value="CSS">
-                    <label for="CSS Selector">Full HTML</label>
+                    <div id="cssSelectorOptions" class="hide">
+                        <input id="resultSettingText" class="type-radio result" type="radio" name="result-type" value="Text" checked>
+                        <label for="resultSettingText">Text</label>
+                        <input id="resultSettingTags" class="type-radio result" type="radio" name="result-type" value="HTML">
+                        <label for="resultSettingTags">Tags</label>
+                        <input id="resultSettingHTML" class="type-radio result" type="radio" name="result-type" value="CSS">
+                        <label for="resultSettingHTML">Full HTML</label>
+                    </div>
                 </div>
             </div>
         </div>
