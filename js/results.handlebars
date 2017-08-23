@@ -1,0 +1,45 @@
+{{#each this}}
+<div class="collapsible-wrap course-results no-pad">
+    <input type="checkbox" id="collapsible-{{ouNumber}}" checked>
+    <label for="collapsible-{{ouNumber}}" class="check-collapse">
+        <a href="/d2l/home/{{ouNumber}}" class="results-course-title" target="_blank">
+            {{courseName}}
+        </a>
+        <span class="OU">{{pages.length}}</span>
+        <span class="count">{{ouNumber}}</span>
+    </label>
+    <div id="course-results-{{ouNumber}}" class="collapsible-{{ouNumber}}-area">
+        <!-- Results for the course go here -->
+        {{#each pages}}
+        <div class="card result-card">
+            <!-- File Information added here -->
+            <div class="flex file-header">
+                <span class="results-file-name" title="{{pageUrl}}">{{name}}</span>
+                <span class="spacer"></span>
+                <a href="{{pageUrl}}" target="_blank">View File</a>
+            </div>
+            <div id="{{id}}">
+                <!-- Matches within the file go here -->
+                {{#if isSelector}}
+                {{#each displayMatches}}
+                <div class="result">
+                    <span>
+                        {{this}}
+                    </span>
+                </div>
+                {{/each}}
+                {{else}}
+                {{#each displayMatches}}
+                <div class="result">
+                    <span>
+                        {{{this}}}
+                    </span>
+                </div>
+                {{/each}}
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{/each}}

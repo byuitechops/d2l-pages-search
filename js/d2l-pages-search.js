@@ -17,7 +17,7 @@ var loadCoursesButton = $('#load-button'),
     searchSettingHTML = $('#searchSettingHTML'),
     searchSettingCSS = $('#searchSettingCSS'),
     searchSettingRegex = $('#searchSettingRegex'),
-    cssResultsButtons = $('.type-radio.result'),
+    cssResultsButtons = $('#cssSelectorOptions > input'),
     downloadButton = $('#download-button');
 
 /**
@@ -66,6 +66,31 @@ function main() {
                 display: 'none'
             }) //            cssResultsButtons.off('click');
         }
+    }
+
+    function modifySelectorDisplay(selectionId) {
+        // Change all the matches to just display the match that was selected
+        results.forEach(function (course) {
+            course.pages.forEach(function (page) {
+                page.displayMatches = page.matches.map(function (match) {
+                    if (searchSettings.isSelector) {
+                        switch (selectionId) {
+                            case 'resultSettingText':
+                                return match.innerText;
+                                break;
+                            case 'resultSettingHTML':
+                                return match.fullHtml;
+                                break;
+                            case 'resultSettingTags':
+                                return match.openCloseTags;
+                                break;
+                        }
+                    } else {
+                        return match;
+                    }
+                })
+            })
+        });
     }
 
 
@@ -118,6 +143,19 @@ function main() {
         // Search the courses
         results = searchCourses(courses, searchSettings);
 
+        if (searchSettings.isSelector) {
+            // Default is the text display
+            modifySelectorDisplay('resultSettingText')
+        } else {
+            results.forEach(function (course) {
+                course.pages.forEach(function (page) {
+                    page.displayMatches = page.matches.map(function (match) {
+                        return match;
+                    })
+                })
+            });
+        }
+
         // Display the results
         displayResults(results, searchSettings);
 
@@ -134,6 +172,9 @@ function main() {
 
     cssResultsButtons.on('click', function () {
         $('.course-results').remove();
+
+        modifySelectorDisplay(this.id);
+
         displayResults(results, searchSettings);
     });
 
@@ -353,12 +394,12 @@ function searchCourses(courses, searchSettings) {
 
                 // Construct the 50 left and right string
                 match = {
-                    firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
-                    queryMatch: matchedWord,
-                    secondFifty: getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)),
+                    queryMatch: Handlebars.Utils.escapeExpression(matchedWord),
+                    secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
                 }
 
-                outputArray.push(match);
+                outputArray.push(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty);
             }
         } else {
             myArray = regEx.exec(searchString);
@@ -367,12 +408,12 @@ function searchCourses(courses, searchSettings) {
 
                 // Construct the 50 left and right string
                 match = {
-                    firstFifty: (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input),
-                    queryMatch: matchedWord,
-                    secondFifty: getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')
+                    firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)),
+                    queryMatch: Handlebars.Utils.escapeExpression(matchedWord),
+                    secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
                 }
 
-                outputArray.push(match);
+                outputArray.push(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty);
             }
         }
 
@@ -446,7 +487,9 @@ function searchCourses(courses, searchSettings) {
                         return {
                             pageUrl: page.url,
                             url: page.url,
-                            matches: makeMatches(page, searchSettings)
+                            name: decodeURI(page.url.split('/')[page.url.split('/').length - 1]),
+                            matches: makeMatches(page, searchSettings),
+                            isSelector: searchSettings.isSelector
                         }
                     })
                     // We're only going to keep the pages that have returned data
@@ -465,79 +508,8 @@ function searchCourses(courses, searchSettings) {
  * @param {object} searchSettings The settings that were used to search for the query
  */
 function displayResults(courses, searchSettings) {
-    /**
-     * This function will render the results of the search using the DOM.
-     * 
-     * @param {object} courseObject An object that contains the course data to display
-     */
-    function renderResults(courseObject) {
-        console.log('RESULT', courseObject);
-        if (courseObject.pages.length > 0) {
-            $('#result-flex').append(Handlebars.templates.course(courseObject));
-            courseObject.pages.forEach((file, index) => {
-                file.name = decodeURI(file.pageUrl.split('/')[file.pageUrl.split('/').length - 1]);
-                file.id = 'file-' + courseObject.ouNumber + '-' + index;
-                $('#course-results-' + courseObject.ouNumber).append(Handlebars.templates.file(file));
-                file.matches.forEach((match, index) => {
-                    if (!searchSettings.isSelector) {
-                        $('#' + file.id).append(Handlebars.templates.textMatch(match));
-                    } else {
-                        // Do the logic to handle the radio buttons
-                        if ($('#resultSettingText').is(':checked')) {
-                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
-                            //$('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.innerText));
-                            /*$('#editor').attr('id', 'editor' + index);
-                            var newEditorSelector = '#editor' + index;
-                            $(newEditorSelector).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)*/
-                        } else if ($('#resultSettingTags').is(':checked')) {
-                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
-                            //$('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.openCloseTags));
-                            /*$('#editor').attr('id', 'editor' + index);
-                            $('#editor' + index).after(`<script>
-var editor = ace.edit('editor${index}');
-editor.setTheme("ace/theme/chrome");
-editor.getSession().setMode("ace/mode/html");
-</script>`);*/
-                        } else {
-                            $('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
-                            //$('#' + file.id).append(Handlebars.templates.cssMatchWithAce(match.fullHtml));
-                            /*$('#editor').attr('id', 'editor' + index);
-                            $('#editor' + index).after(`<script>var editor = ace.edit('editor${index}');editor.setTheme("ace/theme/chrome");editor.getSession().setMode("ace/mode/html");</script>`)*/
-                        }
-                    }
-                });
-                /*if (!searchSettings.isSelector) {
-                    $('#' + file.id).append(Handlebars.templates.textMatch(file.matches));
-                } else {
-                    // Do the logic to handle the radio buttons
-                    if ($('#resultSettingText').is(':checked')) {
-                        file.displayInnerText = true;
-                        file.displayOpenCloseTags = false;
-                        file.displayFullHtml = false;
-                        //$('#' + file.id).append(Handlebars.templates.cssMatch(match.innerText));
-                        $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(file));
-                    } else if ($('#resultSettingTags').is(':checked')) {
-                        file.displayInnerText = false;
-                        file.displayOpenCloseTags = true;
-                        file.displayFullHtml = false;
-                        //$('#' + file.id).append(Handlebars.templates.cssMatch(match.openCloseTags));
-                        $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(file));
-                    } else {
-                        file.displayInnerText = false;
-                        file.displayOpenCloseTags = false;
-                        file.displayFullHtml = true;
-                        //$('#' + file.id).append(Handlebars.templates.cssMatch(match.fullHtml));
-                        $('#' + file.id).append(Handlebars.templates.cssMatchWithAce(file));
-                    }
-                }*/
-            });
-        }
-    }
-
-    // Render the results for each of the courses
-    courses.forEach(function (course) {
-        renderResults(course);
-    });
+    console.log('RESULTS:', courses);
+    $('#results').html(Handlebars.templates.results(courses));
 }
 
 /**
