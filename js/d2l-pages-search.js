@@ -518,8 +518,6 @@ editor.getSession().setMode("ace/mode/html");
     }
 
     // Render the results for each of the courses
-    console.log('DISPLAY: courses.length', courses.length);
-    console.log('DISPLAY: searchSettings', searchSettings);
     courses.forEach(function (course) {
         renderResults(course);
     });
