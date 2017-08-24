@@ -86,7 +86,7 @@ textarea {
     background-color: #fafafa !important;
 }
 
-#editor {
+.editor {
     position: relative;
     width: 500px;
     height: 100px;

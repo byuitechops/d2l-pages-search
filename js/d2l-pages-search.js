@@ -72,17 +72,17 @@ function main() {
         // Change all the matches to just display the match that was selected
         results.forEach(function (course) {
             course.pages.forEach(function (page) {
-                page.displayMatches = page.matches.map(function (match) {
+                page.displayMatches = page.matches.map(function (match, index) {
                     if (searchSettings.isSelector) {
                         switch (selectionId) {
                             case 'resultSettingText':
-                                return match.innerText;
+                                return `<div id="${match.fullHtml.trim().substring(1, 10) + index}" class="editor"><textarea>` + match.innerText + '</textarea></div>';
                                 break;
                             case 'resultSettingHTML':
-                                return match.fullHtml;
+                                return `<div id="${match.fullHtml.trim().substring(1, 10) + index}" class="editor"><textarea>` + match.fullHtml + '</textarea></div>';
                                 break;
                             case 'resultSettingTags':
-                                return match.openCloseTags;
+                                return `<div id="${match.fullHtml.trim().substring(1, 10) + index}" class="editor"><textarea>` + match.openCloseTags + '</textarea></div>';
                                 break;
                         }
                     } else {
@@ -431,9 +431,9 @@ function searchCourses(courses, searchSettings) {
         // Put the open/close tags in
         return Array.from(page.document.querySelectorAll(searchSettings.query)).map(function (foundElement) {
             return {
-                fullHtml: foundElement.outerHTML,
+                fullHtml: Handlebars.Utils.escapeExpression(foundElement.outerHTML),
                 innerText: foundElement.innerText,
-                openCloseTags: foundElement.outerHTML.replace(foundElement.innerHTML, '')
+                openCloseTags: Handlebars.Utils.escapeExpression(foundElement.outerHTML.replace(foundElement.innerHTML, ''))
             }
         });
     }
@@ -510,6 +510,16 @@ function searchCourses(courses, searchSettings) {
 function displayResults(courses, searchSettings) {
     console.log('RESULTS:', courses);
     $('#results').html(Handlebars.templates.results(courses));
+
+    // IF display was of Selectors, convert all text areas to ace
+    if (searchSettings.isSelector) {
+        $('.editor').each(function (index, element) {
+            var editor = ace.edit(element);
+            editor.setTheme("ace/theme/dawn");
+            editor.setReadOnly(true);
+            editor.getSession().setMode("ace/mode/html");
+        });
+    }
 }
 
 /**

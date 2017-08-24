@@ -20,23 +20,19 @@
             </div>
             <div id="{{id}}">
                 <!-- Matches within the file go here -->
-                {{#if isSelector}}
-                {{#each displayMatches}}
-                <div class="result">
-                    <span>
-                        {{this}}
-                    </span>
-                </div>
-                {{/each}}
-                {{else}}
-                {{#each displayMatches}}
+                {{#if isSelector}} {{#each displayMatches}}
                 <div class="result">
                     <span>
                         {{{this}}}
                     </span>
                 </div>
-                {{/each}}
-                {{/if}}
+                {{/each}} {{else}} {{#each displayMatches}}
+                <div class="result">
+                    <span>
+                        {{{this}}}
+                    </span>
+                </div>
+                {{/each}} {{/if}}
             </div>
         </div>
         {{/each}}
