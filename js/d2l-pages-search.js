@@ -9,6 +9,10 @@
  * License: MIT
  **************************************************************************************************/
 
+/*eslint-env es6, browser*/
+/*global $, d2lScrape, async, Handlebars, ace, d3, download*/
+/*eslint no-console:0*/
+
 // jQuery elements
 var loadCoursesButton = $('#load-button'),
     searchCoursesButton = $('#search-button'),
@@ -68,32 +72,6 @@ function main() {
         }
     }
 
-    function modifySelectorDisplay(selectionId) {
-        // Change all the matches to just display the match that was selected
-        results.forEach(function (course) {
-            course.pages.forEach(function (page) {
-                page.displayMatches = page.matches.map(function (match, index) {
-                    if (searchSettings.isSelector) {
-                        switch (selectionId) {
-                            case 'resultSettingText':
-                                return `<div id="${match.fullHtml.trim().substring(1, 10) + index}" class="editor"><textarea>` + match.innerText + '</textarea></div>';
-                                break;
-                            case 'resultSettingHTML':
-                                return `<div id="${match.fullHtml.trim().substring(1, 10) + index}" class="editor"><textarea>` + match.fullHtml + '</textarea></div>';
-                                break;
-                            case 'resultSettingTags':
-                                return `<div id="${match.fullHtml.trim().substring(1, 10) + index}" class="editor"><textarea>` + match.openCloseTags + '</textarea></div>';
-                                break;
-                        }
-                    } else {
-                        return match;
-                    }
-                })
-            })
-        });
-    }
-
-
     // Main event listeners
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
@@ -143,20 +121,9 @@ function main() {
         // Search the courses
         results = searchCourses(courses, searchSettings);
 
-        if (searchSettings.isSelector) {
-            // Default is the text display
-            modifySelectorDisplay('resultSettingText')
-        } else {
-            results.forEach(function (course) {
-                course.pages.forEach(function (page) {
-                    page.displayMatches = page.matches.map(function (match) {
-                        return match;
-                    })
-                })
-            });
-        }
-
         // Display the results
+        searchSettings.radioButtonId = $('#cssSelectorOptions input:checked').attr('id');
+
         displayResults(results, searchSettings);
 
         // Either hide or show the radio buttons
@@ -173,7 +140,7 @@ function main() {
     cssResultsButtons.on('click', function () {
         $('.course-results').remove();
 
-        modifySelectorDisplay(this.id);
+        searchSettings.radioButtonId = this.id;
 
         displayResults(results, searchSettings);
     });
@@ -355,6 +322,7 @@ function searchCourses(courses, searchSettings) {
         var myArray;
         var matchedWord;
         var outputArray = [];
+        var match;
 
         /**
          * This function returns the 50 characters before a found word match, including
@@ -387,6 +355,12 @@ function searchCourses(courses, searchSettings) {
             }
         }
 
+        function compileObject(matchString) {
+            return {
+                display: matchString
+            }
+        }
+
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
         if (regEx.global) {
             while ((myArray = regEx.exec(searchString)) !== null) {
@@ -399,7 +373,7 @@ function searchCourses(courses, searchSettings) {
                     secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
                 }
 
-                outputArray.push(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty);
+                outputArray.push(compileObject(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty));
             }
         } else {
             myArray = regEx.exec(searchString);
@@ -408,12 +382,12 @@ function searchCourses(courses, searchSettings) {
 
                 // Construct the 50 left and right string
                 match = {
-                    firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)),
-                    queryMatch: Handlebars.Utils.escapeExpression(matchedWord),
-                    secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
+                    firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)).trim(),
+                    queryMatch: Handlebars.Utils.escapeExpression(matchedWord).trim(),
+                    secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')).trim()
                 }
 
-                outputArray.push(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty);
+                outputArray.push(compileObject(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty));
             }
         }
 
@@ -428,12 +402,25 @@ function searchCourses(courses, searchSettings) {
      * @returns {object} A match that was found for this page
      */
     function makeMatchesSelector(page, searchSettings) {
+        function makePretty(html) {
+            return html_beautify(html, {
+                "wrap_line_length": 0,
+                unformatted: ['a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'cite', 'data', 'datalist', 'del', 'dfn', 'em', 'i', 'input', 'ins', 'kbd', 'keygen', 'map', 'mark', 'math', 'meter', 'noscript', 'output', 'progress', 'q', 'ruby', 's', 'samp', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'template', 'time', 'u', 'var', 'wbr', 'text', 'acronym', 'address', 'big', 'dt', 'ins', 'small', 'strike', 'tt', 'pre'],
+                extra_liners: [],
+                preserve_newlines: true
+            });
+        }
+
+        function addAceEditor(stringIn) {
+            return '<div class="editor"><textarea>' + Handlebars.Utils.escapeExpression(makePretty(stringIn)) + '</textarea></div>';
+        }
         // Put the open/close tags in
         return Array.from(page.document.querySelectorAll(searchSettings.query)).map(function (foundElement) {
             return {
-                fullHtml: Handlebars.Utils.escapeExpression(foundElement.outerHTML),
-                innerText: foundElement.innerText,
-                openCloseTags: Handlebars.Utils.escapeExpression(foundElement.outerHTML.replace(foundElement.innerHTML, ''))
+                display: '',
+                fullHtml: addAceEditor(foundElement.outerHTML).trim(),
+                innerText: foundElement.innerText.trim(),
+                openCloseTags: addAceEditor(foundElement.outerHTML.replace(foundElement.innerHTML, '')).trim()
             }
         });
     }
@@ -488,8 +475,7 @@ function searchCourses(courses, searchSettings) {
                             pageUrl: page.url,
                             url: page.url,
                             name: decodeURI(page.url.split('/')[page.url.split('/').length - 1]),
-                            matches: makeMatches(page, searchSettings),
-                            isSelector: searchSettings.isSelector
+                            matches: makeMatches(page, searchSettings)
                         }
                     })
                     // We're only going to keep the pages that have returned data
@@ -508,15 +494,44 @@ function searchCourses(courses, searchSettings) {
  * @param {object} searchSettings The settings that were used to search for the query
  */
 function displayResults(courses, searchSettings) {
+    function reformatDisplay(courses, selectionId) {
+        var idToPropMap = {
+                resultSettingText: "innerText",
+                resultSettingHTML: "fullHtml",
+                resultSettingTags: "openCloseTags"
+            },
+            propToGet = idToPropMap[selectionId];
+
+        // Change all the matches to just display the match that was selected
+        courses.forEach(function (course) {
+            course.pages.forEach(function (page) {
+                page.matches.forEach(function (match) {
+                    match.display = match[propToGet];
+                })
+            })
+        });
+    }
+
     console.log('RESULTS:', courses);
+
+    // If we need to, reformat the courses
+    if (searchSettings.isSelector) {
+        reformatDisplay(courses, searchSettings.radioButtonId);
+    }
+
     $('#results').html(Handlebars.templates.results(courses));
 
     // IF display was of Selectors, convert all text areas to ace
     if (searchSettings.isSelector) {
         $('.editor').each(function (index, element) {
+
             var editor = ace.edit(element);
-            editor.setTheme("ace/theme/dawn");
+            editor.setTheme("ace/theme/chrome");
             editor.setReadOnly(true);
+            editor.setOptions({
+                fontFamily: "monospace",
+                fontSize: "16px"
+            })
             editor.getSession().setMode("ace/mode/html");
         });
     }

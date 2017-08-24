@@ -34,13 +34,13 @@ templates['results'] = template({"1":function(container,depth0,helpers,partials,
     + "\" target=\"_blank\">View File</a>\r\n            </div>\r\n            <div id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\">\r\n                <!-- Matches within the file go here -->\r\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.displayMatches : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.matches : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </div>\r\n        </div>\r\n";
 },"3":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, helper;
 
   return "                <div class=\"result\">\r\n                    <span>\r\n                        "
-    + ((stack1 = container.lambda(depth0, depth0)) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = helpers.display || (depth0 != null ? depth0.display : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"display","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\r\n                    </span>\r\n                </div>\r\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
