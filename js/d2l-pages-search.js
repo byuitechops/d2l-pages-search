@@ -68,7 +68,7 @@ function main() {
             // Remove the event listeners from the results radio buttons
             $('#cssSelectorOptions').css({
                 display: 'none'
-            }) //            cssResultsButtons.off('click');
+            });
         }
     }
 
@@ -273,7 +273,7 @@ function getSearchSettings() {
                 throw new Error("There was an Error in making the RegEx Object");
             }
         } else {
-            searchSettings.query = new RegExp(searchSettings.query, 'g');
+            searchSettings.query = new RegExp(searchSettings.query, 'gi');
         }
     }
 
@@ -411,7 +411,6 @@ function searchCourses(courses, searchSettings) {
                 "wrap_line_length": 50,
                 unformatted: ['a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'cite', 'data', 'datalist', 'del', 'dfn', 'em', 'i', 'input', 'ins', 'kbd', 'keygen', 'map', 'mark', 'math', 'meter', 'noscript', 'output', 'progress', 'q', 'ruby', 's', 'samp', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'template', 'time', 'u', 'var', 'wbr', 'text', 'acronym', 'address', 'big', 'dt', 'ins', 'small', 'strike', 'tt', 'pre'],
                 extra_liners: []
-                //preserve_newlines: true
             });
         }
 
@@ -518,6 +517,15 @@ function displayResults(courses, searchSettings) {
 
     console.log('RESULTS:', courses);
 
+    // Check to see if there is anything to display
+    courses.forEach(function (course) {
+        if (course.pages.length > 0) {
+            course.displayResults = true;
+        } else {
+            course.displayResults = false;
+        }
+    });
+
     // If we need to, reformat the courses
     if (searchSettings.isSelector) {
         reformatDisplay(courses, searchSettings.radioButtonId);
@@ -545,6 +553,7 @@ function displayResults(courses, searchSettings) {
         });
     }
 }
+
 
 /**
  * Download a CSV of the results in the format specified by the user.
@@ -579,7 +588,7 @@ function downloadCSV(results, searchSettings) {
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        match: match.firstFifty + match.queryMatch + match.secondFifty
+                        match: match.display.replace('<span class="highlight">', '').replace('</span>', '')
                     });
                 });
             });

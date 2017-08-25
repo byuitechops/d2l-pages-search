@@ -1,4 +1,4 @@
-{{#each this}}
+{{#each this}} {{#if displayResults}}
 <div class="collapsible-wrap course-results no-pad">
     <input type="checkbox" id="collapsible-{{ouNumber}}" checked>
     <label for="collapsible-{{ouNumber}}" class="check-collapse">
@@ -32,4 +32,4 @@
         {{/each}}
     </div>
 </div>
-{{/each}}
+{{/if}} {{/each}}
