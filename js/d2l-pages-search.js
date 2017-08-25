@@ -10,7 +10,7 @@
  **************************************************************************************************/
 
 /*eslint-env es6, browser*/
-/*global $, d2lScrape, async, Handlebars, ace, d3, download, html_beautify*/
+/*global $, d2lScrape, async, Handlebars, ace, d3, download, html_beautify, require*/
 /*eslint no-console:0*/
 
 // jQuery elements
@@ -269,7 +269,7 @@ function getSearchSettings() {
             try {
                 // Create Regular Expression Object
                 searchSettings.query = new RegExp(pattern, flags);
-            } catch (ex) {
+            } catch (regexException) {
                 throw new Error("There was an Error in making the RegEx Object");
             }
         } else {
@@ -291,8 +291,12 @@ function getSearchSettings() {
         // We need to change it to regEx no matter what
         makeRegexFromQuery();
     } else {
-        // Anything that goes in the box can be CSS searched without errors
-        searchSettings.isValidQuery = true;
+        // Error test to see if the query selector is valid
+        try {
+            document.querySelector(searchSettings.query)
+        } catch (selectorException) {
+            throw new Error('Invalid Selector:  Please enter a vaild selector.  More info on query selectors here: https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Selectors');
+        }
     }
 
     return searchSettings;
@@ -527,7 +531,6 @@ function displayResults(courses, searchSettings) {
             // Make the document object to count the lines
             var Document = require('ace/document').Document;
             var doc = new Document(element.outerHTML);
-            console.log(doc.getLength());
 
             var editor = ace.edit(element);
             editor.setTheme("ace/theme/chrome");
