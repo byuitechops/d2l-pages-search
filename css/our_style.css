@@ -88,7 +88,7 @@ textarea {
 
 .editor {
     position: relative;
-    width: 500px;
+    width: 700px;
     height: 100px;
 }
 
@@ -208,6 +208,9 @@ textarea {
 
 
 
+
+
+
 /********************
  * Download button
  ********************/
@@ -239,11 +242,17 @@ textarea {
 
 
 
+
+
+
 /*css selector Search Options*/
 
 #cssSelectorOptions {
     display: none;
 }
+
+
+
 
 
 

@@ -10,7 +10,7 @@
  **************************************************************************************************/
 
 /*eslint-env es6, browser*/
-/*global $, d2lScrape, async, Handlebars, ace, d3, download*/
+/*global $, d2lScrape, async, Handlebars, ace, d3, download, html_beautify*/
 /*eslint no-console:0*/
 
 // jQuery elements
@@ -404,10 +404,10 @@ function searchCourses(courses, searchSettings) {
     function makeMatchesSelector(page, searchSettings) {
         function makePretty(html) {
             return html_beautify(html, {
-                "wrap_line_length": 0,
+                "wrap_line_length": 50,
                 unformatted: ['a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'cite', 'data', 'datalist', 'del', 'dfn', 'em', 'i', 'input', 'ins', 'kbd', 'keygen', 'map', 'mark', 'math', 'meter', 'noscript', 'output', 'progress', 'q', 'ruby', 's', 'samp', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'template', 'time', 'u', 'var', 'wbr', 'text', 'acronym', 'address', 'big', 'dt', 'ins', 'small', 'strike', 'tt', 'pre'],
-                extra_liners: [],
-                preserve_newlines: true
+                extra_liners: []
+                //preserve_newlines: true
             });
         }
 
@@ -524,13 +524,19 @@ function displayResults(courses, searchSettings) {
     // IF display was of Selectors, convert all text areas to ace
     if (searchSettings.isSelector) {
         $('.editor').each(function (index, element) {
+            // Make the document object to count the lines
+            var Document = require('ace/document').Document;
+            var doc = new Document(element.outerHTML);
+            console.log(doc.getLength());
 
             var editor = ace.edit(element);
             editor.setTheme("ace/theme/chrome");
             editor.setReadOnly(true);
+            editor.setAutoScrollEditorIntoView(true);
             editor.setOptions({
                 fontFamily: "monospace",
-                fontSize: "16px"
+                fontSize: "16px",
+                maxLines: doc.getLength() > 30 ? "30" : doc.getLength()
             })
             editor.getSession().setMode("ace/mode/html");
         });
