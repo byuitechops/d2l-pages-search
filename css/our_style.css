@@ -66,7 +66,6 @@ textarea {
 }
 
 .deleteCourseButton {
-    background: url(../resources/x.ico) no-repeat;
     background-size: 100% auto;
     border: none;
     outline: none;
@@ -211,6 +210,16 @@ textarea {
 
 
 
+
+
+
+
+
+
+
+
+
+
 /********************
  * Download button
  ********************/
@@ -245,11 +254,31 @@ textarea {
 
 
 
+
+
+
+
+
+
+
+
+
+
 /*css selector Search Options*/
 
 #cssSelectorOptions {
     display: none;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
