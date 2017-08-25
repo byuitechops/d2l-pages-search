@@ -359,39 +359,30 @@ function searchCourses(courses, searchSettings) {
             }
         }
 
-        function compileObject(matchString) {
+        function compileMatch(myArray) {
+            matchedWord = myArray[0];
+
+            // Construct the 50 left and right string
+            match = {
+                firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)),
+                queryMatch: Handlebars.Utils.escapeExpression(matchedWord),
+                secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
+            }
+
             return {
-                display: matchString
+                display: match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty
             }
         }
 
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
         if (regEx.global) {
             while ((myArray = regEx.exec(searchString)) !== null) {
-                matchedWord = myArray[0];
-
-                // Construct the 50 left and right string
-                match = {
-                    firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)),
-                    queryMatch: Handlebars.Utils.escapeExpression(matchedWord),
-                    secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
-                }
-
-                outputArray.push(compileObject(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty));
+                outputArray.push(compileMatch(myArray));
             }
         } else {
             myArray = regEx.exec(searchString);
             if (myArray) {
-                matchedWord = myArray[0];
-
-                // Construct the 50 left and right string
-                match = {
-                    firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)).trim(),
-                    queryMatch: Handlebars.Utils.escapeExpression(matchedWord).trim(),
-                    secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '')).trim()
-                }
-
-                outputArray.push(compileObject(match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty));
+                outputArray.push(compileMatch(myArray));
             }
         }
 
