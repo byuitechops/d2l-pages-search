@@ -1,0 +1,49 @@
+/* This is how the stylesheet will work:
+ * The higher up a selector is on this sheet,
+ * the older the parent is.
+ */
+
+
+/* The library automatically places extra margin-bottom on containers */
+
+.container + .card {
+    margin-top: 0px;
+}
+
+#searchCourses div div:last-of-type {
+    margin-top: 5px;
+}
+
+#searchCourses > div {
+    width: 50%;
+    margin: 10px auto;
+}
+
+#search-input {
+    font-size: 18px;
+    margin: 10px 10px 20px;
+    padding: 15px 10px;
+    width: 100%;
+    border: solid 1px #2196f3;
+    border-radius: 2px;
+    background: none;
+    background-color: #fafafa;
+}
+
+.radio-container {
+    justify-content: center;
+}
+
+.radio-container > label {
+    padding: 1px 4px;
+}
+
+.search-button {
+    margin: 20px 5px 10px;
+    width: 140px;
+}
+
+
+#cssSelectorOptions {
+    display: none;
+}

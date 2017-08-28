@@ -5,47 +5,50 @@
     <title>
         Course Search
     </title>
-    <link href="https://localhost:8000/css/surface_styles.css" rel="stylesheet">
-<link href="https://localhost:8000/css/our_style.css" rel="stylesheet">
+    <link href="/css/surface_styles.css" rel="stylesheet">
+    <!--<link href="/css/our_style.css" rel="stylesheet">-->
+    <link href="/css/newStyles.css" rel="stylesheet">
 </head>
 
 <body>
     <!-- OU Input Box -->
-    <div class="flex">
-        <div>
-            <div class="flex">
-                <div class="card half-card">
-                    <span class="header">Course OUs</span>
-                    <div class="flex">
-                        <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
-                    </div>
-                    <div class="flex">
-                        <button id="load-button" class="btn--raised search-button">Load Courses</button>
-                    </div>
-                    <p class="step-1-2">1. Insert Course OUs or Drag and Drop a CSV into the box above</p>
+    <div class="g--8 m--2">
+        <div class="container">
+            <div class="card half-card g--6">
+                <span class="header">1. Course OUs</span>
+                <p class="step-1-2">Insert Course OUs or Drag and Drop a CSV into the box above</p>
+                <div class="flex">
+                    <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
                 </div>
-
-                <div class="card flex-column half-card loading-console">
-                    <div class="flex">
-                        <span class="header">Course</span>
-                        <span class="spacer"></span>
-                        <span class="header">Status</span>
-                    </div>
-                    <div id="course-status-container" class="course-holder">
-                        <!-- COURSE STATUSES -->
-                    </div>
-                    <span class="spacer"></span>
-                    <p class="step-1-2">2. Wait until all courses listed above have finished loading</p>
+                <div class="flex">
+                    <button id="load-button" class="btn--raised search-button">Load Courses</button>
                 </div>
             </div>
 
-            <div class="card">
-                <p class="step-3">3. Enter what you'd like to search for below and press "Search"</p>
-                <p class="step-3">Search queries are case-sensitive</p>
+            <div class="card flex-column half-card loading-console g--6 nudge--left ">
+                <span class="header">2. Load Status</span>
+                <p class="step-1-2">Wait until all courses have finished loading before making a search</p>
                 <div class="flex">
-                    <input class="search-input" type="text">
+                    <span class="header">Course</span>
+                    <span class="spacer"></span>
+                    <span class="header">Status</span>
                 </div>
-                <div class="radio-container flex">
+                <div id="course-status-container" class="course-holder">
+                    <!-- COURSE STATUSES -->
+                </div>
+                <span class="spacer"></span>
+            </div>
+        </div>
+
+        <div id="searchCourses" class="card g--12">
+            <h2>3. Search Courses</h2>
+            <p class="step-3">Enter what you'd like to search for below and press "Search"</p>
+            <p class="step-3">Search queries are case-insensitive</p>
+            <div class="g--4 m--5">
+                <div>
+                    <input id="search-input" type="text">
+                </div>
+                <div class="radio-container">
                     <input id="searchSettingText" class="type-radio" type="radio" name="search-type" value="Text" checked>
                     <label for="web-page-text">Page Text</label>
                     <input id="searchSettingHTML" class="type-radio" type="radio" name="search-type" value="HTML">
@@ -55,27 +58,27 @@
                     <input id="searchSettingRegex" class="type-radio" type="checkbox" name="search-type">
                     <label for="regex">Regex</label>
                 </div>
-                <div class="flex">
+                <div class="search-buttons">
                     <button id="search-button" class="btn--raised search-button">Search</button>
                     <button id="download-button" class="btn--raised search-button disabled" disabled>Download</button>
                 </div>
             </div>
+        </div>
 
-            <div class="card results-container" id="results-container">
-                <div class="flex" id="result-flex">
-                    <span class="header">Results</span>
-                    <span class="spacer"></span>
-                    <div id="cssSelectorOptions" class="hide">
-                        <input id="resultSettingText" class="type-radio result" type="radio" name="result-type">
-                        <label for="resultSettingText">Text</label>
-                        <input id="resultSettingTags" class="type-radio result" type="radio" name="result-type" checked>
-                        <label for="resultSettingTags">Tags</label>
-                        <input id="resultSettingHTML" class="type-radio result" type="radio" name="result-type">
-                        <label for="resultSettingHTML">Full HTML</label>
-                    </div>
-                    <div id="results">
-                        <!-- This is where we will place the Handlebars results -->
-                    </div>
+        <div class="card results-container g--12" id="results-container">
+            <div class="flex" id="result-flex">
+                <span class="header">Results</span>
+                <span class="spacer"></span>
+                <div id="cssSelectorOptions" class="hide">
+                    <input id="resultSettingText" class="type-radio result" type="radio" name="result-type">
+                    <label for="resultSettingText">Text</label>
+                    <input id="resultSettingTags" class="type-radio result" type="radio" name="result-type" checked>
+                    <label for="resultSettingTags">Tags</label>
+                    <input id="resultSettingHTML" class="type-radio result" type="radio" name="result-type">
+                    <label for="resultSettingHTML">Full HTML</label>
+                </div>
+                <div id="results">
+                    <!-- This is where we will place the Handlebars results -->
                 </div>
             </div>
         </div>
@@ -84,15 +87,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.10/URI.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/async/2.5.0/async.min.js"></script>
-    <script src="https://localhost:8000/js/libraries/d2lScrape.js"></script>
+    <script src="/js/libraries/d2lScrape.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.js" type="text/javascript"></script>
     <script src="https://d3js.org/d3-dsv.v1.min.js" type="text/javascript"></script>
-    <script src="https://localhost:8000/js/libraries/download.js" type="text/javascript"></script>
+    <script src="/js/libraries/download.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.4/beautify.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.4/beautify-css.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.4/beautify-html.min.js" type="text/javascript"></script>
-    <script src="https://localhost:8000/js/status.js" type="text/javascript"></script>
-    <script src="https://localhost:8000/js/results.js" type="text/javascript"></script>
-    <script src="https://localhost:8000/js/d2l-pages-search.js" type="text/javascript"></script>
+    <script src="/js/status.js" type="text/javascript"></script>
+    <script src="/js/results.js" type="text/javascript"></script>
+    <script src="/js/d2l-pages-search.js" type="text/javascript"></script>
 </body>
