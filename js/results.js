@@ -1,15 +1,9 @@
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['results'] = template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return " "
-    + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.displayResults : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + " ";
-},"2":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "\r\n<div class=\"collapsible-wrap course-results no-pad\">\r\n    <input type=\"checkbox\" id=\"collapsible-"
+  return "<div class=\"collapsible-wrap course-results no-pad\">\r\n    <input type=\"checkbox\" id=\"collapsible-"
     + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
     + "\" checked>\r\n    <label for=\"collapsible-"
     + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
@@ -26,9 +20,9 @@ templates['results'] = template({"1":function(container,depth0,helpers,partials,
     + "\" class=\"collapsible-"
     + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
     + "-area\">\r\n        <!-- Results for the course go here -->\r\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.pages : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.pages : depth0),{"name":"each","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "    </div>\r\n</div>\r\n";
-},"3":function(container,depth0,helpers,partials,data) {
+},"2":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "        <div class=\"card result-card\">\r\n            <!-- File Information added here -->\r\n            <div class=\"flex file-header\">\r\n                <span class=\"results-file-name\" title=\""
@@ -40,18 +34,19 @@ templates['results'] = template({"1":function(container,depth0,helpers,partials,
     + "\" target=\"_blank\">View File</a>\r\n            </div>\r\n            <div id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\">\r\n                <!-- Matches within the file go here -->\r\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.matches : depth0),{"name":"each","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.matches : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </div>\r\n        </div>\r\n";
-},"4":function(container,depth0,helpers,partials,data) {
+},"3":function(container,depth0,helpers,partials,data) {
     var stack1, helper;
 
   return "                <div class=\"result\">\r\n                    <span>\r\n                        "
     + ((stack1 = ((helper = (helper = helpers.display || (depth0 != null ? depth0.display : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"display","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\r\n                    </span>\r\n                </div>\r\n";
+},"5":function(container,depth0,helpers,partials,data) {
+    return "        <div class=\"no-results-container color--blue\">\r\n            There are no results for this course\r\n        </div>\r\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\r\n";
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true});
 })();

@@ -561,12 +561,13 @@ function downloadCSV(results, searchSettings) {
             result.pages.forEach(function (page) {
                 page.matches.forEach(function (match) {
                     toDownload.push({
+                        // As we push, decode the previously encoded HTML
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        fullHtml: match.fullHtml,
-                        innerText: match.innerText,
-                        openCloseTags: match.openCloseTags
+                        fullHtml: decodeURI(match.fullHtml),
+                        innerText: decodeURI(match.innerText),
+                        openCloseTags: decodeURI(match.openCloseTags)
                     });
                 });
             });
@@ -579,12 +580,14 @@ function downloadCSV(results, searchSettings) {
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        match: match.display.replace('<span class="highlight">', '').replace('</span>', '')
+                        match: decodeURI(match.display.replace('<span class="highlight">', '').replace('</span>', ''))
                     });
                 });
             });
         });
     }
+
+    console.log(toDownload);
 
     toDownload = d3.csvFormat(toDownload);
     download(toDownload, 'results.csv', 'text/csv');
