@@ -19,7 +19,28 @@ h2,
 
 .flex {
     display: flex;
+    flex-wrap: wrap;
+}
+
+.display-header {
     justify-content: space-between;
+}
+
+.ou-input {
+    justify-content: center;
+}
+
+textarea {
+    height: 90px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 100%;
+    font-family: "Roboto", sans-serif;
+}
+
+.course-holder {
+    max-height: 170px;
+    overflow: auto;
 }
 
 #searchCourses div div:last-of-type {
@@ -45,6 +66,10 @@ h2,
     border-radius: 2px;
     background: none;
     background-color: #fafafa;
+}
+
+.search-download-buttons {
+    justify-content: center;
 }
 
 .radio-container {
@@ -104,6 +129,11 @@ h2,
     background-color: #efefef;
     padding: 3px;
 }
+
+.results-file-name {
+    font-weight: bold;
+}
+
 
 .highlight {
     background-color: yellow;

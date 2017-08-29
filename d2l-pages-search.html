@@ -20,7 +20,7 @@
                 <div class="flex">
                     <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
                 </div>
-                <div class="flex">
+                <div class="flex ou-input">
                     <button id="load-button" class="btn--raised search-button">Load Courses</button>
                 </div>
             </div>
@@ -28,7 +28,7 @@
             <div class="card flex-column half-card loading-console g--6 nudge--left ">
                 <h2>2. Load Status</h2>
                 <p>Wait until all courses have finished loading before making a search</p>
-                <div class="flex">
+                <div class="flex display-header">
                     <span class="header">Course</span>
                     <span class="header">Status</span>
                 </div>
@@ -54,7 +54,7 @@
                     <input id="searchSettingRegex" type="checkbox" name="regex">
                     <label for="searchSettingRegex">Regex</label>
                 </div>
-                <div class="container m--3">
+                <div class="flex search-download-buttons">
                     <button id="search-button" class="btn--raised search-button">Search</button>
                     <button id="download-button" class="btn--raised search-button disabled" disabled>Download</button>
                 </div>
@@ -63,13 +63,12 @@
 
         <div class="card g--12" id="results-container">
             <h2>Results</h2>
-            <!--<div class="g--12 flex" id="result-flex">-->
             <div id="cssSelectorOptions" class="hide">
-                <input id="resultSettingText" class="type-radio result" type="radio">
+                <input id="resultSettingText" class="type-radio" type="radio">
                 <label for="resultSettingText">Text</label>
-                <input id="resultSettingTags" class="type-radio result" type="radio" checked>
+                <input id="resultSettingTags" class="type-radio" type="radio" checked>
                 <label for="resultSettingTags">Tags</label>
-                <input id="resultSettingHTML" class="type-radio result" type="radio">
+                <input id="resultSettingHTML" class="type-radio" type="radio">
                 <label for="resultSettingHTML">Full HTML</label>
             </div>
             <div id="results" class="g--12">
@@ -85,7 +84,7 @@
                         <!-- Results for the course go here -->
                         <div class="card result-card">
                             <!-- File Information added here -->
-                            <div class="flex file-header">
+                            <div class="flex display-header">
                                 <span class="results-file-name" title="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20Content.html">About Content.html</span>
                                 <a href="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20Content.html" target="_blank">View File</a>
                             </div>
@@ -105,18 +104,18 @@
                         </div>
                         <div class="card result-card">
                             <!-- File Information added here -->
-                            <div class="flex file-header">
+                            <div class="flex display-header">
                                 <span class="results-file-name" title="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20User%20Progress.html">About User Progress.html</span>
                                 <a href="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20User%20Progress.html" target="_blank">View File</a>
                             </div>
                             <div>
                                 <!-- Matches within the file go here -->
-                                <div class="result">
+                                <div class="tile result">
                                     <span>
                         ...you&nbsp;can access your&nbsp;own progress reports for all of the <span class="highlight">courses</span> you&nbsp;have active enrollment in. At the course leve...
                                     </span>
                                 </div>
-                                <div class="result">
+                                <div class="tile result">
                                     <span>
                         ...level, you&nbsp;can access your&nbsp;progress reports for the <span class="highlight">courses</span> you&nbsp;are currently in. To review the questions fro...
                                     </span>
@@ -126,7 +125,6 @@
                     </div>
                 </div>
             </div>
-            <!-- </div>-->
         </div>
     </div>
 
