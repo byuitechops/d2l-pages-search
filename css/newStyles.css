@@ -10,12 +10,16 @@
     margin-top: 0px;
 }
 
-
 h2,
 .header {
     font-size: 22px;
     font-weight: bold;
     margin-bottom: 10px;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
 }
 
 #searchCourses div div:last-of-type {
