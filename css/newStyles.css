@@ -43,6 +43,40 @@ textarea {
     overflow: auto;
 }
 
+.course {
+    margin: 5px 0;
+    justify-content: space-between;
+}
+
+.course img {
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+.course span:first-of-type {
+    flex-grow: 1;
+}
+
+.status-COMPLETE {
+    color: #82C242;
+}
+
+.status-LOADING {
+    color: #F58300;
+}
+
+.status-ERROR {
+    color: #E42226;
+}
+
+.deleteCourseButton {
+    background-size: 100% auto;
+    border: none;
+    outline: none;
+    height: 16px;
+    width: 16px;
+}
+
 #searchCourses div div:last-of-type {
     margin-top: 5px;
 }
@@ -134,7 +168,10 @@ textarea {
     font-weight: bold;
 }
 
-
 .highlight {
     background-color: yellow;
+}
+
+.no-results-container {
+    margin: 20px 0 0 20px;
 }
