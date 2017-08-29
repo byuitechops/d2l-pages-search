@@ -15,7 +15,7 @@
     <div class="g--8 m--2">
         <div class="container">
             <div class="card half-card g--6">
-                <span class="header">1. Course OUs</span>
+                <h2>1. Course OUs</h2>
                 <p class="step-1-2">Insert Course OUs or Drag and Drop a CSV into the box above</p>
                 <div class="flex">
                     <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
@@ -26,7 +26,7 @@
             </div>
 
             <div class="card flex-column half-card loading-console g--6 nudge--left ">
-                <span class="header">2. Load Status</span>
+                <h2>2. Load Status</h2>
                 <p class="step-1-2">Wait until all courses have finished loading before making a search</p>
                 <div class="flex">
                     <span class="header">Course</span>
@@ -36,7 +36,6 @@
                 <div id="course-status-container" class="course-holder">
                     <!-- COURSE STATUSES -->
                 </div>
-                <span class="spacer"></span>
             </div>
         </div>
 
@@ -49,14 +48,14 @@
                     <input id="search-input" type="text">
                 </div>
                 <div class="radio-container">
-                    <input id="searchSettingText" class="type-radio" type="radio" name="search-type" value="Text" checked>
-                    <label for="web-page-text">Page Text</label>
-                    <input id="searchSettingHTML" class="type-radio" type="radio" name="search-type" value="HTML">
-                    <label for="HTML">HTML</label>
-                    <input id="searchSettingCSS" class="type-radio" type="radio" name="search-type" value="CSS">
-                    <label for="CSS Selector">CSS Selector</label>
-                    <input id="searchSettingRegex" class="type-radio" type="checkbox" name="search-type">
-                    <label for="regex">Regex</label>
+                    <input id="searchSettingText" type="radio" name="search-type" value="Text" checked>
+                    <label for="searchSettingText">Page Text</label>
+                    <input id="searchSettingHTML" type="radio" name="search-type" value="HTML">
+                    <label for="searchSettingHTML">HTML</label>
+                    <input id="searchSettingCSS" type="radio" name="search-type" value="CSS">
+                    <label for="searchSettingCSS">CSS Selector</label>
+                    <input id="searchSettingRegex" type="checkbox" name="regex">
+                    <label for="searchSettingRegex">Regex</label>
                 </div>
                 <div class="container m--3">
                     <button id="search-button" class="btn--raised search-button">Search</button>
@@ -65,22 +64,74 @@
             </div>
         </div>
 
-        <div class="card results-container g--12" id="results-container">
-            <div class="flex" id="result-flex">
-                <span class="header">Results</span>
-                <span class="spacer"></span>
-                <div id="cssSelectorOptions" class="hide">
-                    <input id="resultSettingText" class="type-radio result" type="radio" name="result-type">
-                    <label for="resultSettingText">Text</label>
-                    <input id="resultSettingTags" class="type-radio result" type="radio" name="result-type" checked>
-                    <label for="resultSettingTags">Tags</label>
-                    <input id="resultSettingHTML" class="type-radio result" type="radio" name="result-type">
-                    <label for="resultSettingHTML">Full HTML</label>
-                </div>
-                <div id="results">
-                    <!-- This is where we will place the Handlebars results -->
+        <div class="card g--12" id="results-container">
+            <h2>Results</h2>
+            <!--<div class="g--12 flex" id="result-flex">-->
+            <div id="cssSelectorOptions" class="hide">
+                <input id="resultSettingText" class="type-radio result" type="radio">
+                <label for="resultSettingText">Text</label>
+                <input id="resultSettingTags" class="type-radio result" type="radio" checked>
+                <label for="resultSettingTags">Tags</label>
+                <input id="resultSettingHTML" class="type-radio result" type="radio">
+                <label for="resultSettingHTML">Full HTML</label>
+            </div>
+            <div id="results" class="g--12">
+                <!-- This is where we will place the Handlebars results -->
+                <div class="collapsible-wrap no-pad">
+                    <input type="checkbox" id="collapsible-10011" checked>
+                    <label for="collapsible-10011" class="check-collapse">
+                            <a href="/d2l/home/10011" class="results-course-title" target="_blank">Joshua McKinney Course</a>
+                            <!--<span class="OU">10011</span>
+                            <span class="count">3</span>-->
+                        </label>
+                    <div id="course" class="collapsible-area">
+                        <!-- Results for the course go here -->
+                        <div class="card result-card">
+                            <!-- File Information added here -->
+                            <div class="flex file-header">
+                                <span class="results-file-name" title="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20Content.html">About Content.html</span>
+                                <span class="spacer"></span>
+                                <a href="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20Content.html" target="_blank">View File</a>
+                            </div>
+                            <div>
+                                <!-- Matches within the file go here -->
+                                <div class="tile result">
+                                    <span>
+                        ...tool is where you will find the activities for your <span class="highlight">courses</span>.&nbsp;You should be able to find the syllabus, reading...
+                                    </span>
+                                </div>
+                                <div class="tile result">
+                                    <span>
+                        ...ToolEnables you to view different&nbsp;modules and topics in your <span class="highlight">courses</span>. Using the Content tool you can: find the readin...
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card result-card">
+                            <!-- File Information added here -->
+                            <div class="flex file-header">
+                                <span class="results-file-name" title="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20User%20Progress.html">About User Progress.html</span>
+                                <span class="spacer"></span>
+                                <a href="https://byui.brightspace.com/content/enforced/65340-CIT3810126799473/Simulation/About%20User%20Progress.html" target="_blank">View File</a>
+                            </div>
+                            <div>
+                                <!-- Matches within the file go here -->
+                                <div class="result">
+                                    <span>
+                        ...you&nbsp;can access your&nbsp;own progress reports for all of the <span class="highlight">courses</span> you&nbsp;have active enrollment in. At the course leve...
+                                    </span>
+                                </div>
+                                <div class="result">
+                                    <span>
+                        ...level, you&nbsp;can access your&nbsp;progress reports for the <span class="highlight">courses</span> you&nbsp;are currently in. To review the questions fro...
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- </div>-->
         </div>
     </div>
 
