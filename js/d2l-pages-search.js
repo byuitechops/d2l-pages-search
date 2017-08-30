@@ -77,6 +77,8 @@ function main() {
         // Get the ouNumbers
         var ouNumbers = getOuNumbers();
 
+        console.log(ouNumbers);
+
         // For each of the ouNumbers, see if they're on the list of downloaded courses already.
         ouNumbers.forEach(function (ouNumber) {
             var isCourseOnList = courses.some(function (course) {
@@ -161,8 +163,14 @@ function main() {
  * @returns {Array} An array of ou numbers
  */
 function getOuNumbers() {
-    // Return the ou numbers, splitting out the commas
-    return $('#textarea').val().split(', ');
+    // Return the ou numbers, splitting out the commas or spaces
+    return $('#textarea')
+        .val()
+        .replace(/\s+/g, ',')
+        .split(',')
+        .filter(function (ouNumber) {
+            return ouNumber.length > 0;
+        });
 }
 
 

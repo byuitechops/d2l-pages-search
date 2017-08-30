@@ -22,6 +22,10 @@ h2,
     flex-wrap: wrap;
 }
 
+body > div:first-child {
+    margin-top: 0;
+}
+
 .display-header {
     justify-content: space-between;
 }
@@ -88,6 +92,10 @@ textarea {
 
 #searchCourses > p {
     margin: 0px;
+}
+
+#searchCourses > p:nth-of-type(2) {
+    font-size: 13px;
     text-align: center;
 }
 
