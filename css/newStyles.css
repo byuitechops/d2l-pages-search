@@ -129,6 +129,7 @@ textarea {
 
 #cssSelectorOptions {
     display: none;
+    justify-content: flex-end;
 }
 
 .course-results {

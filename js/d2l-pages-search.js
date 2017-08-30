@@ -16,7 +16,7 @@
 // jQuery elements
 var loadCoursesButton = $('#load-button'),
     searchCoursesButton = $('#search-button'),
-    searchInputElement = $('.search-input'),
+    searchInputElement = $('#search-input'),
     searchSettingText = $('#searchSettingText'),
     searchSettingHTML = $('#searchSettingHTML'),
     searchSettingCSS = $('#searchSettingCSS'),
@@ -62,7 +62,7 @@ function main() {
             // When each of of the results radio buttons are clicked, re-display the results
             //  in the proper format.
             $('#cssSelectorOptions').css({
-                display: 'inherit'
+                display: 'flex'
             })
         } else {
             // Remove the event listeners from the results radio buttons
@@ -117,6 +117,8 @@ function main() {
             window.alert(e.message);
             return;
         }
+
+        console.log('Search Settings:', searchSettings);
 
         // Search the courses
         results = searchCourses(courses, searchSettings);
