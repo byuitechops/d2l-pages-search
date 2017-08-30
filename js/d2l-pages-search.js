@@ -360,17 +360,14 @@ function searchCourses(courses, searchSettings) {
         }
 
         function compileMatch(myArray) {
-            matchedWord = myArray[0];
-
             // Construct the 50 left and right string
-            match = {
-                firstFifty: Handlebars.Utils.escapeExpression((myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input)),
-                queryMatch: Handlebars.Utils.escapeExpression(matchedWord),
-                secondFifty: Handlebars.Utils.escapeExpression(getLastFifty(myArray.input, myArray.index + matchedWord.length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : ''))
-            }
+            var firstFifty = (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input);
+            var queryMatch = myArray[0];
+            var secondFifty = getLastFifty(myArray.input, myArray.index + myArray[0].length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '');
 
             return {
-                display: match.firstFifty + '<span class="highlight">' + match.queryMatch + '</span>' + match.secondFifty
+                display: Handlebars.Utils.escapeExpression(firstFifty) + '<span class="highlight">' + Handlebars.Utils.escapeExpression(queryMatch) + '</span>' + Handlebars.Utils.escapeExpression(secondFifty),
+                noEscapeDisplay: firstFifty + queryMatch + secondFifty
             }
         }
 
@@ -414,7 +411,9 @@ function searchCourses(courses, searchSettings) {
                 display: '',
                 fullHtml: addAceEditor(foundElement.outerHTML).trim(),
                 innerText: foundElement.innerText.trim(),
-                openCloseTags: addAceEditor(foundElement.outerHTML.replace(foundElement.innerHTML, '')).trim()
+                openCloseTags: addAceEditor(foundElement.outerHTML.replace(foundElement.innerHTML, '')).trim(),
+                noEscapeHtml: foundElement.outerHTML.trim,
+                noEscapeTags: foundElement.outerHTML.replace(foundElement.innerHTML).trim()
             }
         });
     }
@@ -565,9 +564,9 @@ function downloadCSV(results, searchSettings) {
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        fullHtml: match.fullHtml,
+                        fullHtml: match.noEscapeHtml,
                         innerText: match.innerText,
-                        openCloseTags: match.openCloseTags
+                        openCloseTags: match.noEscapeTags
                     });
                 });
             });
@@ -580,14 +579,12 @@ function downloadCSV(results, searchSettings) {
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        match: match.display.replace('<span class="highlight">', '').replace('</span>', '')
+                        match: match.noEscapeDisplay
                     });
                 });
             });
         });
     }
-
-    console.log(toDownload);
 
     toDownload = d3.csvFormat(toDownload);
     download(toDownload, 'results.csv', 'text/csv');
