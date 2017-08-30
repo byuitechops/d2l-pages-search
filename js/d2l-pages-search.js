@@ -118,8 +118,6 @@ function main() {
             return;
         }
 
-        console.log('Search Settings:', searchSettings);
-
         // Search the courses
         results = searchCourses(courses, searchSettings);
 
@@ -567,9 +565,9 @@ function downloadCSV(results, searchSettings) {
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        fullHtml: decodeURI(match.fullHtml),
-                        innerText: decodeURI(match.innerText),
-                        openCloseTags: decodeURI(match.openCloseTags)
+                        fullHtml: match.fullHtml,
+                        innerText: match.innerText,
+                        openCloseTags: match.openCloseTags
                     });
                 });
             });
@@ -582,7 +580,7 @@ function downloadCSV(results, searchSettings) {
                         courseName: result.courseName,
                         ouNumber: result.ouNumber,
                         pageUrl: page.pageUrl,
-                        match: decodeURI(match.display.replace('<span class="highlight">', '').replace('</span>', ''))
+                        match: match.display.replace('<span class="highlight">', '').replace('</span>', '')
                     });
                 });
             });
@@ -597,3 +595,8 @@ function downloadCSV(results, searchSettings) {
 }
 
 window.onload = main;
+
+/*Handlebars.Utils.toString(
+Handlebars.Utils.toString(
+Handlebars.Utils.toString(
+Handlebars.Utils.toString(*/
