@@ -5,7 +5,7 @@ templates['status'] = template({"1":function(container,depth0,helpers,partials,d
 
   return "<div class=\"flex course\" id=\""
     + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
-    + "-OU\">\r\n    <img src=\"/resources/minus.png\" class=\"deleteCourseButton\" id=\"delete"
+    + "-OU\">\r\n    <img src=\"https://localhost:8000/resources/minus.png\" class=\"deleteCourseButton\" id=\"delete"
     + alias4(((helper = (helper = helpers.ouNumber || (depth0 != null ? depth0.ouNumber : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ouNumber","hash":{},"data":data}) : helper)))
     + "\" />\r\n    <span class=\"course-title\">"
     + alias4(((helper = (helper = helpers.statusName || (depth0 != null ? depth0.statusName : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"statusName","hash":{},"data":data}) : helper)))
