@@ -82,7 +82,7 @@ textarea {
 }
 
 #searchCourses > div {
-    width: 50%;
+    width: 75%;
     margin: 10px auto;
 }
 
@@ -93,9 +93,14 @@ textarea {
 
 #search-input {
     font-size: 18px;
-    margin: 10px 10px 20px;
-    padding: 15px 10px;
+    margin-bottom: 20px;
     width: 100%;
+
+    /* To ensure cursor doesn't hug the left side of the box */
+    padding-left: 15px;
+    box-sizing: border-box;
+
+    /* To hide the default textbox styling of the library */
     border: solid 1px #2196f3;
     border-radius: 2px;
     background: none;
