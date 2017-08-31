@@ -77,8 +77,6 @@ function main() {
         // Get the ouNumbers
         var ouNumbers = getOuNumbers();
 
-        console.log(ouNumbers);
-
         // For each of the ouNumbers, see if they're on the list of downloaded courses already.
         ouNumbers.forEach(function (ouNumber) {
             var isCourseOnList = courses.some(function (course) {
@@ -107,7 +105,6 @@ function main() {
 
         return;
     });
-
 
     searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user
@@ -321,6 +318,7 @@ function getSearchSettings() {
 function searchCourses(courses, searchSettings) {
     // This variable holds the function that we will use to search
     var makeMatches;
+    var results = [];
 
     /**
      * This function searches a string using a regular expression.
@@ -332,9 +330,7 @@ function searchCourses(courses, searchSettings) {
     function searchText(searchString, regEx) {
         // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
         var myArray;
-        var matchedWord;
         var outputArray = [];
-        var match;
 
         /**
          * This function returns the 50 characters before a found word match, including
@@ -464,10 +460,10 @@ function searchCourses(courses, searchSettings) {
     }
 
     // Map the courses with the found matches in each of the courses' pages
-    return courses.map(function (course) {
+    courses.forEach(function (course) {
         // Only map the courses that have the complete status
         if (course.status === 'COMPLETE') {
-            return {
+            results.push({
                 courseName: course.courseName,
                 courseUrl: course.courseUrl,
                 ouNumber: course.ouNumber,
@@ -483,9 +479,11 @@ function searchCourses(courses, searchSettings) {
                     .filter(function (page) {
                         return page.matches.length > 0;
                     })
-            }
+            });
         }
     });
+
+    return results;
 }
 
 /**
