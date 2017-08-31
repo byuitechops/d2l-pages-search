@@ -269,7 +269,7 @@ function getSearchSettings() {
                 pattern = searchSettings.query.slice(1, searchSettings.query.lastIndexOf('/'));
                 flags = searchSettings.query.slice(searchSettings.query.lastIndexOf('/') + 1);
             } else {
-                throw new Error("Regular expression pattern must be wrapped with '/' and must only be followed by valid flags.");
+                throw new Error("Regular expression pattern must be wrapped with '/' and must only be followed by the follwing valid flags:\ng, i, m, u, y.\n\nFollow this link for more information about Regular Expressions: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions");
             }
             try {
                 // Create Regular Expression Object
