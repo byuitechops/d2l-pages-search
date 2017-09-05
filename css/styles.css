@@ -119,6 +119,28 @@ textarea {
     justify-content: center;
 }
 
+
+/********************
+ * Download button
+ ********************/
+
+.disabled {
+    background-color: #888;
+    color: #bbb;
+    cursor: default;
+}
+
+.disabled:hover {
+    background-color: #888;
+    color: #bbb;
+}
+
+.disabled:enabled {
+    background-color: #3498DB;
+    color: white;
+    cursor: pointer;
+}
+
 .radio-container {
     justify-content: center;
 }
