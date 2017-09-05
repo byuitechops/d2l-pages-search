@@ -56,6 +56,9 @@ function main() {
         });
     }
 
+    /**
+     * This function hides and shows the radio buttons that appear for selector searches
+     */
     function handleRadioButtons() {
         // IF the search was done with a selector
         if (searchSettings.isSelector) {
@@ -72,7 +75,9 @@ function main() {
         }
     }
 
-    // Main event listeners
+    /**
+     * When the 'Load Courses' button is clicked
+     */
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
         var ouNumbers = getOuNumbers();
@@ -100,12 +105,16 @@ function main() {
                 console.error('There was an error in downloading the courses: ' + error);
             }
 
+            // Add the event listeners for the delete course buttons
             addDeleteCourseEvents();
         });
 
         return;
     });
 
+    /**
+     * When the 'Search Courses' button is clicked
+     */
     searchCoursesButton.on('click', function () {
         // Get the searchSettings from the user
         try {
@@ -136,15 +145,22 @@ function main() {
         return;
     });
 
+    /**
+     * When any of the radio buttons for selector searches are clicked
+     */
     cssResultsButtons.on('click', function () {
+        // Clear the results page first
         $('.course-results').remove();
 
+        // Get the id for the radio buttons selected
         searchSettings.radioButtonId = this.id;
 
         displayResults(results, searchSettings);
     });
 
-
+    /**
+     * When the 'Download CSV' button is clicked
+     */
     downloadButton.on('click', function () {
         downloadCSV(results, searchSettings);
         return;
@@ -225,7 +241,7 @@ function downloadCourses(courses, callback) {
     // To begin, render the current statuses
     renderStatus(courses);
 
-    // Download all the course html pages for each of the courses
+    // Download all the html pages for each of the courses
     async.eachSeries(courses, downloadCourse, function (error) {
         // We will never call this error statement, because we'll handle it another way
         if (error) {
