@@ -22,6 +22,21 @@ h2,
     flex-wrap: wrap;
 }
 
+
+
+
+/* Tooltip Styling */
+
+#regexTooltipTemplate:hover,
+#regexTooltipTemplate.active {
+    visibility: visible;
+}
+
+
+
+
+/* Main Styling */
+
 body > div:first-child {
     margin-top: 0;
 }
@@ -118,6 +133,15 @@ textarea {
 .search-download-buttons {
     justify-content: center;
 }
+
+
+
+
+
+
+
+
+
 
 
 /********************

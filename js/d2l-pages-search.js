@@ -10,7 +10,7 @@
  **************************************************************************************************/
 
 /*eslint-env es6, browser*/
-/*global $, d2lScrape, async, Handlebars, ace, d3, download, html_beautify, require*/
+/*global $, d2lScrape, async, Handlebars, ace, d3, download, html_beautify, tippy, require*/
 /*eslint no-console:0*/
 
 // jQuery elements
@@ -74,6 +74,19 @@ function main() {
             });
         }
     }
+
+    // Handle tooltips
+    tippy('#regexLabel', {
+        arrow: true,
+        position: 'right',
+        theme: 'light',
+        html: '#regexTooltipTemplate',
+        interactive: true
+    });
+
+    $('#regexTooltipLink').on('click', function () {
+        parent.window.open('https://www.google.com/');
+    });
 
     /**
      * When the 'Load Courses' button is clicked

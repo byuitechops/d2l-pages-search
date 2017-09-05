@@ -1,17 +1,17 @@
 {
-    "name": "d2l-pages-search",
-    "version": "1.0.0",
-    "description": "A tool that helps employees of a d2l CMS find information they need in the HTML pages of courses",
-    "main": "d2l-pages-search.html",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "compile": "handlebars js/status.handlebars -f js/status.js && handlebars js/results.handlebars -f js/results.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/byuitechops/d2l-pages-search.git"
-    },
-    "keywords": [
+  "name": "d2l-pages-search",
+  "version": "1.0.0",
+  "description": "A tool that helps employees of a d2l CMS find information they need in the HTML pages of courses",
+  "main": "d2l-pages-search.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "handlebars js/status.handlebars -f js/status.js && handlebars js/results.handlebars -f js/results.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byuitechops/d2l-pages-search.git"
+  },
+  "keywords": [
     "Search",
     "D2L",
     "Content",
@@ -20,13 +20,16 @@
     "CSS",
     "Selector"
   ],
-    "author": "Scott Nicholes",
-    "contributors": [
-        "Zachary Williams"
-    ],
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/byuitechops/d2l-pages-search/issues"
-    },
-    "homepage": "https://github.com/byuitechops/d2l-pages-search#readme"
+  "author": "Scott Nicholes",
+  "contributors": [
+    "Zachary Williams"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/byuitechops/d2l-pages-search/issues"
+  },
+  "homepage": "https://github.com/byuitechops/d2l-pages-search#readme",
+  "dependencies": {
+    "tippy.js": "^1.2.0"
+  }
 }
