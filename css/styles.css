@@ -24,12 +24,14 @@ h2,
 
 
 
+
 /* Tooltip Styling */
 
 #regexTooltipTemplate:hover,
 #regexTooltipTemplate.active {
     visibility: visible;
 }
+
 
 
 
@@ -144,6 +146,14 @@ textarea {
 .search-download-buttons {
     justify-content: center;
 }
+
+.search-download-buttons img {
+    width: 16px;
+    height: 16px;
+    margin-top: 30px;
+    margin-right: -7px;
+}
+
 
 
 
