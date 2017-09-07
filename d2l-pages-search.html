@@ -16,7 +16,7 @@
         <div class="container">
             <div class="card half-card g--6">
                 <h2>1. Course OUs</h2>
-                <p>Insert Course OUs or Drag and Drop a CSV into the box above</p>
+                <p>Insert Course OUs or Drag and Drop a CSV into the box below</p>
                 <div class="flex">
                     <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
                 </div>
@@ -42,16 +42,17 @@
                     <label for="searchSettingText">Page Text</label> <input id="searchSettingHTML" type="radio" name="search-type" value="HTML" />
                     <label for="searchSettingHTML">HTML</label> <input id="searchSettingCSS" type="radio" name="search-type" value="CSS" />
                     <label for="searchSettingCSS">CSS Selector</label> <input id="searchSettingRegex" type="checkbox" name="regex" />
-                    <label id="regexLabel" for="searchSettingRegex">Regex</label>
+                    <label for="searchSettingRegex">RegEx</label>
+                    <img id="regexHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark.png">
                     <div id="regexTooltipTemplate" style="display: none;">
-                        <a href="/content/enforced/286190-OTOT/d2l-course-page-search/../" onclick="parent.window.open('http://www.regexr.com/'); return false;">Click Here To Follow Link</a>
-                        <a href="https://google.com/" target="_blank">Click Here To Follow Another Link</a>
+                        <p>RegEx or Regular Expressions are a special format of characters used to find exactly what you're looking for.
+                            <br>For more information about regular expressions, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank">click here</a></p>
                     </div>
                 </div>
                 <div class="flex search-download-buttons">
                     <button id="search-and-display-button" class="btn--raised search-button">Search & Display</button>
                     <button id="search-and-download-button" class="btn--raised search-button">Search & Download CSV</button>
-                    <img src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark.png" class="help-image">
+                    <img id="csvHelper" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png" class="help-image" title="A CSV or Comma Seperated Value file is a format that makes reading and recording data easy.  It saves data seperated by commas with an optional column header.  CSV files can be made using Microsoft Excel.">
                 </div>
             </div>
         </div>

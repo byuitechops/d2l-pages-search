@@ -77,17 +77,7 @@ function main() {
     }
 
     // Handle tooltips
-    tippy('#regexLabel', {
-        arrow: true,
-        position: 'right',
-        theme: 'light',
-        html: '#regexTooltipTemplate',
-        interactive: true
-    });
-
-    $('#regexTooltipLink').on('click', function () {
-        parent.window.open('https://www.google.com/');
-    });
+    handleTooltips();
 
     /**
      * When the 'Load Courses' button is clicked
@@ -203,6 +193,27 @@ function main() {
     });
 
     // End program
+    return;
+}
+
+/**
+ * This function contains all the tooltip logic we need.
+ */
+function handleTooltips() {
+    tippy('#regexHelper', {
+        arrow: true,
+        position: 'right',
+        theme: 'light',
+        html: '#regexTooltipTemplate',
+        interactive: true
+    });
+
+    tippy('.help-image', {
+        position: 'right',
+        arrow: true,
+        theme: 'light'
+    });
+
     return;
 }
 

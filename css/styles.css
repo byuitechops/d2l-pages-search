@@ -25,12 +25,16 @@ h2,
 
 
 
+
+
 /* Tooltip Styling */
 
 #regexTooltipTemplate:hover,
 #regexTooltipTemplate.active {
     visibility: visible;
 }
+
+
 
 
 
@@ -161,6 +165,8 @@ textarea {
 
 
 
+
+
 /********************
  * Download CSV button
  ********************/
@@ -192,6 +198,13 @@ textarea {
 
 .radio-container > label {
     padding: 1px 8px;
+}
+
+.radio-container img {
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    margin-right: -7px;
 }
 
 .search-button {
