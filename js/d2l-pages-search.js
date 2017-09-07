@@ -208,6 +208,14 @@ function handleTooltips() {
         interactive: true
     });
 
+    tippy('#cssHelper', {
+        arrow: true,
+        position: 'right',
+        theme: 'light',
+        html: '#cssTooltipTemplate',
+        interactive: true
+    })
+
     tippy('.help-image', {
         position: 'right',
         arrow: true,

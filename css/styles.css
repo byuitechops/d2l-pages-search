@@ -4,7 +4,7 @@
  */
 
 
-/* The library automatically places extra margin-bottom on containers */
+/* The CSS library automatically places extra margin-bottom on containers */
 
 .container + .card {
     margin-top: 0px;
@@ -26,30 +26,12 @@ h2,
 
 
 
-
-
-
-
-
 /* Tooltip Styling */
 
 #regexTooltipTemplate:hover,
 #regexTooltipTemplate.active {
     visibility: visible;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -173,12 +155,6 @@ textarea {
 
 
 
-
-
-
-
-
-
 /********************
  * Download CSV button
  ********************/
@@ -205,7 +181,7 @@ textarea {
 }
 
 .radio-container > input[type=checkbox] {
-    margin: 0px 8px;
+    margin: 0px 2px;
 }
 
 .radio-container > label {
@@ -216,7 +192,8 @@ textarea {
     width: 24px;
     height: 24px;
     margin-top: 0px;
-    margin-right: -7px;
+    margin-right: 10px;
+    margin-left: -4px;
 }
 
 .search-button {
