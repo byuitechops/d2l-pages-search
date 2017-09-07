@@ -21,7 +21,7 @@
                     <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
                 </div>
                 <div class="flex ou-input">
-                    <button id="load-button" class="btn--raised search-button">Load Courses</button>
+                    <button id="load-button" class="btn--raised">Load Courses</button>
                 </div>
             </div>
             <div class="card flex-column half-card loading-console g--6 nudge--left ">
@@ -49,13 +49,16 @@
                     </div>
                 </div>
                 <div class="flex search-download-buttons">
-                    <button id="search-button" class="btn--raised search-button">Search</button>
-                    <button id="download-button" class="btn--raised search-button disabled" disabled="disabled">Download</button>
+                    <button id="search-and-display-button" class="btn--raised search-button">Search & Display</button>
+                    <button id="search-and-download-button" class="btn--raised search-button">Search & Download CSV</button>
                 </div>
             </div>
         </div>
         <div class="card g--12" id="results-container">
-            <h2>4. Results</h2>
+            <div class="flex results-header">
+                <h2>4. Results</h2>
+                <button id="download-button" class="btn--raised disabled" disabled="disabled">Download CSV</button>
+            </div>
             <div id="cssSelectorOptions" class="flex"><input id="resultSettingText" type="radio" name="selector-result-value" value="Text" />
                 <label for="resultSettingText">Text</label> <input id="resultSettingTags" type="radio" name="selector-result-value" value="Tags" checked="checked" />
                 <label for="resultSettingTags">Tags</label> <input id="resultSettingHTML" type="radio" name="selector-result-value" value="FullHtml" />

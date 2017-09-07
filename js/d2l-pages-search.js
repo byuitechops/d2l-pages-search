@@ -15,13 +15,14 @@
 
 // jQuery elements
 var loadCoursesButton = $('#load-button'),
-    searchCoursesButton = $('#search-button'),
+    searchAndDisplayButton = $('#search-and-display-button'),
     searchInputElement = $('#search-input'),
     searchSettingText = $('#searchSettingText'),
     searchSettingHTML = $('#searchSettingHTML'),
     searchSettingCSS = $('#searchSettingCSS'),
     searchSettingRegex = $('#searchSettingRegex'),
     cssResultsButtons = $('#cssSelectorOptions > input'),
+    searchAndDownloadButton = $('#search-and-download-button'),
     downloadButton = $('#download-button');
 
 /**
@@ -128,7 +129,7 @@ function main() {
     /**
      * When the 'Search Courses' button is clicked
      */
-    searchCoursesButton.on('click', function () {
+    searchAndDisplayButton.on('click', function () {
         // Get the searchSettings from the user
         try {
             searchSettings = getSearchSettings();
@@ -155,6 +156,9 @@ function main() {
             downloadButton.removeAttr('disabled');
         }
 
+        // Scroll down to display
+        document.querySelector('#results-container').scrollIntoView();
+
         return;
     });
 
@@ -172,8 +176,27 @@ function main() {
     });
 
     /**
-     * When the 'Download CSV' button is clicked
+     * When the 'Search And Download CSV' button is clicked
      */
+    searchAndDownloadButton.on('click', function () {
+        // Get the searchSettings from the user
+        try {
+            searchSettings = getSearchSettings();
+        } catch (e) {
+            // We have an error.  Report it and end the function.
+            console.log(e);
+            window.alert(e.message);
+            return;
+        }
+
+        // Search the courses
+        results = searchCourses(courses, searchSettings);
+
+        // Download the CSV
+        downloadCSV(results, searchSettings);
+        return;
+    });
+
     downloadButton.on('click', function () {
         downloadCSV(results, searchSettings);
         return;
@@ -474,7 +497,6 @@ function searchCourses(courses, searchSettings) {
     function makeMatchesHtml(page, searchSettings) {
         return searchText(page.html, searchSettings.query);
     }
-
 
     // Remove the current results, if any
     $('.course-results').remove();
