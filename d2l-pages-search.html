@@ -15,7 +15,10 @@
         <!-- OU Input Box -->
         <div class="container">
             <div class="card half-card g--6">
-                <h2>1. Course OUs</h2>
+                <div class="flex ou-header">
+                    <h2>1. Course OUs</h2>
+                    <img id="ouHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png" title="OU numbers or Organization Unit numbers are used by D2L as course ids.  This simply is the course id.">
+                </div>
                 <p>Insert Course OUs or Drag and Drop a CSV into the box below</p>
                 <div class="flex">
                     <textarea id="textarea" placeholder="123456, 456789, 123789..."></textarea>
@@ -40,10 +43,10 @@
             <div class="g--4 m--5"><input id="search-input" class="search-input" type="text" />
                 <div class="radio-container"><input id="searchSettingText" type="radio" name="search-type" value="Text" checked="checked" />
                     <label for="searchSettingText">Page Text</label>
-                    <img id="textHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png">
+                    <img id="textHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png" title="Search courses by the text that is seen on each page.">
                     <input id="searchSettingHTML" type="radio" name="search-type" value="HTML" />
                     <label for="searchSettingHTML">HTML</label>
-                    <img id="htmlHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png">
+                    <img id="htmlHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png" title="Search courses by their HTML content.">
                     <input id="searchSettingCSS" type="radio" name="search-type" value="CSS" />
                     <label for="searchSettingCSS">CSS Selector</label>
                     <img id="cssHelper" class="help-image" src="/content/enforced/286190-OTOT/d2l-course-page-search/resources/question-mark32.png" title="A CSS Selector is an expression used to gather specific groups of html elements.">

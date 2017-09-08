@@ -17,10 +17,22 @@ h2,
     margin-bottom: 10px;
 }
 
+.ou-header img {
+    width: 32px;
+    height: 32px;
+    margin-left: 10px;
+}
+
 .flex {
     display: flex;
     flex-wrap: wrap;
 }
+
+
+
+
+
+
 
 
 
@@ -33,6 +45,11 @@ h2,
 #regexTooltipTemplate.active {
     visibility: visible;
 }
+
+
+
+
+
 
 
 
@@ -149,6 +166,11 @@ textarea {
     margin-top: 22px;
     margin-right: -7px;
 }
+
+
+
+
+
 
 
 
