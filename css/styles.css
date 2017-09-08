@@ -26,12 +26,14 @@ h2,
 
 
 
+
 /* Tooltip Styling */
 
 #regexTooltipTemplate:hover,
 #regexTooltipTemplate.active {
     visibility: visible;
 }
+
 
 
 
@@ -155,6 +157,7 @@ textarea {
 
 
 
+
 /********************
  * Download CSV button
  ********************/
@@ -189,8 +192,8 @@ textarea {
 }
 
 .radio-container img {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     margin-top: 0px;
     margin-right: 10px;
     margin-left: -4px;
