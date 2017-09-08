@@ -178,7 +178,9 @@ function main() {
         }
 
         // Scroll down to display
-        document.querySelector('#results-container').scrollIntoView();
+        $('html, body').animate({
+            scrollTop: $("#searchCourses").offset().top
+        }, 1000);
 
         return;
     });
