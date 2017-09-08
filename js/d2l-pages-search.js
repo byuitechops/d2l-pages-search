@@ -263,6 +263,7 @@ function downloadCourses(courses, callback) {
 
             // Download a single course
             d2lScrape.getCourseHtmlPages(course.ouNumber, function (error, data) {
+                console.log('data:', data);
                 if (error) {
                     course.status = 'ERROR';
                     downloadCourseCallback();
