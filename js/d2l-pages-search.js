@@ -110,7 +110,9 @@ function main() {
     // Set the tooltips up
     handleTooltips();
 
-
+    /**
+     * When the 'Load Courses' button is clicked
+     */
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
         var ouNumbers = getOuNumbers();
@@ -163,9 +165,8 @@ function main() {
         // Search the courses
         results = searchCourses(courses, searchSettings);
 
-        searchSettings.radioButtonId = $('#cssSelectorOptions input:checked').attr('id');
-
         // Display the results
+        searchSettings.radioButtonId = $('#cssSelectorOptions input:checked').attr('id');
         displayResults(results, searchSettings);
 
         // Either hide or show the radio buttons
@@ -217,7 +218,9 @@ function main() {
         return;
     });
 
-
+    /**
+     * When the 'Download CSV' button is clicked
+     */
     downloadButton.on('click', function () {
         downloadCSV(results, searchSettings);
         return;
@@ -228,7 +231,7 @@ function main() {
 }
 
 /**
- * This function simply gets the ou numbers from the text box.
+ * Gets the ou numbers from the textarea.
  * 
  * @returns {Array} An array of ou numbers
  */
@@ -245,10 +248,11 @@ function getOuNumbers() {
 
 
 /**
- * This function downloads all the courses that have not been downloaded yet.
+ * Downloads all the courses that have not yet been downloaded.
  * 
  * @param {Array}    courses  An array of course objects to attempt to download
- * @param {function} callback A function to call once all the work of this function is done
+ * @param {function} callback Returns an error, if there was one.  We are not using this
+ *                            mechanism, because we handle the error using d2lScrape.
  */
 function downloadCourses(courses, callback) {
     /**
@@ -265,7 +269,6 @@ function downloadCourses(courses, callback) {
 
             // Download a single course
             d2lScrape.getCourseHtmlPages(course.ouNumber, function (error, data) {
-                console.log('data:', data);
                 if (error) {
                     course.status = 'ERROR';
                     downloadCourseCallback();
@@ -317,7 +320,7 @@ function downloadCourses(courses, callback) {
 }
 
 /**
- * This function changes the view according to the model data it is given.
+ * Changes the Handlebars display according to the model data it is given.
  *
  * @param {object}  courses The course data to be displayed
  */
@@ -326,37 +329,47 @@ function renderStatus(courses) {
 }
 
 /**
- * This function gets and formats the search settings from the DOM.
+ * Gets and formats the search settings from the 'Search Courses' box.
  * 
- * @throws {Error} A string that tells the user what format the regular Expression should be in
- * @returns {[[Type]]} [[Description]]
+ * @throws {Error} An error further directing the user to input a valid query
+ * @returns {object} The settings with which to search
  */
 function getSearchSettings() {
+    /**
+     * Makes a regular expression from a query.
+     * 
+     * @throws {Error} An error describing why a regular expression could not be created.
+     */
     function makeRegexFromQuery() {
+        // If query is already a regular expression
         if (searchSettings.isRegex) {
-            // Taken from `course-search` gitHub repo
             // Check to make sure searchString is in regular expression form
+            // Taken from `course-search` gitHub repo: https://github.com/byuitechops/course-search/blob/master/src/courseSearchTools.js
             var pattern;
             var flags;
 
+            // Test to see if the query is in correct regEx format
             if (/^\/.+(\/[gimy]*)$/.test(searchSettings.query)) {
+                // Set the regEx pattern and flags
                 pattern = searchSettings.query.slice(1, searchSettings.query.lastIndexOf('/'));
                 flags = searchSettings.query.slice(searchSettings.query.lastIndexOf('/') + 1);
             } else {
                 throw new Error("Regular expression pattern must be wrapped with '/' and must only be followed by the follwing valid flags:\ng, i, m, u, y.\n\nFollow this link for more information about Regular Expressions: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions");
             }
+
             try {
-                // Create Regular Expression Object
+                // Create Regular Expression Object with the correct pattern and flags
                 searchSettings.query = new RegExp(pattern, flags);
             } catch (regexException) {
                 throw new Error("There was an Error in making the RegEx Object");
             }
         } else {
+            // The user simply put a string of characters in.  Make a regular expression from this.
             searchSettings.query = new RegExp(searchSettings.query, 'gi');
         }
     }
 
-    // Get the search settings from the input box
+    // Get the search settings from the search courses box
     var searchSettings = {
         query: searchInputElement.val(),
         searchInnerText: searchSettingText.is(':checked'),
@@ -382,8 +395,7 @@ function getSearchSettings() {
 }
 
 /**
- * This function will search through all of the downloaded courses and return the results of
- * the search.
+ * Searches all the downloaded courses and returns the results.
  * 
  * @param   {Array}  courses        The courses to be searched
  * @param   {object} searchSettings The settings to search with
@@ -395,36 +407,37 @@ function searchCourses(courses, searchSettings) {
     var results = [];
 
     /**
-     * This function searches a string using a regular expression.
+     * Searches a string using a regular expression.
      * 
      * @param   {string} searchString The string we want to search
      * @param   {RegExp} regEx        The regular expression we want to search with
      * @returns {Array}  The array of results that were found
      */
     function searchText(searchString, regEx) {
-        // Taken from MDN: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches`
-        var myArray;
+        // Taken from MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#Finding_successive_matches
+        var matchArray;
         var outputArray = [];
 
         /**
-         * This function returns the 50 characters before a found word match, including
+         * Returns the 50 characters before a found word match, including
          * the whole word before those 50 characters, if there is any.
          * 
          * @param   {string} string The string from which to parse
          * @returns {string} The fully formed first 50 or more characters after the match
          */
         function getFirstFifty(string) {
-            return string.substring(string.substring(0, myArray.index - 50).lastIndexOf(' ') + 1, myArray.index).replace(/\n+/g, '');
+            return string.substring(string.substring(0, matchArray.index - 50).lastIndexOf(' ') + 1, matchArray.index).replace(/\n+/g, '');
         }
 
         /**
-         * This function returns the 50 characters after a found word match, including
+         * Returns the 50 characters after a found word match, including
          * the whole word after those 50 characters, if there is any.
          * 
          * @param   {string} string The string from which to parse
          * @returns {string} The fully formed last 50 or more characters after the match
          */
         function getLastFifty(string, endOfWordIndex) {
+            // This is the regEx in order to get 50 characters after the word
             var lastFiftyRegex = /[\s\S]{50}/;
             // Step 1: Get 50 chars to the right of the word
             var allAfterWord = string.substring(endOfWordIndex);
@@ -437,11 +450,17 @@ function searchCourses(courses, searchSettings) {
             }
         }
 
-        function compileMatch(myArray) {
+        /**
+         * Constructs a complete match for both CSV and Handlebars output
+         * 
+         * @param   {object} matchArray The array that has the returned match
+         * @returns {object} An object with handlebars and CSV display properties
+         */
+        function compileMatch(matchArray) {
             // Construct the 50 left and right string
-            var firstFifty = (myArray.index - 50 > 0 ? '...' : '') + getFirstFifty(myArray.input);
-            var queryMatch = myArray[0];
-            var secondFifty = getLastFifty(myArray.input, myArray.index + myArray[0].length) + (myArray.index + 50 < myArray.input.length - 1 ? '...' : '');
+            var firstFifty = (matchArray.index - 50 > 0 ? '...' : '') + getFirstFifty(matchArray.input);
+            var queryMatch = matchArray[0];
+            var secondFifty = getLastFifty(matchArray.input, matchArray.index + matchArray[0].length) + (matchArray.index + 50 < matchArray.input.length - 1 ? '...' : '');
 
             return {
                 display: Handlebars.Utils.escapeExpression(firstFifty) + '<span class="highlight">' + Handlebars.Utils.escapeExpression(queryMatch) + '</span>' + Handlebars.Utils.escapeExpression(secondFifty),
@@ -451,13 +470,18 @@ function searchCourses(courses, searchSettings) {
 
         // Because this loop is an infinite loop if it is given no global flag, we differentiate which code will run
         if (regEx.global) {
-            while ((myArray = regEx.exec(searchString)) !== null) {
-                outputArray.push(compileMatch(myArray));
+
+            // Continuously update the array, finding all the matches within the search string
+            while ((matchArray = regEx.exec(searchString)) !== null) {
+                // Push onto our output properly compiled matches
+                outputArray.push(compileMatch(matchArray));
             }
         } else {
-            myArray = regEx.exec(searchString);
-            if (myArray) {
-                outputArray.push(compileMatch(myArray));
+            matchArray = regEx.exec(searchString);
+
+            // IF anything was found...
+            if (matchArray) {
+                outputArray.push(compileMatch(matchArray));
             }
         }
 
@@ -465,15 +489,21 @@ function searchCourses(courses, searchSettings) {
     }
 
     /**
-     * This function will return a new match for every querySelector that was found on a page.
+     * Returns a new match for every querySelector that was found on a page.
      * 
      * @param   {object} page           A page of a course we want searching
      * @param   {object} searchSettings Settings that we want to search with
      * @returns {object} A match that was found for this page
      */
     function makeMatchesSelector(page, searchSettings) {
-
+        /**
+         * Beautifuies a found html match.
+         * 
+         * @param   {string} html The html to be beautified
+         * @returns {string} The beautified html
+         */
         function makePretty(html) {
+            // Uses external html_beautify library
             return html_beautify(html, {
                 "wrap_line_length": 50,
                 unformatted: ['a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'cite', 'data', 'datalist', 'del', 'dfn', 'em', 'i', 'input', 'ins', 'kbd', 'keygen', 'map', 'mark', 'math', 'meter', 'noscript', 'output', 'progress', 'q', 'ruby', 's', 'samp', 'select', 'small', 'span', 'strong', 'sub', 'sup', 'template', 'time', 'u', 'var', 'wbr', 'text', 'acronym', 'address', 'big', 'dt', 'ins', 'small', 'strike', 'tt', 'pre'],
@@ -481,10 +511,17 @@ function searchCourses(courses, searchSettings) {
             });
         }
 
+        /**
+         * Adds html to html matches to display with Ace editor.
+         * 
+         * @param   {string} stringIn The string to add Ace editor code to
+         * @returns {string} The converted html string with Ace code
+         */
         function addAceEditor(stringIn) {
             return '<div class="editor"><textarea>' + Handlebars.Utils.escapeExpression(makePretty(stringIn)) + '</textarea></div>';
         }
-        // Put the open/close tags in
+
+        // Format all the matches before returning
         return Array.from(page.document.querySelectorAll(searchSettings.query)).map(function (foundElement) {
             return {
                 display: '',
@@ -498,8 +535,7 @@ function searchCourses(courses, searchSettings) {
     }
 
     /**
-     * This function returns the searchText function, sending it the innerText of the page to be
-     * searched. 
+     * Returns the searchText function with the text content to search.
      * 
      * @param   {object}   page           A page of a course we want to search
      * @param   {object}   searchSettings Settings that we want to search with
@@ -510,8 +546,7 @@ function searchCourses(courses, searchSettings) {
     }
 
     /**
-     * This function returns the searchText function, sending it the html of the page to be
-     * searched.
+     * Returns the searchText function with the html content to search.
      * 
      * @param   {object}   page           A page of a course we want to search
      * @param   {object}   searchSettings Settings that we want to search with
@@ -524,7 +559,9 @@ function searchCourses(courses, searchSettings) {
     // Remove the current results, if any
     $('.course-results').remove();
 
-    // Decide what our make function will be
+    // Decide what our make function will be.  We do this so that while in the forEach
+    //   statement below, we simply just pass it a variable that has the correct function
+    //   for this search.
     if (searchSettings.isSelector) {
         makeMatches = makeMatchesSelector;
     } else if (searchSettings.searchInnerText) {
@@ -533,9 +570,9 @@ function searchCourses(courses, searchSettings) {
         makeMatches = makeMatchesHtml;
     }
 
-    // Map the courses with the found matches in each of the courses' pages
+    // Loop through each of the courses
     courses.forEach(function (course) {
-        // Only map the courses that have the complete status
+        // Only save the courses that have the complete status
         if (course.status === 'COMPLETE') {
             results.push({
                 courseName: course.courseName,
@@ -545,7 +582,9 @@ function searchCourses(courses, searchSettings) {
                         return {
                             pageUrl: page.url,
                             url: page.url,
+                            // We decode the url so that we just get the name
                             name: decodeURI(page.url.split('/')[page.url.split('/').length - 1]),
+                            // Use the newly assigned makeMatches function
                             matches: makeMatches(page, searchSettings)
                         }
                     })
@@ -561,52 +600,41 @@ function searchCourses(courses, searchSettings) {
 }
 
 /**
- * This function will display the results that were found through the DOM.
+ * Display the results in the 'Results' box.
  * 
  * @param {Array}  courses        The transformed course objects with the results from the search
  * @param {object} searchSettings The settings that were used to search for the query
  */
 function displayResults(courses, searchSettings) {
-
+    /**
+     * Formats the results according to a display preference.
+     * 
+     * @param {Array}  courses     The courses to format
+     * @param {string} selectionId The string to specify which property to display
+     */
     function reformatDisplay(courses, selectionId) {
         var idToPropMap = {
                 resultSettingText: "innerText",
                 resultSettingHTML: "fullHtml",
                 resultSettingTags: "openCloseTags"
             },
-            propToGet = idToPropMap[selectionId];
+            // At the specific selectionId, assign the property to display
+            propToDisplay = idToPropMap[selectionId];
 
         // Change all the matches to just display the match that was selected
         courses.forEach(function (course) {
             course.pages.forEach(function (page) {
                 page.matches.forEach(function (match) {
-                    match.display = match[propToGet];
+                    match.display = match[propToDisplay];
                 })
             })
         });
     }
 
-    console.log('RESULTS:', courses);
-
-    // Check to see if there is anything to display
-    courses.forEach(function (course) {
-        if (course.pages.length > 0) {
-            course.displayResults = true;
-        } else {
-            course.displayResults = false;
-        }
-    });
-
-    // If we need to, reformat the courses
-    if (searchSettings.isSelector) {
-        reformatDisplay(courses, searchSettings.radioButtonId);
-    }
-
-    // Send the courses to the Handlebars template to be rendered
-    $('#results').html(Handlebars.templates.results(courses));
-
-    // IF display was of Selectors, convert all text areas to ace
-    if (searchSettings.isSelector) {
+    /**
+     * Changes elements on the html page to show the ace editor.
+     */
+    function renderAceEditor() {
         $('.editor').each(function (index, element) {
             // Make the document object to count the lines
             var Document = require('ace/document').Document;
@@ -619,16 +647,32 @@ function displayResults(courses, searchSettings) {
             editor.setOptions({
                 fontFamily: "monospace",
                 fontSize: "16px",
+                // Only display 30 lines, if result is longer than 30 lines
                 maxLines: doc.getLength() > 30 ? "30" : doc.getLength()
             })
             editor.getSession().setMode("ace/mode/html");
         });
     }
+
+    console.log('RESULTS:', courses);
+
+    // If we need to, reformat the courses
+    if (searchSettings.isSelector) {
+        // Send in the radio button selection id
+        reformatDisplay(courses, searchSettings.radioButtonId);
+    }
+
+    // Send the courses to the Handlebars template to be rendered
+    $('#results').html(Handlebars.templates.results(courses));
+
+    // IF display was of Selectors, convert all text areas to ace
+    if (searchSettings.isSelector) {
+        renderAceEditor();
+    }
 }
 
-
 /**
- * Download a CSV of the results in the format specified by the user.
+ * Downloads a CSV of the results in the format specified by the user.
  * 
  * @param {Array}  results        The results to download
  * @param {object} searchSettings Settings to determine in what format to download the results
@@ -637,6 +681,7 @@ function downloadCSV(results, searchSettings) {
     // Array of the data to download
     var toDownload = [];
 
+    // Get the appropriate properties either for a selector or for a text match
     if (searchSettings.isSelector) {
         results.forEach(function (result) {
             result.pages.forEach(function (page) {
@@ -668,7 +713,10 @@ function downloadCSV(results, searchSettings) {
         });
     }
 
+    // Use external library d3 to format the download array
     toDownload = d3.csvFormat(toDownload);
+
+    // Use external library to download the array
     download(toDownload, 'results.csv', 'text/csv');
     return;
 }
