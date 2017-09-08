@@ -1,12 +1,13 @@
 /**************************************************************************************************
- * d2l-pages-search.js
- * This program searches all of d2l for what a user is looking for.  After searching, this program
- * displays the search results in different ways that help the user analyze what was returned.
+ * Program:
+ *  D2L Pages Search
  * 
- * This program drives the d2l-pages-search.html web page.
+ * Authors:
+ *  Scott Nicholes and Zachary Williams
  * 
- * Authors: Scott Nicholes and Zachary Williams
- * License: MIT
+ * Summary:
+ *  This program searches for queries in the content pages of d2l courses.  In addition, this
+ *  program also displays and downloads the results of the search.
  **************************************************************************************************/
 
 /*eslint-env es6, browser*/
@@ -26,7 +27,8 @@ var loadCoursesButton = $('#load-button'),
     downloadButton = $('#download-button');
 
 /**
- * Main will handle all user input from the DOM.
+ * Gathers the course ouNumbers, downloads them, and then either 
+ * searches for and displays or downloads the results.
  */
 function main() {
     var courses = [];
@@ -34,7 +36,7 @@ function main() {
     var results;
 
     /**
-     * This function manages the event handlers for each of the course's deletion functions.
+     * Adds delete events to each of the course delete buttons.
      */
     function addDeleteCourseEvents() {
         courses.forEach(function (course, index) {
@@ -58,7 +60,7 @@ function main() {
     }
 
     /**
-     * This function hides and shows the radio buttons that appear for selector searches
+     * Hides or shows the radio buttons that appear for selector searches
      */
     function handleRadioButtons() {
         // IF the search was done with a selector
@@ -76,23 +78,51 @@ function main() {
         }
     }
 
-    // Handle tooltips
+    /**
+     * Sets up the proper format for the tooltips.
+     */
+    function handleTooltips() {
+        tippy('#regexHelper', {
+            arrow: true,
+            position: 'right',
+            theme: 'light',
+            html: '#regexTooltipTemplate',
+            interactive: true
+        });
+
+        tippy('#cssHelper', {
+            arrow: true,
+            position: 'right',
+            theme: 'light',
+            html: '#cssTooltipTemplate',
+            interactive: true
+        })
+
+        tippy('.help-image', {
+            position: 'right',
+            arrow: true,
+            theme: 'light'
+        });
+
+        return;
+    }
+
+    // Set the tooltips up
     handleTooltips();
 
-    /**
-     * When the 'Load Courses' button is clicked
-     */
+
     loadCoursesButton.on('click', function () {
         // Get the ouNumbers
         var ouNumbers = getOuNumbers();
 
         // For each of the ouNumbers, see if they're on the list of downloaded courses already.
         ouNumbers.forEach(function (ouNumber) {
+            // IF at least one of the ouNumbers is on the list, we know that this number is on the list.
             var isCourseOnList = courses.some(function (course) {
                 return ouNumber === course.ouNumber;
             });
 
-            // If not on the list, make a new object with which to put our downloaded course.
+            // If the ouNumber is not on the list, make a new object with which to put our downloaded course.
             if (!isCourseOnList) {
                 courses.push({
                     statusName: String(ouNumber),
@@ -133,9 +163,9 @@ function main() {
         // Search the courses
         results = searchCourses(courses, searchSettings);
 
-        // Display the results
         searchSettings.radioButtonId = $('#cssSelectorOptions input:checked').attr('id');
 
+        // Display the results
         displayResults(results, searchSettings);
 
         // Either hide or show the radio buttons
@@ -187,6 +217,7 @@ function main() {
         return;
     });
 
+
     downloadButton.on('click', function () {
         downloadCSV(results, searchSettings);
         return;
@@ -197,36 +228,7 @@ function main() {
 }
 
 /**
- * This function contains all the tooltip logic we need.
- */
-function handleTooltips() {
-    tippy('#regexHelper', {
-        arrow: true,
-        position: 'right',
-        theme: 'light',
-        html: '#regexTooltipTemplate',
-        interactive: true
-    });
-
-    tippy('#cssHelper', {
-        arrow: true,
-        position: 'right',
-        theme: 'light',
-        html: '#cssTooltipTemplate',
-        interactive: true
-    })
-
-    tippy('.help-image', {
-        position: 'right',
-        arrow: true,
-        theme: 'light'
-    });
-
-    return;
-}
-
-/**
- * This function simply gets the ou numbers from the DOM.
+ * This function simply gets the ou numbers from the text box.
  * 
  * @returns {Array} An array of ou numbers
  */
@@ -470,6 +472,7 @@ function searchCourses(courses, searchSettings) {
      * @returns {object} A match that was found for this page
      */
     function makeMatchesSelector(page, searchSettings) {
+
         function makePretty(html) {
             return html_beautify(html, {
                 "wrap_line_length": 50,
@@ -564,6 +567,7 @@ function searchCourses(courses, searchSettings) {
  * @param {object} searchSettings The settings that were used to search for the query
  */
 function displayResults(courses, searchSettings) {
+
     function reformatDisplay(courses, selectionId) {
         var idToPropMap = {
                 resultSettingText: "innerText",
@@ -598,6 +602,7 @@ function displayResults(courses, searchSettings) {
         reformatDisplay(courses, searchSettings.radioButtonId);
     }
 
+    // Send the courses to the Handlebars template to be rendered
     $('#results').html(Handlebars.templates.results(courses));
 
     // IF display was of Selectors, convert all text areas to ace
@@ -669,8 +674,3 @@ function downloadCSV(results, searchSettings) {
 }
 
 window.onload = main;
-
-/*Handlebars.Utils.toString(
-Handlebars.Utils.toString(
-Handlebars.Utils.toString(
-Handlebars.Utils.toString(*/
