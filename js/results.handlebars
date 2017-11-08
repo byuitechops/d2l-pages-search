@@ -1,32 +1,30 @@
 {{#each this}}
-<div class="collapsible-wrap no-pad">
-    <input type="checkbox" id="collapsible-{{ouNumber}}" checked>
-    <label for="collapsible-{{ouNumber}}" class="check-collapse">
-        <a href="/d2l/home/{{ouNumber}}" class="results-course-title" target="_blank">{{courseName}}</a>
-        <span class="OU">{{ouNumber}}</span>
-        <span class="count">{{pages.length}}</span>
-    </label>
-    <div class="collapsible-area">
-        <!-- Results for the course go here -->
-        {{#each pages}}
-        <div class="card result-card">
-            <!-- File Information added here -->
-            <div class="flex display-header">
-                <span class="results-file-name" title="{{pageUrl}}">{{name}}</span>
-                <a href="{{pageUrl}}" target="_blank">View File</a>
-            </div>
-            <!-- Matches within the file go here -->
-            {{#each matches}}
-            <div class="tile result">
-                <span>{{{display}}}</span>
-            </div>
-            {{/each}}
-        </div>
-        {{else}}
-        <div class="no-results-container color--blue">
-            There are no results for this course
-        </div>
-        {{/each}}
+<div class="collapsible-wrap no-pad {{#if pages.length}}{{else}}hidden{{/if}}">
+  <input type="checkbox" id="collapsible-{{ouNumber}}" checked>
+  <label for="collapsible-{{ouNumber}}" class="check-collapse">
+    <a href="/d2l/home/{{ouNumber}}" class="results-course-title" target="_blank">{{courseName}} (Pages: {{pages.length}}/{{totalPages}})</a>
+  </label>
+  <div class="collapsible-area">
+    <!-- Results for the course go here -->
+    {{#each pages}}
+    <div class="card result-card">
+      <!-- File Information added here -->
+      <div class="flex display-header">
+        <span class="results-file-name" title="{{pageUrl}}">{{name}} (results: {{matches.length}})</span>
+        <a href="{{pageUrl}}" target="_blank">View File</a>
+      </div>
+      <!-- Matches within the file go here -->
+      {{#each matches}}
+      <div class="tile result">
+        <span>{{{display}}}</span>
+      </div>
+      {{/each}}
     </div>
+    {{else}}
+    <div class="no-results-container color--blue">
+      There are no results for this course
+    </div>
+    {{/each}}
+  </div>
 </div>
 {{/each}}

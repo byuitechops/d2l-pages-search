@@ -25,8 +25,8 @@ var loadCoursesButton = $('#load-button'),
   cssResultsButtons = $('#cssSelectorOptions > input'),
   searchAndDownloadButton = $('#search-and-download-button'),
   downloadButton = $('#download-button'),
-  courseInputElement = $('#textarea');
-
+  courseInputElement = $('#textarea'),
+  hideEmptyCourses = $('#hideEmptyCourses');
 /**
  * Gathers the course ouNumbers, downloads them, and then either 
  * searches for and displays or downloads the results.
@@ -176,6 +176,11 @@ function main() {
     // Enable the download CSV button
     if (downloadButton.prop('disabled')) {
       downloadButton.removeAttr('disabled');
+    }
+
+    //Enable the filter button
+    if (hideEmptyCourses.prop('disabled')) {
+      hideEmptyCourses.removeAttr('disabled');
     }
 
     // Scroll down to display
@@ -581,6 +586,7 @@ function searchCourses(courses, searchSettings) {
         courseName: course.courseName,
         courseUrl: course.courseUrl,
         ouNumber: course.ouNumber,
+        totalPages: course.pages.length,
         pages: course.pages.map(function (page) {
             return {
               pageUrl: page.url,
@@ -657,7 +663,7 @@ function displayResults(courses, searchSettings) {
     });
   }
 
-  console.log('RESULTS:', courses);
+  getCourseStats(courses)
 
   // If we need to, reformat the courses
   if (searchSettings.isSelector) {
@@ -666,6 +672,8 @@ function displayResults(courses, searchSettings) {
   }
 
   // Send the courses to the Handlebars template to be rendered
+  console.log('RESULTS:', courses);
+
   $('#results').html(Handlebars.templates.results(courses));
 
   // IF display was of Selectors, convert all text areas to ace
@@ -724,6 +732,7 @@ function downloadCSV(results, searchSettings) {
   return;
 }
 
+/* Begin Ben's lack of documentation! */
 /* Handle Drag and drop CSV functionality */
 
 function parseCSV(csvFile) {
@@ -734,9 +743,10 @@ function parseCSV(csvFile) {
   var reader = new FileReader();
   reader.onload = function (fileData) {
     var ous = fileData.target.result.split(', ')
-    console.log(ous)
     ous.forEach(function (ou) {
-      courseInputElement.val(courseInputElement.val() + ou + "\n")
+      ou.split('\n').forEach(function (ou) {
+        courseInputElement.val(courseInputElement.val() + ou + "\n")
+      })
     })
   }
   reader.readAsText(csvFile, "UTF-8")
@@ -767,5 +777,40 @@ courseInputElement.on("drop", function (event) {
   }
 });
 
+/*Get Course Search Stats*/
+function getCourseStats(courses) {
+  $('#stats').removeClass('hidden');
+  var coursesStat = 0;
+  var totPages = 0;
+  var totPageStat = 0;
+  var totStat = 0;
+  courses.forEach(function (course) {
+    totPages += course.totalPages;
+    if (course.pages.length > 0) {
+      coursesStat++
+      totPageStat += course.pages.length;
+      course.pages.forEach(function (page) {
+        totStat += page.matches.length;
+      })
+    }
+  })
+  coursesStat = coursesStat + "/" + courses.length;
+  var avgStat = totStat / courses.length;
+
+  $('#coursesStat').text(coursesStat)
+  $('#totStat').text(totStat)
+  $('#avgStat').text(avgStat)
+  $('#totPageStat').text(totPageStat + "/" + totPages)
+}
+
+/* Hide Empty Courses */
+hideEmptyCourses.on("click", function () {
+  $('.no-results-container').parent().parent().toggle('hidden')
+  if (hideEmptyCourses.text() == "Hide Empty Courses") {
+    hideEmptyCourses.text('Show Empty Courses')
+  } else {
+    hideEmptyCourses.text('Hide Empty Courses')
+  }
+})
 
 window.onload = main;

@@ -7,34 +7,50 @@
 /* The CSS library automatically places extra margin-bottom on containers */
 
 .container + .card {
-    margin-top: 0px;
+  margin-top: 0px;
 }
 
 h2,
 .header {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .ou-header img {
-    width: 32px;
-    height: 32px;
-    margin-left: 10px;
+  width: 32px;
+  height: 32px;
+  margin-left: 10px;
 }
 
 .flex {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
+.attributions a {
+  font-size: 8pt;
+}
 
+.attributions p {
+  margin-bottom: 5px;
+}
 
+#textarea {
+  resize: vertical;
+}
 
+.hidden {
+  display: none;
+}
 
+.results-0 {
+  display: none;
+}
 
-
-
+#stats p {
+  margin-bottom: 5px;
+}
 
 
 
@@ -43,16 +59,20 @@ h2,
 
 #regexTooltipTemplate:hover,
 #regexTooltipTemplate.active {
-    visibility: visible;
+  visibility: visible;
 }
 
+#searchBox {
+  align-items: center;
+}
 
+#searchBox div {
+  margin-bottom: 25px
+}
 
-
-
-
-
-
+#regexHelper {
+  margin-left: 10px;
+}
 
 
 
@@ -60,122 +80,131 @@ h2,
 /* Main Styling */
 
 body > div:first-child {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .display-header {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .ou-input {
-    justify-content: center;
+  justify-content: center;
 }
 
 textarea {
-    height: 90px;
-    padding: 10px;
-    margin-top: 10px;
-    width: 100%;
-    font-family: "Roboto", sans-serif;
+  height: 90px;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
 }
 
 #load-button {
-    margin: 20px 5px 10px;
+  margin: 20px 5px 10px;
 }
 
 .course-holder {
-    max-height: 170px;
-    overflow: auto;
+  max-height: 170px;
+  overflow: auto;
 }
 
 .course {
-    margin: 5px 0;
-    justify-content: space-between;
+  margin: 5px 0;
+  justify-content: space-between;
 }
 
 .course img {
-    margin-top: 2px;
-    margin-right: 5px;
+  margin-top: 2px;
+  margin-right: 5px;
 }
 
 .course span:first-of-type {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .status-COMPLETE {
-    color: #82C242;
+  color: #82C242;
 }
 
 .status-LOADING {
-    color: #F58300;
+  color: #F58300;
 }
 
 .status-ERROR {
-    color: #E42226;
+  color: #E42226;
 }
 
 .deleteCourseButton {
-    background-size: 100% auto;
-    border: none;
-    outline: none;
-    height: 16px;
-    width: 16px;
+  background-size: 100% auto;
+  border: none;
+  outline: none;
+  height: 16px;
+  width: 16px;
 }
 
 #searchCourses div div:last-of-type {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 #searchCourses > div {
-    width: 75%;
-    margin: 10px auto;
+  width: 75%;
+  margin: 10px auto;
 }
 
 #searchCourses > p {
-    margin: 0px;
+  margin: 0px;
 }
 
-#searchCourses > p:nth-of-type(2) {
-    font-size: 13px;
-    text-align: center;
+#searchCourses > p {
+  font-size: 13px;
+  text-align: center;
 }
 
 #search-input {
-    font-size: 18px;
-    margin-bottom: 20px;
-    width: 100%;
+  font-size: 18px;
+  margin-bottom: 20px;
+  flex-grow: 1;
 
-    /* To ensure cursor doesn't hug the left side of the box */
-    padding-left: 15px;
-    box-sizing: border-box;
+  /* To ensure cursor doesn't hug the left side of the box */
+  padding-left: 15px;
+  box-sizing: border-box;
 
-    /* To hide the default textbox styling of the library */
-    border: solid 1px #2196f3;
-    border-radius: 2px;
-    background: none;
-    background-color: #fafafa;
+  /* To hide the default textbox styling of the library */
+  border: solid 1px #2196f3;
+  border-radius: 2px;
+  background: none;
+  background-color: #fafafa;
 }
 
 .search-download-buttons {
-    justify-content: center;
+  justify-content: center;
 }
 
 .search-download-buttons img {
-    width: 32px;
-    height: 32px;
-    margin-top: 22px;
-    margin-right: -7px;
+  width: 32px;
+  height: 32px;
+  margin-top: 22px;
+  margin-right: -7px;
 }
 
 
 
 
+/* CSV dragging styling */
 
+.dragging {
+  background: #eeefff;
+  position: relative;
+}
 
-
-
-
-
+.dragging::after {
+  content: "Drop to load files";
+  /*
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)*/
+}
 
 
 
@@ -185,101 +214,98 @@ textarea {
  ********************/
 
 .disabled {
-    background-color: #888;
-    color: #bbb;
-    cursor: default;
+  background-color: #888;
+  color: #bbb;
+  cursor: default;
 }
 
 .disabled:hover {
-    background-color: #888;
-    color: #bbb;
+  background-color: #888;
+  color: #bbb;
 }
 
 .disabled:enabled {
-    background-color: #3498DB;
-    color: white;
-    cursor: pointer;
+  background-color: #3498DB;
+  color: white;
+  cursor: pointer;
 }
 
 .radio-container {
-    justify-content: center;
+  justify-content: center;
 }
 
 .radio-container > input[type=checkbox] {
-    margin: 0px 2px;
+  margin: 0px 2px;
 }
 
 .radio-container > label {
-    padding: 1px 8px;
+  padding: 1px 8px;
 }
 
-.radio-container img {
-    width: 18px;
-    height: 18px;
-    margin-top: 0px;
-    margin-right: 10px;
-    margin-left: -4px;
+.help-image {
+  height: 1.2em;
+  width: 1.2em;
 }
 
 .search-button {
-    margin: 20px 5px 10px;
-    width: 210px;
+  margin: 20px 5px 10px;
+  width: 210px;
 }
 
 .results-header {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .check-collapse {
-    padding: 0;
+  padding: 0;
 }
 
 #cssSelectorOptions {
-    display: none;
-    justify-content: flex-end;
+  display: none;
+  justify-content: flex-end;
 }
 
 .course-results {
-    margin: 20px 0 0;
+  margin: 20px 0 0;
 }
 
 .results-course-title {
-    font-size: 22px;
-    padding-bottom: 5px;
+  font-size: 22px;
+  padding-bottom: 5px;
 }
 
 .OU {
-    color: gray;
-    padding-left: 5px;
-    font-size: 12px;
+  color: gray;
+  padding-left: 5px;
+  font-size: 12px;
 }
 
 .count {
-    position: absolute;
-    right: 20px;
-    margin: 0 10px;
-    font-size: 12px;
-    color: #888;
+  position: absolute;
+  right: 20px;
+  margin: 0 10px;
+  font-size: 12px;
+  color: #888;
 }
 
 .result-card {
-    margin: 20px;
+  margin: 20px;
 }
 
 .result {
-    margin: 10px 0;
-    background-color: #efefef;
-    padding: 3px;
+  margin: 10px 0;
+  background-color: #efefef;
+  padding: 3px;
 }
 
 .results-file-name {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .highlight {
-    background-color: yellow;
+  background-color: yellow;
 }
 
 .no-results-container {
-    margin: 20px 0 0 20px;
+  margin: 20px 0 0 20px;
 }
